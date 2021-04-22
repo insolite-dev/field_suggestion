@@ -28,23 +28,23 @@ import 'package:field_suggestion/src/styles.dart';
 /// And more..
 class FieldSuggestion extends StatefulWidget {
   ///
-  /// The text editing controller for listen field value changes. 
+  /// The text editing controller for listen field value changes.
   final TextEditingController textController;
 
   /// The main list as `String` which would be displayed into suggestion box.
   final List<String> suggestionList;
 
   /// To set custom `onTap` method.
-  /// For example: you need open a page, when item selected
-  /// so you can use [onTap] as Navigator..
+  /// e.g you need open a page, when item selected.
+  /// Then you should use [onTap] as Navigator..
   final VoidCallback onTap;
 
   /// As default we use `onIconTap` for remove tapped item which are in [suggestionList] and [_matchers] list.
-  /// this property make able to customize this.
+  /// This property make able to customize this propery's action.
   final VoidCallback onIconTap;
 
-  /// To calucalte size of suggestionBox by per item.
-  /// So if `sizeByItem == 1` then size will be `60` (and also as default). it's `60`.
+  /// For calucalte size of suggestionBox by per item.
+  /// So if `sizeByItem == 1` then size will be `60` (and also as default it's `60`).
   /// The number increases in parallel so when `sizeByItem == 2` then suggestionBox's size will be `120`.
   final int sizeByItem;
 
@@ -60,12 +60,12 @@ class FieldSuggestion extends StatefulWidget {
   /// ```
   final SuggestionBoxStyle suggestionBoxStyle;
 
-  /// `wDivider` means - with divider? so if it equeals `true`, we can see a simple line,
-  /// every suggestionItem's front.
+  /// `wDivider` means - (with divider) so if it equeals `true`,
+  /// user can see a simple line, every suggestionItem's front.
   final bool wDivider;
 
-  /// As default we have divider widget.To create your own divider widget,
-  /// you should use [divider].
+  /// As default we have divider widget. To create your own divider widget,
+  /// you should use [divider] property.
   final Widget divider;
 
   /// Custom style option of `SuggestionItem`, it takes, [SuggestionItemStyle.DefaultStyle] by default.
@@ -117,7 +117,7 @@ class FieldSuggestion extends StatefulWidget {
   /// As default `spacer` is `5.0`.
   final double spacer;
 
-  /// To disable and enable opacity animation. in default is [true]
+  /// To disable and enable opacity animation. As default is [true]
   final bool wOpacityAnimation;
 
   /// Duration property for customize duration of suggestonBox animation.
@@ -128,7 +128,7 @@ class FieldSuggestion extends StatefulWidget {
   final bool wSlideAnimation;
 
   /// Custom enum for set tween offset of slide animation.
-  /// 
+  ///
   /// **Rigth to left [RTL], Left to right [LTR], Bottom to up [BTU], Up to down [UTD].**
   final SlideAnimationStyle slideAnimationStyle;
 

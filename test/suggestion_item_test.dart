@@ -9,7 +9,6 @@ void main() {
   Widget suggestionItem;
 
   setUpAll(() {
-
     // Initilaze [SuggestionItem] widget with custom properties.
     suggestionItem = SuggestionItem(
       style: SuggestionItemStyle.DefaultStyle,
@@ -27,16 +26,15 @@ void main() {
         ),
       ),
     );
-
   });
-  
+
   testWidgets('Suggestion Item test', (WidgetTester tester) async {
     await tester.pumpWidget(mainWidget);
 
     // mainWidget tests.
     expect(find.byType(MaterialApp), findsOneWidget);
     expect(find.byType(Scaffold), findsOneWidget);
-    expect(find.byType(Center), findsOneWidget);
+    expect(find.byType(Center), findsNWidgets(2));
 
     // Suggestion Item tests
     expect(find.byType(SuggestionItem), findsOneWidget);
