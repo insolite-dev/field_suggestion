@@ -1,7 +1,8 @@
+import 'package:flutter/material.dart';
+
+import 'package:field_suggestion/src/styles.dart';
 import 'package:field_suggestion/src/suggestion_item.dart';
 import 'package:field_suggestion/src/utils.dart';
-import 'package:flutter/material.dart';
-import 'package:field_suggestion/src/styles.dart';
 
 /// [FieldSuggestion] require to take `textController` and `suggestionList`.
 /// `textController` listen changing on field, and after listening it's create a custom matchers list.

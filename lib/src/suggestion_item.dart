@@ -1,5 +1,5 @@
-import 'package:field_suggestion/src/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:field_suggestion/src/styles.dart';
 
 // Custom private class, for build [SuggestionItem].
 class SuggestionItem extends StatelessWidget {
