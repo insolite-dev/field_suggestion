@@ -29,7 +29,6 @@ import 'package:field_suggestion/src/utils.dart';
 /// ```
 /// To get more info about [FieldSuggestion].
 /// Check [README.md](https://github.com/theiskaa/field_suggestion/blob/develop/README.md) of repository.
-
 class FieldSuggestion extends StatefulWidget {
   /// The text editing controller for listen field value changes.
   final TextEditingController textController;
@@ -203,14 +202,12 @@ class FieldSuggestionState extends State<FieldSuggestion>
   Animation<double> _opacity;
   Animation<Offset> _slide;
 
-  // Overly list to manage overlays easily.
+  // Overly list to manage overlays.
   var _overlaysList = [];
 
   @override
   void dispose() {
     widget.textController.dispose();
-    _animationController.dispose();
-    // _overlayEntry.dispose();
     super.dispose();
   }
 
