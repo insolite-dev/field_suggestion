@@ -1,6 +1,5 @@
-# field_suggestion
-
-A new Flutter package project.
+# Field Suggestion 
+[![codecov](https://codecov.io/gh/theiskaa/field_suggestion/branch/main/graph/badge.svg)](https://codecov.io/gh/theiskaa/field_suggestion)
 
 ## Getting Started
 
@@ -12,4 +11,3 @@ multiple Flutter or Dart projects.
 For help getting started with Flutter, view our 
 [online documentation](https://flutter.dev/docs), which offers tutorials, 
 samples, guidance on mobile development, and a full API reference.
-# field_suggestion
