@@ -1,5 +1,5 @@
 name: field_suggestion
-description: Field Suggestions
+description: FieldSuggestion help us to make beautiful type ahead fields, By listening values of given TextEditingController and checking if the given value is in the list or not. 
 version: 0.1.0
 author:
 homepage: https://github.com/theiskaa/field_suggestion
