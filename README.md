@@ -1,7 +1,7 @@
 # Field Suggestion 
 [![codecov](https://codecov.io/gh/theiskaa/field_suggestion/branch/develop/graph/badge.svg)](https://codecov.io/gh/theiskaa/field_suggestion)
 [![**Package** Version](https://img.shields.io/pub/v/field_suggestion?color=blue)](https://github.com/theiskaa/field_suggestion "Published package version")
-[![LICENSE](https://img.shields.io/badge/License-MIT-red.svg)](https://github.com/theiskaa/insta-like-button/blob/main/LICENSE "Project's LICENSE section")
+[![LICENSE](https://img.shields.io/badge/License-MIT-red.svg)](https://github.com/theiskaa/field_suggestion/blob/develop/LICENSE "Project's LICENSE section")
 
 ---
 ## Installing
@@ -47,7 +47,7 @@ List<String> suggestionList = [
 ];
 ```
 <br/>
-<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/docs/example/assets/default.gif" align = "right" height = "200px">
+<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/default.gif" align = "right" height = "200px">
 
 ## Basic/Default usage.
 ```dart
@@ -91,9 +91,9 @@ FieldSuggestion(
 ```
 
 ### Result of custom usage: 
-<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/docs/example/assets/custom.gif" height = "300px">
+<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/custom.gif" height = "300px">
 
-To get more about `FieldSuggestion` check [example folder/repo](https://github.com/theiskaa/field_suggestion/example).
+**To get more about `FieldSuggestion` check [example folder/repo](https://github.com/theiskaa/field_suggestion/tree/develop/example).**
 
 
 # Contributions
