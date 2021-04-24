@@ -1,8 +1,8 @@
 name: field_suggestion
-description: A new Flutter package project.
+description: Field Suggestions
 version: 0.1.0
 author:
-homepage:
+homepage: https://github.com/theiskaa/field_suggestion
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
