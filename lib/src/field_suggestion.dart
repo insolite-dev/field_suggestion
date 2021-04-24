@@ -1,4 +1,5 @@
 import 'package:field_suggestion/src/suggestion_item.dart';
+import 'package:field_suggestion/src/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:field_suggestion/src/styles.dart';
 
@@ -155,9 +156,9 @@ class FieldSuggestion extends StatefulWidget {
     this.sizeByItem,
     this.closeBoxAfterSelect = true,
     this.wOpacityAnimation = true,
-    this.animationDuration,
+    this.animationDuration = const Duration(milliseconds: 400),
     this.wSlideAnimation = false,
-    this.slideCurve,
+    this.slideCurve = Curves.decelerate,
     this.slideTweenOffset,
     this.slideAnimationStyle = SlideAnimationStyle.RTL,
 
@@ -206,6 +207,15 @@ class FieldSuggestionState extends State<FieldSuggestion>
   var _overlaysList = [];
 
   @override
+  void dispose() {
+    widget.textController.dispose();
+    _animationController.dispose();
+    _node.dispose();
+    // _overlayEntry.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     // Add listener to textController, for listen field and create matchers list.
@@ -216,9 +226,7 @@ class FieldSuggestionState extends State<FieldSuggestion>
       // Implement _animationController.
       _animationController = AnimationController(
         vsync: this,
-        duration: (widget.animationDuration != null)
-            ? widget.animationDuration
-            : Duration(milliseconds: 400),
+        duration: widget.animationDuration,
       );
 
       // Initilaze opacity [_animation] if [widget.wOpacityAnimation] is true.
@@ -235,41 +243,38 @@ class FieldSuggestionState extends State<FieldSuggestion>
         if (widget.slideTweenOffset != null) {
           _offsetTween = widget.slideTweenOffset;
         } else {
-          // Set _offsetTween for SlideAnimationStyle.RTL.
-          if (widget.slideAnimationStyle == SlideAnimationStyle.RTL) {
-            _offsetTween = Tween<Offset>(
-              begin: Offset(5, 0),
-              end: Offset.zero,
-            );
-          }
-          // Set _offsetTween for SlideAnimationStyle.LTR.
-          else if (widget.slideAnimationStyle == SlideAnimationStyle.LTR) {
-            _offsetTween = Tween<Offset>(
-              begin: Offset(-5, 0),
-              end: Offset.zero,
-            );
-          }
-          // Set _offsetTween for SlideAnimationStyle.BTU.
-          else if (widget.slideAnimationStyle == SlideAnimationStyle.BTU) {
-            _offsetTween = Tween<Offset>(
-              begin: Offset(0, 5),
-              end: Offset.zero,
-            );
-          }
-          // Set _offsetTween for SlideAnimationStyle.UTD.
-          else if (widget.slideAnimationStyle == SlideAnimationStyle.UTD) {
-            _offsetTween = Tween<Offset>(
-              begin: Offset(0, -5),
-              end: Offset.zero,
-            );
+          switch (widget.slideAnimationStyle) {
+            case SlideAnimationStyle.RTL:
+              _offsetTween = Tween<Offset>(
+                begin: Offset(5, 0),
+                end: Offset.zero,
+              );
+              break;
+            case SlideAnimationStyle.LTR:
+              _offsetTween = Tween<Offset>(
+                begin: Offset(-5, 0),
+                end: Offset.zero,
+              );
+              break;
+            case SlideAnimationStyle.BTU:
+              _offsetTween = Tween<Offset>(
+                begin: Offset(0, 5),
+                end: Offset.zero,
+              );
+              break;
+            case SlideAnimationStyle.UTD:
+              _offsetTween = Tween<Offset>(
+                begin: Offset(0, -5),
+                end: Offset.zero,
+              );
+              break;
+            default:
           }
         }
         _slide = _offsetTween.animate(
           CurvedAnimation(
             parent: _animationController,
-            curve: (widget.slideCurve != null)
-                ? widget.slideCurve
-                : Curves.decelerate,
+            curve: widget.slideCurve,
           ),
         );
       }
@@ -353,8 +358,7 @@ class FieldSuggestionState extends State<FieldSuggestion>
 
   // Default list item tap method.
   _onItemTap(String selectedItem) {
-    if (widget.disabledDefaultOnTap != null &&
-        widget.disabledDefaultOnTap != false) {
+    if (widget.disabledDefaultOnTap) {
       widget.onTap();
     } else {
       _customSetState(setState(() {
@@ -369,8 +373,7 @@ class FieldSuggestionState extends State<FieldSuggestion>
 
   // Default Tralling icon tap method.
   _onTrallingTap(String selectedItem) {
-    if (widget.disabledDefaultOnIconTap != null &&
-        widget.disabledDefaultOnIconTap != false) {
+    if (widget.disabledDefaultOnIconTap) {
       widget.onIconTap();
     } else {
       widget.suggestionList.remove(selectedItem);
@@ -444,7 +447,11 @@ class FieldSuggestionState extends State<FieldSuggestion>
         child: ConstrainedBox(
           constraints: BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: _maxHeight(),
+            maxHeight: maxSuggestionBoxHeight(
+              matchersList: _matchers,
+              wDivider: widget.wDivider,
+              sizeByItem: widget.sizeByItem,
+            ),
           ),
           child: ListView.separated(
             controller: widget.scrollController,
@@ -515,49 +522,6 @@ class FieldSuggestionState extends State<FieldSuggestion>
               : InputDecoration(hintText: widget.hint, labelText: widget.hint),
         ),
       );
-
-  // Get right max height by listening `suggestionItemStyle`, `wDivider` and `sizeByItem`.
-  double _maxHeight() {
-    double size;
-
-    // Set size by listening [suggestionItemStyle] and [wDivider].
-    if (widget.suggestionItemStyle ==
-            SuggestionItemStyle.WhiteNeumorphismedStyle ||
-        widget.wDivider == true ||
-        widget.suggestionItemStyle ==
-            SuggestionItemStyle.BlackNeumorphismedStyle) {
-      if (widget.suggestionItemStyle ==
-              SuggestionItemStyle.WhiteNeumorphismedStyle ||
-          widget.suggestionItemStyle ==
-                  SuggestionItemStyle.BlackNeumorphismedStyle &&
-              widget.wDivider == true) {
-        size = 70;
-      }
-      size = 65;
-    } else {
-      size = 60;
-    }
-
-    // Set size by listening [sizeByItem].
-    if (widget.sizeByItem != null) {
-      if (widget.sizeByItem == 1) {
-        return size;
-      } else {
-        return size * widget.sizeByItem.roundToDouble();
-      }
-    }
-
-    // Set size by listening [_matchers.length].
-    else {
-      if (_matchers.length == 1) {
-        return size;
-      } else if (_matchers.length == 2) {
-        return size * _matchers.length.roundToDouble();
-      } else {
-        return size * 3.toDouble();
-      }
-    }
-  }
 
   // Get [_suggestionBoxStyle] by listening [suggestionBoxStyle].
   Decoration get _suggestionBoxStyle => BoxDecoration(

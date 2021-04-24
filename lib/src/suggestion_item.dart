@@ -36,6 +36,7 @@ class SuggestionItem extends StatelessWidget {
       );
 
   IconButton _buildIconButton() => IconButton(
+        key: Key('SuggestionItem.icon'),
         splashColor: Colors.transparent,
         icon: Icon(style.icon, color: style.iconColor, size: style.iconSize),
         onPressed: onIconTap,
