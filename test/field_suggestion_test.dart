@@ -24,9 +24,11 @@ void main() {
   FieldSuggestion fieldSuggestion;
 
   // To test `slideAnimationStyle` property as [SlideAnimationStyle.LTR].
+  // And test `wDivider` property as custom widget.
   FieldSuggestion secondFieldSuggestion;
 
   // To test `slideAnimationStyle` property as [SlideAnimationStyle.BTU].
+  // And test `fieldDecoration` property as custom InputDecoration.
   FieldSuggestion thirdFieldSuggestion;
 
   // To test `slideAnimationStyle` property as [SlideAnimationStyle.UTD].
@@ -79,6 +81,8 @@ void main() {
       key: Key('seccond.suggestion.field'),
       textController: secondTextEditingController,
       suggestionList: suggestions,
+      wDivider: true,
+      divider: Divider(),
       disabledDefaultOnIconTap: true,
       disabledDefaultOnTap: true,
       wSlideAnimation: true,
@@ -90,6 +94,7 @@ void main() {
       textController: thirdTextEditingController,
       suggestionList: suggestions,
       wSlideAnimation: true,
+      fieldDecoration: InputDecoration(labelText: 'Type.'),
       slideAnimationStyle: SlideAnimationStyle.BTU,
     );
 

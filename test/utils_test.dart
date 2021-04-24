@@ -1,5 +1,5 @@
-import 'package:field_suggestion/src/utils.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:field_suggestion/src/utils.dart';
 
 void main() {
   group('[Utils]', () {
