@@ -1,6 +1,7 @@
-import 'package:field_suggestion/src/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'package:field_suggestion/src/styles.dart';
 
 main() {
   SuggestionBoxStyle customSuggestionBoxStyle;
@@ -42,7 +43,7 @@ main() {
       expect(customSuggestionBoxStyle.padding, EdgeInsets.all(10));
       expect(customSuggestionBoxStyle.shape, BoxShape.circle);
     });
-    
+
     test('DefaultStyle', () {
       SuggestionBoxStyle defaultStyle = SuggestionBoxStyle.DefaultStyle;
 

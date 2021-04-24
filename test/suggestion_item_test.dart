@@ -1,8 +1,8 @@
-import 'package:field_suggestion/src/suggestion_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:field_suggestion/field_suggestion.dart';
+import 'package:field_suggestion/src/suggestion_item.dart';
 
 void main() {
   Widget mainWidget;
