@@ -187,17 +187,14 @@ class FieldSuggestion extends StatefulWidget {
 
 class FieldSuggestionState extends State<FieldSuggestion>
     with TickerProviderStateMixin {
-  // We showing/closing SuggestionsBox by listening [showSuggestionBox].
-  bool showSuggestionBox = false;
-
-  // To collect and list the pwidget.suggestionList] elements matching the text of the [widget.textController] in a list.
+  // To collect and list the [widget.suggestionList] elements
+  // matching the text of the [widget.textController] in a list.
   List<dynamic> matchers = <dynamic>[];
 
   OverlayEntry _overlayEntry;
 
   LayerLink _layerLink = LayerLink();
 
-  // Animation and AnimationController of [SuggestionBox].
   AnimationController animationController;
   Animation<double> _opacity;
   Animation<Offset> _slide;
@@ -233,9 +230,9 @@ class FieldSuggestionState extends State<FieldSuggestion>
 
       if (widget.wSlideAnimation) {
         var _offsetTween;
-        if (widget.slideTweenOffset != null) {
+        if (widget.slideTweenOffset != null)
           _offsetTween = widget.slideTweenOffset;
-        } else {
+        else {
           switch (widget.slideAnimationStyle) {
             case SlideAnimationStyle.RTL:
               _offsetTween = Tween<Offset>(
@@ -264,6 +261,7 @@ class FieldSuggestionState extends State<FieldSuggestion>
             default:
           }
         }
+
         _slide = _offsetTween.animate(
           CurvedAnimation(
             parent: animationController,
@@ -276,41 +274,23 @@ class FieldSuggestionState extends State<FieldSuggestion>
 
   void _textListener() {
     if (widget.textController.text.length == 0)
-      _customSetState(() => showSuggestionBox = false);
+      closeBox();
     else {
-      matchers.clear();
-
-      if (matchers.length == 0)
-        _customSetState(() => showSuggestionBox = false);
+      final inputText = widget.textController.text;
 
       // Upper case every item which were into [suggestionList] for easy separation.
       // And than create [matchers] list by listening `textController`.
-      widget.suggestionList.forEach((item) {
-        if (item
-            .toUpperCase()
-            .contains(widget.textController.text.toUpperCase()))
-          matchers.add(item);
-      });
+      matchers = widget.suggestionList
+          .where((item) => item.toUpperCase().contains(inputText.toUpperCase()))
+          .toList();
 
-      if (matchers.length == 0)
-        showSuggestionBox = false;
-      else {
-        if (matchers.length == 1 && matchers[0] == widget.textController.text) {
-          widget.closeBoxAfterSelect
-              ? showSuggestionBox = false
-              : showSuggestionBox = true;
-        } else {
-          showSuggestionBox = true;
-        }
+      if ((matchers.isNotEmpty && matchers[0] != inputText) ||
+          !widget.closeBoxAfterSelect) {
+        showBox();
+      } else {
+        closeBox();
       }
-      _customSetState(() {});
     }
-
-    // Run the appropriate method.
-    if (showSuggestionBox)
-      showBox();
-    else
-      closeBox();
   }
 
   // For avoid [setState() called after dispose()] issue
@@ -323,7 +303,7 @@ class FieldSuggestionState extends State<FieldSuggestion>
   void showBox() {
     if (_overlayEntry != null && _overlaysList.isNotEmpty) {
       _overlayEntry.remove();
-      setState(() => _overlayEntry = null);
+      _customSetState(() => _overlayEntry = null);
     }
     _createOverlay(context);
     if (widget.wOpacityAnimation || widget.wSlideAnimation)
@@ -331,16 +311,20 @@ class FieldSuggestionState extends State<FieldSuggestion>
   }
 
   // Custom method for close suggestionBox.
+  // It just clears/removes overlay entry.
   void closeBox() {
     if (_overlayEntry != null && _overlaysList.isNotEmpty) {
       _overlayEntry.remove();
       if (widget.wOpacityAnimation || widget.wSlideAnimation)
         animationController.reverse();
-      setState(() => _overlayEntry = null);
+      _customSetState(() => _overlayEntry = null);
     }
   }
 
   // Default tap method of SuggestionItem.
+  // It fills value of field with title of selected item.
+  // And if `closeBoxAfterSelect` is enabled (as default it's enabled),
+  // it closes suggestions box after tapping the item.
   onItemTap(String selectedItem) {
     if (widget.disabledDefaultOnTap)
       widget.onTap();
@@ -355,30 +339,25 @@ class FieldSuggestionState extends State<FieldSuggestion>
     }
   }
 
-  // Default tap method of SuggestionItem's tralling.
+  // Default tap method of tralling of SuggestionItem.
+  // It removes selected item from [widget.suggestionList] and [matchers].
   onTrallingTap(String selectedItem) {
     if (widget.disabledDefaultOnIconTap)
       widget.onIconTap();
     else {
       widget.suggestionList.remove(selectedItem);
       matchers.remove(selectedItem);
-      _customSetState(() {});
 
       if (widget.onIconTap != null) widget.onIconTap();
-
-      if (matchers.length != 0)
-        showBox();
-      else {
-        _customSetState(() => showSuggestionBox = false);
-        closeBox();
-      }
+      (matchers.length != 0) ? showBox() : closeBox();
     }
   }
 
   @override
   Widget build(BuildContext context) => fieldSuggestion();
 
-  // Method to display SuggestionBox.
+  // Creates SuggestionsBox as overlay,
+  // it's sticking to down of [fieldSuggestion] by using [_layerLink].
   void _createOverlay(BuildContext context) {
     RenderBox renderBox = context.findRenderObject();
     OverlayState _overlayState = Overlay.of(context);
@@ -441,12 +420,9 @@ class FieldSuggestionState extends State<FieldSuggestion>
             shrinkWrap: true,
             itemCount: matchers.length,
             separatorBuilder: (context, index) {
-              if (widget.wDivider) {
-                if (widget.divider != null)
-                  return widget.divider;
-                else
-                  return _divider;
-              } else
+              if (widget.wDivider)
+                return (widget.divider != null) ? widget.divider : _divider;
+              else
                 return SizedBox.shrink();
             },
             itemBuilder: (context, index) => suggestionListItem(index),
