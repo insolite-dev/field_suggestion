@@ -41,7 +41,7 @@ class FieldSuggestion extends StatefulWidget {
   /// Then you should use [onTap] as Navigator..
   final VoidCallback onTap;
 
-  /// As default we use `onIconTap` for remove tapped item which are in [suggestionList] and [_matchers] list.
+  /// As default we use `onIconTap` for remove tapped item which are in [suggestionList] and [matchers] list.
   /// This property make able to customize action.
   final VoidCallback onIconTap;
 
@@ -191,14 +191,14 @@ class FieldSuggestionState extends State<FieldSuggestion>
   bool showSuggestionBox = false;
 
   // To collect and list the pwidget.suggestionList] elements matching the text of the [widget.textController] in a list.
-  List<dynamic> _matchers = <dynamic>[];
+  List<dynamic> matchers = <dynamic>[];
 
   OverlayEntry _overlayEntry;
 
   LayerLink _layerLink = LayerLink();
 
   // Animation and AnimationController of [SuggestionBox].
-  AnimationController _animationController;
+  AnimationController animationController;
   Animation<double> _opacity;
   Animation<Offset> _slide;
 
@@ -219,7 +219,7 @@ class FieldSuggestionState extends State<FieldSuggestion>
 
     // Initilaze animations if any animaton is enabled.
     if (widget.wOpacityAnimation || widget.wSlideAnimation) {
-      _animationController = AnimationController(
+      animationController = AnimationController(
         vsync: this,
         duration: widget.animationDuration,
       );
@@ -228,7 +228,7 @@ class FieldSuggestionState extends State<FieldSuggestion>
         _opacity = Tween<double>(
           begin: 0,
           end: 1,
-        ).animate(_animationController);
+        ).animate(animationController);
       }
 
       if (widget.wSlideAnimation) {
@@ -266,7 +266,7 @@ class FieldSuggestionState extends State<FieldSuggestion>
         }
         _slide = _offsetTween.animate(
           CurvedAnimation(
-            parent: _animationController,
+            parent: animationController,
             curve: widget.slideCurve,
           ),
         );
@@ -275,117 +275,111 @@ class FieldSuggestionState extends State<FieldSuggestion>
   }
 
   void _textListener() {
-    if (widget.textController.text.length > 0) {
-      _matchers.clear();
+    if (widget.textController.text.length == 0)
+      _customSetState(() => showSuggestionBox = false);
+    else {
+      matchers.clear();
 
-      if (_matchers.length == 0)
-        _customSetState(setState(() => showSuggestionBox = false));
+      if (matchers.length == 0)
+        _customSetState(() => showSuggestionBox = false);
 
       // Upper case every item which were into [suggestionList] for easy separation.
-      // Create [_matchers] list by listening `textController`.
+      // And than create [matchers] list by listening `textController`.
       widget.suggestionList.forEach((item) {
-        if (item.toUpperCase().contains(
-              widget.textController.text.toUpperCase(),
-            )) _matchers.add(item);
+        if (item
+            .toUpperCase()
+            .contains(widget.textController.text.toUpperCase()))
+          matchers.add(item);
       });
 
-      if (_matchers.length > 0) {
-        if (_matchers.length == 1 &&
-            _matchers[0] == widget.textController.text) {
-          if (widget.closeBoxAfterSelect) {
-            showSuggestionBox = false;
-          } else {
-            showSuggestionBox = true;
-          }
+      if (matchers.length == 0)
+        showSuggestionBox = false;
+      else {
+        if (matchers.length == 1 && matchers[0] == widget.textController.text) {
+          widget.closeBoxAfterSelect
+              ? showSuggestionBox = false
+              : showSuggestionBox = true;
         } else {
           showSuggestionBox = true;
         }
-      } else {
-        showSuggestionBox = false;
       }
-      _customSetState(setState(() {}));
-    } else {
-      _customSetState(setState(() => showSuggestionBox = false));
+      _customSetState(() {});
     }
 
     // Run the appropriate method.
     if (showSuggestionBox)
-      _showBox();
+      showBox();
     else
-      _closeBox();
+      closeBox();
   }
 
-  // For avoid this issue: [setState() called after dispose()].
-  void _customSetState(void setS) {
-    if (this.mounted) return setS;
+  // For avoid [setState() called after dispose()] issue
+  void _customSetState(void Function() fn) {
+    if (this.mounted) return setState(fn);
   }
 
   // Custom method for show suggestionBox.
   // First it clears _overlayEntry and creates new one.
-  void _showBox() {
-    if (_overlayEntry != null) {
-      if (_overlaysList.isNotEmpty) {
-        _overlayEntry.remove();
-        setState(() => _overlayEntry = null);
-      }
+  void showBox() {
+    if (_overlayEntry != null && _overlaysList.isNotEmpty) {
+      _overlayEntry.remove();
+      setState(() => _overlayEntry = null);
     }
-    _overlay(context);
+    _createOverlay(context);
     if (widget.wOpacityAnimation || widget.wSlideAnimation)
-      _animationController.forward();
+      animationController.forward();
   }
 
   // Custom method for close suggestionBox.
-  void _closeBox() {
-    if (_overlayEntry != null) {
-      if (_overlaysList.isNotEmpty) {
-        _overlayEntry.remove();
-        if (widget.wOpacityAnimation || widget.wSlideAnimation)
-          _animationController.reverse();
-        setState(() => _overlayEntry = null);
-      }
+  void closeBox() {
+    if (_overlayEntry != null && _overlaysList.isNotEmpty) {
+      _overlayEntry.remove();
+      if (widget.wOpacityAnimation || widget.wSlideAnimation)
+        animationController.reverse();
+      setState(() => _overlayEntry = null);
     }
   }
 
   // Default tap method of SuggestionItem.
-  _onItemTap(String selectedItem) {
-    if (widget.disabledDefaultOnTap) {
+  onItemTap(String selectedItem) {
+    if (widget.disabledDefaultOnTap)
       widget.onTap();
-    } else {
-      _customSetState(setState(() {
+    else {
+      _customSetState(() {
         widget.textController.text = selectedItem;
         widget.textController.selection = TextSelection.fromPosition(
             TextPosition(offset: widget.textController.text.length));
-        if (widget.onTap != null) widget.onTap();
-      }));
-      if (widget.closeBoxAfterSelect == true) _closeBox();
+      });
+      if (widget.onTap != null) widget.onTap();
+      if (widget.closeBoxAfterSelect) closeBox();
     }
   }
 
   // Default tap method of SuggestionItem's tralling.
-  _onTrallingTap(String selectedItem) {
-    if (widget.disabledDefaultOnIconTap) {
+  onTrallingTap(String selectedItem) {
+    if (widget.disabledDefaultOnIconTap)
       widget.onIconTap();
-    } else {
+    else {
       widget.suggestionList.remove(selectedItem);
-      _matchers.remove(selectedItem);
+      matchers.remove(selectedItem);
+      _customSetState(() {});
 
-      if (_matchers.length == 0) {
-        _customSetState(setState(() {
-          showSuggestionBox = false;
-        }));
-        _closeBox();
-      }
-      _customSetState(setState(() {}));
       if (widget.onIconTap != null) widget.onIconTap();
-      _showBox();
+
+      if (matchers.length != 0)
+        showBox();
+      else {
+        _customSetState(() => showSuggestionBox = false);
+        closeBox();
+      }
     }
   }
 
   @override
-  Widget build(BuildContext context) => _fieldSuggestion();
+  Widget build(BuildContext context) => fieldSuggestion();
 
-  // Method to create overlay.
-  void _overlay(BuildContext context) {
+  // Method to display SuggestionBox.
+  void _createOverlay(BuildContext context) {
     RenderBox renderBox = context.findRenderObject();
     OverlayState _overlayState = Overlay.of(context);
     var size = renderBox.size;
@@ -404,7 +398,7 @@ class FieldSuggestionState extends State<FieldSuggestion>
 
     // Determine the method to be defined by listening to the animation values.
     if (widget.wOpacityAnimation || widget.wSlideAnimation) {
-      _animationController.addListener(() {
+      animationController.addListener(() {
         _overlayState.setState(() {});
       });
     }
@@ -419,14 +413,14 @@ class FieldSuggestionState extends State<FieldSuggestion>
   // matches whatever value in the list you have defined,
   // then the buildSuggestionBox will appear.
   Widget _buildSuggestionBox(BuildContext context) {
-    // Default divider. Which would be displayed front of each [_suggestionListItem].
+    // Default divider. Which would be displayed front of each [suggestionListItem].
     Widget _divider = Container(
       margin: EdgeInsets.only(bottom: 5),
       height: 1,
       color: Colors.black.withOpacity(.3),
     );
 
-    Widget _suggestionbox = Opacity(
+    Widget _suggestionBox = Opacity(
       opacity: (widget.wOpacityAnimation) ? _opacity.value : 1,
       child: Container(
         padding: EdgeInsets.all(12),
@@ -436,7 +430,7 @@ class FieldSuggestionState extends State<FieldSuggestion>
             maxWidth: MediaQuery.of(context).size.width,
             // Custom utility for manage the maxHeight of [_suggestionbox].
             maxHeight: maxSuggestionBoxHeight(
-              matchersList: _matchers,
+              matchersList: matchers,
               wDivider: widget.wDivider,
               sizeByItem: widget.sizeByItem,
             ),
@@ -445,7 +439,7 @@ class FieldSuggestionState extends State<FieldSuggestion>
             controller: widget.scrollController,
             padding: EdgeInsets.zero,
             shrinkWrap: true,
-            itemCount: _matchers.length,
+            itemCount: matchers.length,
             separatorBuilder: (context, index) {
               if (widget.wDivider) {
                 if (widget.divider != null)
@@ -455,29 +449,29 @@ class FieldSuggestionState extends State<FieldSuggestion>
               } else
                 return SizedBox.shrink();
             },
-            itemBuilder: (context, index) => _suggestionListItem(index),
+            itemBuilder: (context, index) => suggestionListItem(index),
           ),
         ),
       ),
     );
 
     Widget _box() {
-      // Show suggestionBox with [SlideTransition] by listening [wSlideAnimation].
-      if (widget.wSlideAnimation) {
+      // Show suggestionBox with [SlideTransition] animation,
+      // if [wSlideAnimation] is enabled (equals true).
+      if (widget.wSlideAnimation)
         return SlideTransition(
           position: _slide,
-          child: _suggestionbox,
+          child: _suggestionBox,
         );
-      }
-
-      return _suggestionbox;
+      else
+        return _suggestionBox;
     }
 
     return Material(child: _box());
   }
 
-  // Items which were mapped from _matchers in [suggestionList].
-  Container _suggestionListItem(int index) => Container(
+  // Items which were mapped from matchers in [suggestionList].
+  Container suggestionListItem(int index) => Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -485,18 +479,17 @@ class FieldSuggestionState extends State<FieldSuggestion>
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 3),
               child: SuggestionItem(
-                title: "${_matchers[index]}",
+                title: "${matchers[index]}",
                 style: widget.suggestionItemStyle,
-                onTap: () => _onItemTap(_matchers[index]),
-                onIconTap: () => _onTrallingTap(_matchers[index]),
+                onTap: () => onItemTap(matchers[index]),
+                onIconTap: () => onTrallingTap(matchers[index]),
               ),
             ),
           ],
         ),
       );
 
-  // Main TextField widget.
-  Widget _fieldSuggestion() => CompositedTransformTarget(
+  Widget fieldSuggestion() => CompositedTransformTarget(
         link: _layerLink,
         child: TextField(
           keyboardType: widget.fieldType,
@@ -510,7 +503,7 @@ class FieldSuggestionState extends State<FieldSuggestion>
         ),
       );
 
-  // Get [_suggestionBoxStyle] by listening [suggestionBoxStyle].
+  // Get [_suggestionBoxStyle] by listening custom style widget [widget.suggestionBoxStyle].
   Decoration get _suggestionBoxStyle => BoxDecoration(
         color: widget.suggestionBoxStyle.backgroundColor,
         borderRadius: widget.suggestionBoxStyle.borderRadius,
