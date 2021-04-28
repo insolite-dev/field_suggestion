@@ -64,7 +64,7 @@ class FieldSuggestion extends StatefulWidget {
   /// User would see a simple line, every suggestionItem's front.
   final bool wDivider;
 
-  /// As default we have divider widget. To create your own divider widget,
+  /// As default FieldSuggestion has divider widget. To create your own divider widget,
   /// you should use [divider] property.
   final Widget divider;
 
@@ -153,7 +153,7 @@ class FieldSuggestion extends StatefulWidget {
     // SuggestionBox properties.
     this.spacer = 5.0,
     this.suggestionBoxStyle = SuggestionBoxStyle.DefaultStyle,
-    this.divider,
+    this.divider = const Divider(),
     this.wDivider = false,
     this.sizeByItem,
     this.closeBoxAfterSelect = true,
@@ -228,47 +228,7 @@ class FieldSuggestionState extends State<FieldSuggestion>
         ).animate(animationController);
       }
 
-      if (widget.wSlideAnimation) {
-        var _offsetTween;
-        if (widget.slideTweenOffset != null)
-          _offsetTween = widget.slideTweenOffset;
-        else {
-          switch (widget.slideAnimationStyle) {
-            case SlideAnimationStyle.RTL:
-              _offsetTween = Tween<Offset>(
-                begin: Offset(5, 0),
-                end: Offset.zero,
-              );
-              break;
-            case SlideAnimationStyle.LTR:
-              _offsetTween = Tween<Offset>(
-                begin: Offset(-5, 0),
-                end: Offset.zero,
-              );
-              break;
-            case SlideAnimationStyle.BTU:
-              _offsetTween = Tween<Offset>(
-                begin: Offset(0, 5),
-                end: Offset.zero,
-              );
-              break;
-            case SlideAnimationStyle.UTD:
-              _offsetTween = Tween<Offset>(
-                begin: Offset(0, -5),
-                end: Offset.zero,
-              );
-              break;
-            default:
-          }
-        }
-
-        _slide = _offsetTween.animate(
-          CurvedAnimation(
-            parent: animationController,
-            curve: widget.slideCurve,
-          ),
-        );
-      }
+      if (widget.wSlideAnimation) return initilazeSlideAnimation();
     }
   }
 
@@ -291,6 +251,51 @@ class FieldSuggestionState extends State<FieldSuggestion>
         closeBox();
       }
     }
+  }
+
+  // Detects [slideAnimationStyle] and sets valid [_offsetTween].
+  // After that initilazes [_slide] animation, with setted [_offsetTween].
+  void initilazeSlideAnimation() {
+    var _offsetTween;
+    if (widget.slideTweenOffset != null)
+      _offsetTween = widget.slideTweenOffset;
+    else {
+      switch (widget.slideAnimationStyle) {
+        case SlideAnimationStyle.RTL:
+          _offsetTween = Tween<Offset>(
+            begin: Offset(5, 0),
+            end: Offset.zero,
+          );
+          break;
+        case SlideAnimationStyle.LTR:
+          _offsetTween = Tween<Offset>(
+            begin: Offset(-5, 0),
+            end: Offset.zero,
+          );
+          break;
+        case SlideAnimationStyle.BTU:
+          _offsetTween = Tween<Offset>(
+            begin: Offset(0, 5),
+            end: Offset.zero,
+          );
+          break;
+        case SlideAnimationStyle.UTD:
+          _offsetTween = Tween<Offset>(
+            begin: Offset(0, -5),
+            end: Offset.zero,
+          );
+          break;
+        default:
+      }
+    }
+
+    // Initialze setted [_offsetTween] as [_slide] animation.
+    _slide = _offsetTween.animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: widget.slideCurve,
+      ),
+    );
   }
 
   // For avoid [setState() called after dispose()] issue
@@ -392,13 +397,6 @@ class FieldSuggestionState extends State<FieldSuggestion>
   // matches whatever value in the list you have defined,
   // then the buildSuggestionBox will appear.
   Widget _buildSuggestionBox(BuildContext context) {
-    // Default divider. Which would be displayed front of each [suggestionListItem].
-    Widget _divider = Container(
-      margin: EdgeInsets.only(bottom: 5),
-      height: 1,
-      color: Colors.black.withOpacity(.3),
-    );
-
     Widget _suggestionBox = Opacity(
       opacity: (widget.wOpacityAnimation) ? _opacity.value : 1,
       child: Container(
@@ -419,12 +417,8 @@ class FieldSuggestionState extends State<FieldSuggestion>
             padding: EdgeInsets.zero,
             shrinkWrap: true,
             itemCount: matchers.length,
-            separatorBuilder: (context, index) {
-              if (widget.wDivider)
-                return (widget.divider != null) ? widget.divider : _divider;
-              else
-                return SizedBox.shrink();
-            },
+            separatorBuilder: (_, __) =>
+                (widget.wDivider) ? widget.divider : SizedBox.shrink(),
             itemBuilder: (context, index) => suggestionListItem(index),
           ),
         ),

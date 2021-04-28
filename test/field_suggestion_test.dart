@@ -168,7 +168,7 @@ void main() {
       expect(find.byType(Material), findsNWidgets(2));
       expect(find.byType(Overlay), findsOneWidget);
       expect(find.byType(SlideTransition), findsNWidgets(2));
-      expect(find.byType(SizedBox), findsNWidgets(7));
+      expect(find.byType(SizedBox), findsNWidgets(9));
       expect(find.byType(Container), findsNWidgets(9));
       expect(find.byType(CompositedTransformTarget), findsNWidgets(2));
       expect(find.byType(ConstrainedBox), findsNWidgets(9));
@@ -176,7 +176,7 @@ void main() {
       expect(find.byType(ListView), findsOneWidget);
       expect(find.byType(SlideTransition), findsNWidgets(2));
       expect(find.byType(Column), findsNWidgets(3));
-      expect(find.byType(Padding), findsNWidgets(12));
+      expect(find.byType(Padding), findsNWidgets(14));
       expect(find.byType(SuggestionItem), findsNWidgets(3));
       expect(find.byType(TextField), findsOneWidget);
 
