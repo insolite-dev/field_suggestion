@@ -14,10 +14,7 @@ double maxSuggestionBoxHeight({
 
   // Set size by listening [sizeByItem].
   if (sizeByItem != null) {
-    if (sizeByItem == 1)
-      return size;
-    else
-      return size * sizeByItem.roundToDouble();
+    return (sizeByItem == 1) ? size : size * sizeByItem.roundToDouble();
   }
 
   // Set size by listening [matchersList].
