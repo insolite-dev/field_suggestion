@@ -113,7 +113,7 @@ FieldSuggestion(
 )
 ```
 <img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/custom.gif" height = "300px">
----
+
 # Contributions
 ***Feel free to contribute to this project.***
 
