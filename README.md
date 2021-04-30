@@ -12,7 +12,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  field_suggestion: ^0.1.0
+  field_suggestion: ^0.1.1
 ```
 
 ### Install it

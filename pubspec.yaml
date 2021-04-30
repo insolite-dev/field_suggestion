@@ -1,6 +1,6 @@
 name: field_suggestion
 description: This package helps to make beautiful type ahead fields. It listens values of given TextEditingController and checks if the given value is in the given suggestion list or not. 
-version: 0.1.0
+version: 0.1.1
 homepage: https://github.com/theiskaa/field_suggestion
 issue_tracker: https://github.com/theiskaa/field_suggestion/issues
 
