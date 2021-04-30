@@ -30,10 +30,6 @@ Now in your Flutter code, you can use:
 import 'package:field_suggestion/field_suggestion.dart';
 ```
 ---
-## About
-`FieldSuggestion` help us to make type ahead fields. It takes a `TextEditingController` & suggestions list and
-listens values of given TextEditingController and checks if the given value is in the list or not. 
-
 ## Usage and overview
 **Require to create a `TextEditingController` and suggestions list, e.g:**
 
@@ -57,6 +53,33 @@ FieldSuggestion(
   hint: 'Email',
 ),
 ```
+## Parameters:
+| parameter                  | description                                                                           | default                                                                                                                                                                               |
+| -------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `onTap`                    | It makes able to set custom onTap method. e.g you need open a page, when item selected. Then you should use [onTap] as Navigator. | Changes value of field with title of selected item                                                                                        |
+| `onIconTap`                | It makes able to set custom method when we press on tralling of SuggestionItem.       | Removes tapped item which are in [suggestionList] and private [matchers] list.
+| `sizeByItem`               | Makes able to set size of SuggestionsBox by calculating count of SuggestionItem.      | We do not use that property to set size of SuggestionBox.                                                                                                                             |
+| `suggestionBoxStyle`       | Custom style option of [SuggestionBox], Makes able to customize SuggestionBox.        | `SuggestionBoxStyle.DefaultStyle`                                                                                                                                                     |
+| `wDivider`                 | if it equeals `true`, you would see a simple line, every suggestionItem's front.      | `false`, so it's diabled.                                                                                                                                                             |
+| `divider`                  | If `wDivider` is enabled, then user can use this property to show a widget  every suggestionItem's front | `Divider()` widget.                                                                                                                                                |
+| `suggestionItemStyle`      | Custom style option for `SuggestionItem`. Makes able to customize Suggestion Item With following properties:  `backgroundColor`, `titleStyle`, `icon`, `iconSize`, `iconColor`, `border`, `borderRadius`, `gradient`, `boxShadow`, `margin`.|It takes, [SuggestionItemStyle.DefaultStyle] as default.|
+| `hint`                     | Field hint property to set it without `fieldDecoration` property.                     | null                                                                                                                                                                                  |
+| `fieldDecoration`          | Custom `InputDecoration` of Field                                                     | InputDecoration(hintText: `hint`, labelText: `hint`),                                                                                                                                 |
+| `fieldType`                | `TextInputType` of field.                                                             | null                                                                                                                                                                                  |
+| `focusNode`                | `FocusNode` of field.                                                                 | null                                                                                                                                                                                  |
+| `onChanged`                | `onChanged` so `Function(String)` method of Field                                     | null                                                                                                                                                                                  |
+| `maxLines`                 | `maxLines` of field                                                                   | null                                                                                                                                                                                  |
+| `disabledDefaultOnTap`     | To dissable default `onTap` method of `SuggestionItem`.                               | `false`, so it's diabled                                                                                                                                                              |
+| `disabledDefaultOnIconTap` | To dissable default `onIconTap` method of `SuggestionItem`.                           | `false`, so it's diabled                                                                                                                                                              |
+| `closeBoxAfterSelect`      | If it's equals `false` (so disabled) then when you select item suggestion box won't close. | `true`, so it's enabled                                                                                                                                                          |
+| `scrollController`         | The scroll controller for suggestionList.                                             | null                                                                                                                                                                                  |
+| `spacer`                   | To set size between field and suggestionsBox.                                         | `5.0`                                                                                                                                                                                 |
+| `wOpacityAnimation`        | To disable or enable opacity animation.                                               | `false`, so it's diabled                                                                                                                                                              |
+| `animationDuration`        | Customize duration of suggestion Box animation.                                       | `Duration(milliseconds: 400)`                                                                                                                                                         |
+| `wSlideAnimation`          | To enable or disable slide animtaion of suggestions box.                              | `false`, so it's diabled                                                                                                                                                              |
+| `slideAnimationStyle`      | Custom enum to set tween offset of slide animation, by: **Rigth to left [RTL], Left to right [LTR], Bottom to up [BTU], Up to down [UTD].**| `SlideAnimationStyle.RTL`                                                                                                        |
+| `slideCurve`               | To initilaze custom transition curve.                                                 | null                                                                                                                                                                                  |
+| `slideTweenOffset`         | Offset with Tween for Slide animation. **Note:** when you use `slideTweenOffset`, otomaticly `slideAnimationStyle` would be disabled. | null                                                                                                                                  |
 ---
 ## Custom usage.
 ```dart
@@ -89,12 +112,7 @@ FieldSuggestion(
   ),
 )
 ```
-
-### Result of custom usage: 
 <img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/custom.gif" height = "300px">
-
-**To get more about `FieldSuggestion` check [example folder/repo](https://github.com/theiskaa/field_suggestion/tree/develop/example).**
-
 
 # Contributions
 ***Feel free to contribute to this project.***
