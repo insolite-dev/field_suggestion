@@ -30,10 +30,6 @@ Now in your Flutter code, you can use:
 import 'package:field_suggestion/field_suggestion.dart';
 ```
 ---
-## About
-`FieldSuggestion` help us to make type ahead fields. It takes a `TextEditingController` & suggestions list and
-listens values of given TextEditingController and checks if the given value is in the list or not. 
-
 ## Usage and overview
 **Require to create a `TextEditingController` and suggestions list, e.g:**
 
