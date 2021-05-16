@@ -32,9 +32,11 @@ void main() {
   FieldSuggestion thirdFieldSuggestion;
 
   // To test `slideAnimationStyle` property as [SlideAnimationStyle.UTD].
+  // And custom gestures.
   FieldSuggestion fourthFieldSuggestion;
 
   // To test slideTweenOffset property as custom value.
+  // And default gestures.
   FieldSuggestion fifthFieldSuggestion;
 
   // For [fieldSuggestion].
@@ -53,6 +55,7 @@ void main() {
   TextEditingController fifthTextEditingController;
 
   const suggestions = ['test@gmail.com', 'test1@gmail.com', 'test2@gmail.com'];
+  var suggestion = ['test@gmail.com'];
 
   final findFieldSuggestion = find.byKey(Key('suggestion.field'));
   final findSecondFieldSuggestion = find.byKey(Key('seccond.suggestion.field'));
@@ -101,7 +104,11 @@ void main() {
     fourthFieldSuggestion = FieldSuggestion(
       key: Key('fourth.suggestion.field'),
       textController: fourthTextEditingController,
-      suggestionList: suggestions,
+      suggestionList: suggestion,
+      disabledDefaultOnTap: true,
+      disabledDefaultOnIconTap: true,
+      onTap: () {},
+      onIconTap: () {},
       wSlideAnimation: true,
       slideAnimationStyle: SlideAnimationStyle.UTD,
     );
@@ -109,7 +116,8 @@ void main() {
     fifthFieldSuggestion = FieldSuggestion(
       key: Key('fifth.suggestion.field'),
       textController: fifthTextEditingController,
-      suggestionList: suggestions,
+      suggestionList: suggestion,
+      closeBoxAfterSelect: false,
       wSlideAnimation: true,
       slideTweenOffset: Tween<Offset>(begin: Offset(-8, 0), end: Offset.zero),
     );
@@ -223,7 +231,8 @@ void main() {
       await tester.pumpAndSettle();
     });
 
-    testWidgets('Test [slideAnimationStyle: SlideAnimationStyle.UTD]',
+    testWidgets(
+        'Test [slideAnimationStyle: SlideAnimationStyle.UTD]  + custom gestures',
         (WidgetTester tester) async {
       await tester.pumpWidget(fourthMainWidget);
 
@@ -236,9 +245,15 @@ void main() {
       // Enter text to fourthFieldSuggestion and reload page.
       await tester.enterText(findFourthFieldSuggestion, 'test');
       await tester.pumpAndSettle();
+
+      final suggestedItem = find.byType(SuggestionItem);
+      final tralling = find.byIcon(Icons.clear);
+
+      await tester.tap(suggestedItem);
+      await tester.tap(tralling);
     });
 
-    testWidgets('Test [slideTweenOffset] as custom property',
+    testWidgets('Test [slideTweenOffset] as custom property + default gestures',
         (WidgetTester tester) async {
       await tester.pumpWidget(fifthMainWidget);
 
@@ -250,6 +265,17 @@ void main() {
 
       // Enter text to fifthFieldSuggestion and reload page.
       await tester.enterText(findFifthFieldSuggestion, 'test');
+      await tester.pumpAndSettle();
+
+      final suggestedItem = find.byType(SuggestionItem);
+      final tralling = find.byIcon(Icons.clear);
+
+      expect(tralling, findsOneWidget);
+
+      await tester.tap(suggestedItem);
+      await tester.pumpAndSettle();
+
+      await tester.tap(tralling);
       await tester.pumpAndSettle();
     });
   });
