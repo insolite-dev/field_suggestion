@@ -182,10 +182,18 @@ class FieldSuggestion extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  FieldSuggestionState createState() => FieldSuggestionState();
+  _FieldSuggestionState createState() => _FieldSuggestionState();
+
+  // static void hide(BuildContext context) {
+  //   context.findAncestorStateOfType<_FieldSuggestionState>().closeBox();
+  // }
+
+  static _FieldSuggestionState of(BuildContext context) {
+    return context.findAncestorStateOfType<_FieldSuggestionState>();
+  }
 }
 
-class FieldSuggestionState extends State<FieldSuggestion>
+class _FieldSuggestionState extends State<FieldSuggestion>
     with TickerProviderStateMixin {
   // To collect and list the [widget.suggestionList] elements
   // matching the text of the [widget.textController] in a list.
@@ -195,7 +203,7 @@ class FieldSuggestionState extends State<FieldSuggestion>
 
   LayerLink _layerLink = LayerLink();
 
-  AnimationController animationController;
+  AnimationController _animationController;
   Animation<double> _opacity;
   Animation<Offset> _slide;
 
@@ -216,7 +224,7 @@ class FieldSuggestionState extends State<FieldSuggestion>
 
     // Initilaze animations if any animaton is enabled.
     if (widget.wOpacityAnimation || widget.wSlideAnimation) {
-      animationController = AnimationController(
+      _animationController = AnimationController(
         vsync: this,
         duration: widget.animationDuration,
       );
@@ -225,7 +233,7 @@ class FieldSuggestionState extends State<FieldSuggestion>
         _opacity = Tween<double>(
           begin: 0,
           end: 1,
-        ).animate(animationController);
+        ).animate(_animationController);
       }
 
       if (widget.wSlideAnimation) return initilazeSlideAnimation();
@@ -292,7 +300,7 @@ class FieldSuggestionState extends State<FieldSuggestion>
     // Initialze setted [_offsetTween] as [_slide] animation.
     _slide = _offsetTween.animate(
       CurvedAnimation(
-        parent: animationController,
+        parent: _animationController,
         curve: widget.slideCurve,
       ),
     );
@@ -312,7 +320,8 @@ class FieldSuggestionState extends State<FieldSuggestion>
     }
     _createOverlay(context);
     if (widget.wOpacityAnimation || widget.wSlideAnimation)
-      animationController.forward();
+      _animationController.forward();
+    print("Showing");
   }
 
   // Custom method for close suggestionBox.
@@ -321,7 +330,7 @@ class FieldSuggestionState extends State<FieldSuggestion>
     if (_overlayEntry != null && _overlaysList.isNotEmpty) {
       _overlayEntry.remove();
       if (widget.wOpacityAnimation || widget.wSlideAnimation)
-        animationController.reverse();
+        _animationController.reverse();
       _customSetState(() => _overlayEntry = null);
     }
   }
@@ -382,7 +391,7 @@ class FieldSuggestionState extends State<FieldSuggestion>
 
     // Determine the method to be defined by listening to the animation values.
     if (widget.wOpacityAnimation || widget.wSlideAnimation) {
-      animationController.addListener(() {
+      _animationController.addListener(() {
         _overlayState.setState(() {});
       });
     }
@@ -449,6 +458,7 @@ class FieldSuggestionState extends State<FieldSuggestion>
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 3),
               child: SuggestionItem(
+                key: Key('suggested.item'),
                 title: "${matchers[index]}",
                 style: widget.suggestionItemStyle,
                 onTap: () => onItemTap(matchers[index]),
