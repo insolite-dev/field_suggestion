@@ -29,7 +29,7 @@ jobs:
         run: flutter test --coverage
 
       - name: Code Coverage
-        uses: codecov/codecov-action@v1.2.1
+        uses: codecov/codecov-action@v1.5.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: coverage/lcov.info

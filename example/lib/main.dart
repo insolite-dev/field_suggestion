@@ -81,21 +81,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
 
-              SizedBox(height: 50),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () => FieldSuggestion.of(context).showBox(),
-                    child: Text("Show"),
-                  ),
-                  SizedBox(width: 15),
-                  ElevatedButton(
-                    onPressed: () => FieldSuggestion.of(context).closeBox(),
-                    child: Text("Hide"),
-                  )
-                ],
-              ),
             ],
           ),
         ),

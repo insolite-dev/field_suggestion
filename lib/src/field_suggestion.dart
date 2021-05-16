@@ -183,14 +183,6 @@ class FieldSuggestion extends StatefulWidget {
 
   @override
   _FieldSuggestionState createState() => _FieldSuggestionState();
-
-  // static void hide(BuildContext context) {
-  //   context.findAncestorStateOfType<_FieldSuggestionState>().closeBox();
-  // }
-
-  static _FieldSuggestionState of(BuildContext context) {
-    return context.findAncestorStateOfType<_FieldSuggestionState>();
-  }
 }
 
 class _FieldSuggestionState extends State<FieldSuggestion>
