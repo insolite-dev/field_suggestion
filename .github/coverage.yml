@@ -3,9 +3,9 @@ name: coverage
 # This workflow is triggered on pull requests and pushes to the repository.
 on:
   pull_request:
-    branches: [beta, develop, master]
+    branches: [develop]
   push:
-    branches: [beta, develop, master]
+    branches: [develop]
 
 jobs:
   coverage:
