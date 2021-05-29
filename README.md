@@ -95,7 +95,7 @@ FieldSuggestion(
 Here we cust wrapped our `Scaffold` with `GestureDetector` to handle gestures on the screen.
 And now we can close box when we tap on the screen.
 
-<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/feature/external-control/example/assets/external-control.gif" align = "right" height = "230px">
+<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/feature/external-control/example/assets/external-control.gif" align = "right" height = "250px">
 
 ```dart
  class Example extends StatelessWidget {
