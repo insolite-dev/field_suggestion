@@ -73,7 +73,7 @@ class FieldSuggestion extends StatefulWidget {
   ///   }
   /// }
   /// ```
-  /// Here we cust wrapped our `Scaffold` with `GestureDetector` to handle gestures on the screen.
+  /// Here we just wrapped our `Scaffold` with `GestureDetector` to handle gestures on the screen.
   /// And now we can close box when we tap on the screen.
   final BoxController boxController;
 
