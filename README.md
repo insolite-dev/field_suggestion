@@ -42,10 +42,11 @@ List<String> suggestionList = [
  'test2@gmail.com',
 ];
 ```
-<br/>
-<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/default.gif" align = "right" height = "200px">
+
 
 ## Basic/Default usage.
+<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/default.gif" align = "right" height = "200px">
+
 ```dart
 FieldSuggestion(
   textController: emailEditingController,
@@ -54,36 +55,11 @@ FieldSuggestion(
 ),
 ```
 
-## Parameters:
-| parameter                  | description                                                                           | default                                                                                                                                                                               |
-| -------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `onTap`                    | It makes able to set custom onTap method. e.g you need open a page, when item selected. Then you should use [onTap] as Navigator. | Changes value of field with title of selected item                                                                                        |
-| `onIconTap`                | It makes able to set custom method when we press on tralling of SuggestionItem.       | Removes tapped item which are in [suggestionList] and private [matchers] list.
-| `sizeByItem`               | Makes able to set size of SuggestionsBox by calculating count of SuggestionItem.      | We do not use that property to set size of SuggestionBox.                                                                                                                             |
-| `suggestionBoxStyle`       | Custom style option of [SuggestionBox], Makes able to customize SuggestionBox.        | `SuggestionBoxStyle.DefaultStyle`                                                                                                                                                     |
-| `wDivider`                 | if it equeals `true`, you would see a simple line, every suggestionItem's front.      | `false`, so it's diabled.                                                                                                                                                             |
-| `divider`                  | If `wDivider` is enabled, then user can use this property to show a widget  every suggestionItem's front | `Divider()` widget.                                                                                                                                                |
-| `suggestionItemStyle`      | Custom style option for `SuggestionItem`. Makes able to customize Suggestion Item With following properties:  `backgroundColor`, `titleStyle`, `icon`, `iconSize`, `iconColor`, `border`, `borderRadius`, `gradient`, `boxShadow`, `margin`.|It takes, [SuggestionItemStyle.DefaultStyle] as default.|
-| `hint`                     | Field hint property to set it without `fieldDecoration` property.                     | null                                                                                                                                                                                  |
-| `fieldDecoration`          | Custom `InputDecoration` of Field                                                     | InputDecoration(hintText: `hint`, labelText: `hint`),                                                                                                                                 |
-| `fieldType`                | `TextInputType` of field.                                                             | null                                                                                                                                                                                  |
-| `focusNode`                | `FocusNode` of field.                                                                 | null                                                                                                                                                                                  |
-| `onChanged`                | `onChanged` so `Function(String)` method of Field                                     | null                                                                                                                                                                                  |
-| `maxLines`                 | `maxLines` of field                                                                   | null                                                                                                                                                                                  |
-| `disabledDefaultOnTap`     | To dissable default `onTap` method of `SuggestionItem`.                               | `false`, so it's diabled                                                                                                                                                              |
-| `disabledDefaultOnIconTap` | To dissable default `onIconTap` method of `SuggestionItem`.                           | `false`, so it's diabled                                                                                                                                                              |
-| `closeBoxAfterSelect`      | If it's equals `false` (so disabled) then when you select item suggestion box won't close. | `true`, so it's enabled                                                                                                                                                          |
-| `scrollController`         | The scroll controller for suggestionList.                                             | null                                                                                                                                                                                  |
-| `spacer`                   | To set size between field and suggestionsBox.                                         | `5.0`                                                                                                                                                                                 |
-| `wOpacityAnimation`        | To disable or enable opacity animation.                                               | `false`, so it's diabled                                                                                                                                                              |
-| `animationDuration`        | Customize duration of suggestion Box animation.                                       | `Duration(milliseconds: 400)`                                                                                                                                                         |
-| `wSlideAnimation`          | To enable or disable slide animtaion of suggestions box.                              | `false`, so it's diabled                                                                                                                                                              |
-| `slideAnimationStyle`      | Custom enum to set tween offset of slide animation, by: **Rigth to left [RTL], Left to right [LTR], Bottom to up [BTU], Up to down [UTD].**| `SlideAnimationStyle.RTL`                                                                                                        |
-| `slideCurve`               | To initilaze custom transition curve.                                                 | null                                                                                                                                                                                  |
-| `slideTweenOffset`         | Offset with Tween for Slide animation. **Note:** when you use `slideTweenOffset`, otomaticly `slideAnimationStyle` would be disabled. | null                                                                                                                                  |
 ---
 
 ## Custom usage.
+<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/custom.gif" align = "right" height = "200px">
+
 ```dart
 FieldSuggestion(
   textController: secondTextController,
@@ -114,10 +90,38 @@ FieldSuggestion(
   ),
 )
 ```
-<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/custom.gif" height = "300px">
+
+## External control
+Here we cust wrapped our `Scaffold` with `GestureDetector` to handle gestures on the screen.
+And now we can close box when we tap on the screen.
+
+<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/custom.gif" align = "right" height = "200px">
+
+```dart
+ class Example extends StatelessWidget {
+   final _textController = TextEditingController();
+   final _boxController = BoxController();
+ 
+   @override
+   Widget build(BuildContext context) {
+     return GestureDetector(
+       onTap: () => _boxController.close(),
+       child: Scaffold(
+         body: Center(
+           child: FieldSuggestion(
+             hint: 'test',
+             suggestionList: [], // Your suggestions list here...
+             boxController: _boxController,
+             textController: _textController,
+           ),
+         ),
+       ),
+     );
+   }
+ }
+```
 
 # Contributions
-***Feel free to contribute to this project.***
+**If you find a bug or want a feature, but don't know how to fix/implement it, please fill an *[issue](https://github.com/theiskaa/field_suggestion/issues)*.**
 
-**If you find a bug or want a feature, but don't know how to fix/implement it, please fill an *[issue](https://github.com/theiskaa/field_suggestion/issues)*.** <br/>
 **If you fixed a bug or implemented a new feature, please send a *[pull request](https://github.com/theiskaa/field_suggestion/pulls)*.**
