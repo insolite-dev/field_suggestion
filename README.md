@@ -14,10 +14,11 @@ List<String> suggestionList = [
  'test2@gmail.com',
 ];
 ```
-<br/>
-<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/default.gif" align = "right" height = "200px">
+
 
 ## Basic/Default usage.
+<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/default.gif" align = "right" height = "200px">
+
 ```dart
 FieldSuggestion(
   textController: emailEditingController,
@@ -26,7 +27,11 @@ FieldSuggestion(
 ),
 ```
 
+---
+
 ## Custom usage.
+<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/custom.gif" align = "right" height = "200px">
+
 ```dart
 FieldSuggestion(
   textController: secondTextController,
@@ -57,7 +62,36 @@ FieldSuggestion(
   ),
 )
 ```
-<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/custom.gif" height = "300px">
+
+## External control
+Here we cust wrapped our `Scaffold` with `GestureDetector` to handle gestures on the screen.
+And now we can close box when we tap on the screen.
+
+<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/custom.gif" align = "right" height = "200px">
+
+```dart
+ class Example extends StatelessWidget {
+   final _textController = TextEditingController();
+   final _boxController = BoxController();
+ 
+   @override
+   Widget build(BuildContext context) {
+     return GestureDetector(
+       onTap: () => _boxController.close(),
+       child: Scaffold(
+         body: Center(
+           child: FieldSuggestion(
+             hint: 'test',
+             suggestionList: [], // Your suggestions list here...
+             boxController: _boxController,
+             textController: _textController,
+           ),
+         ),
+       ),
+     );
+   }
+ }
+```
 
 
 ---
@@ -89,8 +123,6 @@ import 'package:field_suggestion/field_suggestion.dart';
 ---
 
 # Contributions
-***Feel free to contribute to this project.***
-
-**If you find a bug or want a feature, but don't know how to fix/implement it, please fill an *[issue](https://github.com/theiskaa/field_suggestion/issues)*.** 
+**If you find a bug or want a feature, but don't know how to fix/implement it, please fill an *[issue](https://github.com/theiskaa/field_suggestion/issues)*.**
 
 **If you fixed a bug or implemented a new feature, please send a *[pull request](https://github.com/theiskaa/field_suggestion/pulls)*.**
