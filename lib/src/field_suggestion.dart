@@ -1,3 +1,4 @@
+import 'package:field_suggestion/src/box_controller.dart';
 import 'package:flutter/material.dart';
 
 import 'package:field_suggestion/src/styles.dart';
@@ -44,6 +45,37 @@ class FieldSuggestion extends StatefulWidget {
   /// As default we use `onIconTap` for remove tapped item which are in [suggestionList] and [matchers] list.
   /// This property make able to customize action.
   final VoidCallback onIconTap;
+
+  /// Controller to use suggeestion box externally.
+  /// It makes able to "show" and "close" suggestion box, whenever/everywhere you want.
+  ///
+  /// **Example:**
+  /// ```dart
+  /// class Example extends StatelessWidget {
+  ///   final _textController = TextEditingController();
+  ///   final _boxController = BoxController();
+  /// 
+  ///   @override
+  ///   Widget build(BuildContext context) {
+  ///     return GestureDetector(
+  ///       onTap: () => _boxController.close(),
+  ///       child: Scaffold(
+  ///         body: Center(
+  ///           child: FieldSuggestion(
+  ///             hint: 'test',
+  ///             suggestionList: [], // Your suggestions list here...
+  ///             boxController: _boxController,
+  ///             textController: _textController,
+  ///           ),
+  ///         ),
+  ///       ),
+  ///     );
+  ///   }
+  /// }
+  /// ```
+  /// Here we cust wrapped our `Scaffold` with `GestureDetector` to handle gestures on the screen.
+  /// And now we can close box when we tap on the screen.
+  final BoxController boxController;
 
   /// For calucalte size of suggestionBox by per item.
   /// So if `sizeByItem == 1` then size will be `60`.
@@ -151,6 +183,7 @@ class FieldSuggestion extends StatefulWidget {
     @required this.suggestionList,
 
     // SuggestionBox properties.
+    this.boxController,
     this.spacer = 5.0,
     this.suggestionBoxStyle = SuggestionBoxStyle.DefaultStyle,
     this.divider = const Divider(),
@@ -182,11 +215,19 @@ class FieldSuggestion extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _FieldSuggestionState createState() => _FieldSuggestionState();
+  _FieldSuggestionState createState() => _FieldSuggestionState(boxController);
 }
 
 class _FieldSuggestionState extends State<FieldSuggestion>
     with TickerProviderStateMixin {
+  // Sets boxController values by current state values.
+  _FieldSuggestionState(BoxController _boxController) {
+    if (_boxController != null) {
+      _boxController.close = closeBox;
+      _boxController.show = showBox;
+    }
+  }
+
   // To collect and list the [widget.suggestionList] elements
   // matching the text of the [widget.textController] in a list.
   List<dynamic> matchers = <dynamic>[];
@@ -247,9 +288,8 @@ class _FieldSuggestionState extends State<FieldSuggestion>
       if ((matchers.isNotEmpty && matchers[0] != inputText) ||
           !widget.closeBoxAfterSelect) {
         showBox();
-      } else {
+      } else
         closeBox();
-      }
     }
   }
 
@@ -313,7 +353,6 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     _createOverlay(context);
     if (widget.wOpacityAnimation || widget.wSlideAnimation)
       _animationController.forward();
-    print("Showing");
   }
 
   // Custom method for close suggestionBox.
