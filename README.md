@@ -2,7 +2,37 @@
 [![codecov](https://codecov.io/gh/theiskaa/field_suggestion/branch/develop/graph/badge.svg)](https://codecov.io/gh/theiskaa/field_suggestion)
 [![**Package** Version](https://img.shields.io/pub/v/field_suggestion?color=blue)](https://github.com/theiskaa/field_suggestion "Published package version")
 [![LICENSE](https://img.shields.io/badge/License-MIT-red.svg)](https://github.com/theiskaa/field_suggestion/blob/develop/LICENSE "Project's LICENSE section")
-## Usage and overview
+
+---
+## Installing
+
+### Depend on it
+
+Add this to your package's `pubspec.yaml` file:
+
+```yaml
+dependencies:
+  field_suggestion: ^0.1.1
+```
+
+### Install it
+
+You can install packages from the command line:
+
+```sh
+$ flutter pub get
+```
+### Import it
+
+Now in your Flutter code, you can use:
+
+```dart
+import 'package:field_suggestion/field_suggestion.dart';
+```
+---
+
+
+# Usage and overview
 **Require to create a `TextEditingController` and suggestions list, e.g:**
 
 ```dart
@@ -64,8 +94,8 @@ FieldSuggestion(
 ```
 
 ## External control
-Here we cust wrapped our `Scaffold` with `GestureDetector` to handle gestures on the screen.
-And now we can close box when we tap on the screen.
+Here we just wrapped our `Scaffold` with `GestureDetector` to handle gestures on the screen.
+And now we can close box when we tap on the screen. (You can do it everywhere, where you used `FieldSuggestion` with `BoxController`).
 
 <img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/feature/external-control/example/assets/external-control.gif" align = "right" height = "250px">
 
@@ -92,35 +122,6 @@ And now we can close box when we tap on the screen.
    }
  }
 ```
-
-
----
-## Installing
-
-### Depend on it
-
-Add this to your package's `pubspec.yaml` file:
-
-```yaml
-dependencies:
-  field_suggestion: ^0.1.1
-```
-
-### Install it
-
-You can install packages from the command line:
-
-```sh
-$ flutter pub get
-```
-### Import it
-
-Now in your Flutter code, you can use:
-
-```dart
-import 'package:field_suggestion/field_suggestion.dart';
-```
----
 
 # Contributions
 **If you find a bug or want a feature, but don't know how to fix/implement it, please fill an *[issue](https://github.com/theiskaa/field_suggestion/issues)*.**
