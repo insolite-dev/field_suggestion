@@ -35,8 +35,8 @@ void main() {
   // And custom gestures.
   FieldSuggestion fourthFieldSuggestion;
 
-  // To test slideTweenOffset property as custom value.
-  // And default gestures.
+  // To test slideTweenOffset property as custom value, default gestures.
+  // And external control.
   FieldSuggestion fifthFieldSuggestion;
 
   // For [fieldSuggestion].
@@ -53,6 +53,7 @@ void main() {
 
   // For [fifthFieldSuggestion].
   TextEditingController fifthTextEditingController;
+  BoxController boxController;
 
   const suggestions = ['test@gmail.com', 'test1@gmail.com', 'test2@gmail.com'];
   var suggestion = ['test@gmail.com'];
@@ -64,12 +65,13 @@ void main() {
   final findFifthFieldSuggestion = find.byKey(Key('fifth.suggestion.field'));
 
   setUpAll(() {
-    // Initilaze all text editing controllerers.
     textEditingController = TextEditingController();
     secondTextEditingController = TextEditingController();
     thirdTextEditingController = TextEditingController();
     fourthTextEditingController = TextEditingController();
     fifthTextEditingController = TextEditingController();
+
+    boxController = BoxController();
 
     fieldSuggestion = FieldSuggestion(
       key: Key('suggestion.field'),
@@ -115,6 +117,7 @@ void main() {
 
     fifthFieldSuggestion = FieldSuggestion(
       key: Key('fifth.suggestion.field'),
+      boxController: boxController,
       textController: fifthTextEditingController,
       suggestionList: suggestion,
       closeBoxAfterSelect: false,
@@ -176,15 +179,15 @@ void main() {
       expect(find.byType(Material), findsNWidgets(2));
       expect(find.byType(Overlay), findsOneWidget);
       expect(find.byType(SlideTransition), findsNWidgets(2));
-      expect(find.byType(SizedBox), findsNWidgets(9));
-      expect(find.byType(Container), findsNWidgets(9));
+      expect(find.byType(SizedBox), findsNWidgets(10));
+      expect(find.byType(Container), findsNWidgets(10));
       expect(find.byType(CompositedTransformTarget), findsNWidgets(2));
-      expect(find.byType(ConstrainedBox), findsNWidgets(9));
+      expect(find.byType(ConstrainedBox), findsNWidgets(10));
       expect(find.byType(Opacity), findsOneWidget);
       expect(find.byType(ListView), findsOneWidget);
       expect(find.byType(SlideTransition), findsNWidgets(2));
       expect(find.byType(Column), findsNWidgets(3));
-      expect(find.byType(Padding), findsNWidgets(14));
+      expect(find.byType(Padding), findsNWidgets(17));
       expect(find.byType(SuggestionItem), findsNWidgets(3));
       expect(find.byType(TextField), findsOneWidget);
 
