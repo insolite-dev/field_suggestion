@@ -12,7 +12,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  field_suggestion: ^0.1.1
+  field_suggestion: <latest_version>
 ```
 
 ### Install it
@@ -36,7 +36,7 @@ import 'package:field_suggestion/field_suggestion.dart';
 **Require to create a `TextEditingController` and suggestions list, e.g:**
 
 ```dart
-final emailEditingController = TextEditingController();
+final textEditingController = TextEditingController();
 // And 
 List<String> suggestionList = [
  'test@gmail.com',
@@ -51,7 +51,7 @@ List<String> suggestionList = [
 
 ```dart
 FieldSuggestion(
-  textController: emailEditingController,
+  textController: textEditingController,
   suggestionList: suggestionList,
   hint: 'Email',
 ),
@@ -64,7 +64,7 @@ FieldSuggestion(
 
 ```dart
 FieldSuggestion(
-  textController: secondTextController,
+  textController: textEditingController,
   suggestionList: suggestionList,
   fieldDecoration: InputDecoration(
     hintText: "Email",
@@ -97,7 +97,7 @@ FieldSuggestion(
 Here we just wrapped our `Scaffold` with `GestureDetector` to handle gestures on the screen.
 And now we can close box when we tap on the screen. (You can do it everywhere, where you used `FieldSuggestion` with `BoxController`).
 
-<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/feature/external-control/example/assets/external-control.gif" align = "right" height = "250px">
+<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/external-control.gif" align = "right" height = "250px">
 
 ```dart
  class Example extends StatelessWidget {
