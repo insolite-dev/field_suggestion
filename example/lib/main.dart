@@ -14,7 +14,7 @@ class App extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -35,11 +35,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => suggestionBoxController.close(),
+      onTap: () => suggestionBoxController.close!(),
       child: Scaffold(
-        appBar: AppBar(title: Text("FieldSuggestion Example")),
+        appBar: AppBar(title: const Text("FieldSuggestion Example")),
         body: SingleChildScrollView(
-          padding: EdgeInsets.all(15),
+          padding: const EdgeInsets.all(15),
           child: Center(
             child: Column(
               children: [
@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
                   hint: 'Email',
                 ),
 
-                SizedBox(height: 100),
+                const SizedBox(height: 100),
 
                 // Custom usage.
                 FieldSuggestion(
@@ -59,15 +59,15 @@ class _HomePageState extends State<HomePage> {
                   suggestionList: suggestionList,
                   fieldDecoration: InputDecoration(
                     hintText: "Email",
-                    enabledBorder: OutlineInputBorder(),
-                    focusedBorder: OutlineInputBorder(),
+                    enabledBorder: const OutlineInputBorder(),
+                    focusedBorder: const OutlineInputBorder(),
                   ),
                   wDivider: true,
-                  divider: SizedBox(height: 5),
+                  divider: const SizedBox(height: 5),
                   wSlideAnimation: true,
                   slideAnimationStyle: SlideAnimationStyle.LTR,
                   slideCurve: Curves.linearToEaseOut,
-                  animationDuration: Duration(milliseconds: 300),
+                  animationDuration: const Duration(milliseconds: 300),
                   suggestionItemStyle:
                       SuggestionItemStyle.WhiteNeumorphismedStyle,
                   suggestionBoxStyle: SuggestionBoxStyle(
@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                         color: Colors.blue.withOpacity(.2),
                         spreadRadius: 5,
                         blurRadius: 10,
-                        offset: Offset(0, 5),
+                        offset: const Offset(0, 5),
                       ),
                     ],
                   ),

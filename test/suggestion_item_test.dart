@@ -5,7 +5,7 @@ import 'package:field_suggestion/field_suggestion.dart';
 import 'package:field_suggestion/src/suggestion_item.dart';
 
 void main() {
-  Widget mainWidget;
+  late Widget mainWidget;
   Widget suggestionItem;
 
   setUpAll(() {

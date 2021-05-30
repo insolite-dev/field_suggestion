@@ -3,6 +3,6 @@
 /// So basicly [close] used to close suggestion box,
 /// and [show] used to show suggestion box.
 class BoxController {
-  void Function() close;
-  void Function() show;
+  void Function()? close;
+  void Function()? show;
 }

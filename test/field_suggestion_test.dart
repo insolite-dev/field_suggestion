@@ -6,19 +6,19 @@ import 'package:field_suggestion/src/suggestion_item.dart';
 
 void main() {
   // To test [fieldSuggestion].
-  Widget mainWidget;
+  late Widget mainWidget;
 
   // To test [secondFieldSuggestion].
-  Widget secondMainWidget;
+  late Widget secondMainWidget;
 
   // To test [thirdFieldSuggestion].
-  Widget thirdMainWidget;
+  late Widget thirdMainWidget;
 
   // To test [fourthFieldSuggestion].
-  Widget fourthMainWidget;
+  late Widget fourthMainWidget;
 
   // To test [fifthFieldSuggestion]
-  Widget fifthMainWidget;
+  late Widget fifthMainWidget;
 
   // To test inital values of [FieldSuggestion].
   FieldSuggestion fieldSuggestion;

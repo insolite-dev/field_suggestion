@@ -1,3 +1,5 @@
+## [v0.1.3] - 30/05/21
+- **Enabled null safety**
 ## [v0.1.2] - 30/05/21
 - **New feature: External Control**
 By using this version, users can create an `BoxController` and give it to `Fill Suggestion`.
