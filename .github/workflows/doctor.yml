@@ -23,7 +23,7 @@ jobs:
           channel: "stable" # "alpha", "beta", "dev", default to: "stable"
           #
           # # You can also specify exact version of Flutter.
-          flutter-version: "2.0.1"
+          flutter-version: "2.2.0"
 
       - name: Print Flutter SDK version
         run: flutter --version

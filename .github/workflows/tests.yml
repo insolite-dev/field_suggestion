@@ -1,15 +1,15 @@
-name: coverage
+name: tests
 
 # This workflow is triggered on pull requests and pushes to the repository.
 on:
   pull_request:
-    branches: [develop]
+    branches: [beta, develop, master]
   push:
-    branches: [develop]
+    branches: [beta, develop, master]
 
 jobs:
-  coverage:
-    name: Upload code coverage to Codecov
+  test:
+    name: Test the application
 
     # This job will run on Ubuntu virtual machine.
     runs-on: ubuntu-20.04
@@ -23,13 +23,7 @@ jobs:
           channel: "stable" # "alpha", "beta", "dev", default to: "stable"
           #
           # # You can also specify exact version of Flutter.
-          flutter-version: "2.0.1"
+          flutter-version: "2.2.0"
 
       - name: Test the application
-        run: flutter test --coverage
-
-      - name: Code Coverage
-        uses: codecov/codecov-action@v1.5.0
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: coverage/lcov.info
+        run: flutter test
