@@ -54,7 +54,7 @@ class FieldSuggestion extends StatefulWidget {
   /// class Example extends StatelessWidget {
   ///   final _textController = TextEditingController();
   ///   final _boxController = BoxController();
-  /// 
+  ///
   ///   @override
   ///   Widget build(BuildContext context) {
   ///     return GestureDetector(
