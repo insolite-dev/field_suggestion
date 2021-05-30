@@ -14,7 +14,7 @@ class App extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => suggestionBoxController.close(),
+      onTap: () => suggestionBoxController.close!(),
       child: Scaffold(
         appBar: AppBar(title: Text("FieldSuggestion Example")),
         body: SingleChildScrollView(

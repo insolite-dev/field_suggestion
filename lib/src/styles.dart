@@ -30,19 +30,19 @@ class SuggestionBoxStyle {
   final Color backgroundColor;
 
   /// [border] of `SuggestionBox`
-  final Border border;
+  final Border? border;
 
   /// [borderRadius] of `SuggestionBox`
-  final BorderRadiusGeometry borderRadius;
+  final BorderRadiusGeometry? borderRadius;
 
   /// [gradient] of `SuggestionBox`
-  final Gradient gradient;
+  final Gradient? gradient;
 
   /// [boxShadow] of `SuggestionBox`
-  final List<BoxShadow> boxShadow;
+  final List<BoxShadow>? boxShadow;
 
   /// [margin] of `SuggestionBox`
-  final EdgeInsetsGeometry padding;
+  final EdgeInsetsGeometry? padding;
 
   /// [shape] of `SuggestionBox`.
   final BoxShape shape;
@@ -94,30 +94,30 @@ class SuggestionBoxStyle {
 /// ```
 class SuggestionItemStyle {
   /// [backgroundColor] of `SuggestionItem` card.
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   /// [titleStyle] of `SuggestionItem`'s title.
-  final TextStyle titleStyle;
+  final TextStyle? titleStyle;
 
   /// [icon] of `SuggestionItem` which .
   final IconData icon;
-  final double iconSize;
+  final double? iconSize;
   final Color iconColor;
 
   /// [border] of `SuggestionItem` card.
-  final Border border;
+  final Border? border;
 
   /// [borderRadius] of `SuggestionItem` card.
-  final BorderRadius borderRadius;
+  final BorderRadius? borderRadius;
 
   /// [gradient] of `SuggestionItem` card.
-  final Gradient gradient;
+  final Gradient? gradient;
 
   /// [boxShadow] of `SuggestionItem` card.
-  final List<BoxShadow> boxShadow;
+  final List<BoxShadow>? boxShadow;
 
   /// [margin] of `SuggestionItem` card.
-  final EdgeInsetsGeometry margin;
+  final EdgeInsetsGeometry? margin;
 
   const SuggestionItemStyle({
     this.backgroundColor,

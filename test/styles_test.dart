@@ -4,8 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:field_suggestion/src/styles.dart';
 
 main() {
-  SuggestionBoxStyle customSuggestionBoxStyle;
-  SuggestionItemStyle customSuggestionItemStyle;
+  late SuggestionBoxStyle customSuggestionBoxStyle;
+  late SuggestionItemStyle customSuggestionItemStyle;
 
   setUpAll(() {
     customSuggestionBoxStyle = SuggestionBoxStyle(

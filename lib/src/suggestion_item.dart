@@ -9,11 +9,11 @@ class SuggestionItem extends StatelessWidget {
   final String title;
 
   const SuggestionItem({
-    Key key,
-    @required this.style,
-    @required this.onTap,
-    @required this.onIconTap,
-    @required this.title,
+    Key? key,
+    required this.style,
+    required this.onTap,
+    required this.onIconTap,
+    required this.title,
   }) : super(key: key);
 
   @override
@@ -23,7 +23,7 @@ class SuggestionItem extends StatelessWidget {
       decoration: _buildBoxDecoration(),
       child: ListTile(
         hoverColor: Colors.transparent,
-        onTap: onTap,
+        onTap: onTap as void Function()?,
         title: _buildTitle(),
         trailing: _buildIconButton(),
       ),
@@ -39,7 +39,7 @@ class SuggestionItem extends StatelessWidget {
         key: Key('SuggestionItem.icon'),
         splashColor: Colors.transparent,
         icon: Icon(style.icon, color: style.iconColor, size: style.iconSize),
-        onPressed: onIconTap,
+        onPressed: onIconTap as void Function()?,
       );
 
   BoxDecoration _buildBoxDecoration() {
