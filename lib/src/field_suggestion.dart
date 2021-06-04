@@ -34,8 +34,9 @@ class FieldSuggestion extends StatefulWidget {
   /// The text editing controller for listen field value changes.
   final TextEditingController textController;
 
-  /// The main list as `String` which would be displayed into suggestion box.
-  final List<String> suggestionList;
+  /// The main list which would be displayed into suggestion box.
+  /// Able to use as `List<String>`, `List<int>`, and `List<double>`
+  final List<dynamic> suggestionList;
 
   /// To set custom `onTap` method.
   /// e.g you need open a page, when item selected.
@@ -281,9 +282,13 @@ class _FieldSuggestionState extends State<FieldSuggestion>
 
       // Upper case every item which were into [suggestionList] for easy separation.
       // And than create [matchers] list by listening `textController`.
-      matchers = widget.suggestionList
-          .where((item) => item.toUpperCase().contains(inputText.toUpperCase()))
-          .toList();
+      matchers = widget.suggestionList.where((item) {
+        if (widget.suggestionList is List<int> ||
+            widget.suggestionList is List<double>)
+          return item.toString().contains(inputText.toString());
+
+        return item.toUpperCase().contains(inputText.toUpperCase());
+      }).toList();
 
       if ((matchers.isNotEmpty && matchers[0] != inputText) ||
           !widget.closeBoxAfterSelect) {
@@ -376,7 +381,8 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     _customSetState(() {
       widget.textController.text = selectedItem;
       widget.textController.selection = TextSelection.fromPosition(
-          TextPosition(offset: widget.textController.text.length));
+        TextPosition(offset: widget.textController.text.length),
+      );
     });
 
     if (widget.onTap != null) widget.onTap!();
@@ -385,7 +391,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
 
   // Default tap method of tralling of SuggestionItem.
   // It removes selected item from [widget.suggestionList] and [matchers].
-  onTrallingTap(String selectedItem) {
+  onTrallingTap(dynamic selectedItem) {
     if (widget.disabledDefaultOnIconTap) return widget.onIconTap!();
 
     widget.suggestionList.remove(selectedItem);
@@ -479,7 +485,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
                 key: const Key('suggested.item'),
                 title: "${matchers[index]}",
                 style: widget.suggestionItemStyle,
-                onTap: () => onItemTap(matchers[index]),
+                onTap: () => onItemTap(matchers[index].toString()),
                 onIconTap: () => onTrallingTap(matchers[index]),
               ),
             ),

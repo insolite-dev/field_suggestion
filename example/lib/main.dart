@@ -23,19 +23,31 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final firstTextController = TextEditingController();
   final secondTextController = TextEditingController();
+  final thirdTextController = TextEditingController();
 
-  final suggestionBoxController = BoxController();
+  final firstBoxController = BoxController();
+  final secondBoxController = BoxController();
+  final thirdBoxController = BoxController();
 
-  List<String> suggestionList = [
+  List<String> stringSuggestions = [
     'test@gmail.com',
     'test1@gmail.com',
     'test2@gmail.com',
   ];
 
+  List<int> numSuggestions = [
+    13187829696,
+    13102743803,
+    15412917703,
+  ];
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => suggestionBoxController.close!(),
+      onTap: () {
+        firstBoxController.close!();
+        secondBoxController.close!();
+      },
       child: Scaffold(
         appBar: AppBar(title: const Text("FieldSuggestion Example")),
         body: SingleChildScrollView(
@@ -45,18 +57,28 @@ class _HomePageState extends State<HomePage> {
               children: [
                 // Basic usage.
                 FieldSuggestion(
+                  boxController: firstBoxController,
                   textController: firstTextController,
-                  suggestionList: suggestionList,
+                  suggestionList: stringSuggestions,
                   hint: 'Email',
                 ),
 
                 const SizedBox(height: 100),
 
+                // With num type variables.
+                FieldSuggestion(
+                  boxController: secondBoxController,
+                  textController: secondTextController,
+                  suggestionList: numSuggestions,
+                  hint: 'Phone Number',
+                ),
+                const SizedBox(height: 100),
+
                 // Custom usage.
                 FieldSuggestion(
-                  boxController: suggestionBoxController,
-                  textController: secondTextController,
-                  suggestionList: suggestionList,
+                  boxController: thirdBoxController,
+                  textController: thirdTextController,
+                  suggestionList: stringSuggestions,
                   fieldDecoration: InputDecoration(
                     hintText: "Email",
                     enabledBorder: const OutlineInputBorder(),
