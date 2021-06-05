@@ -1,7 +1,34 @@
-# Field Suggestion 
-[![codecov](https://codecov.io/gh/theiskaa/field_suggestion/branch/develop/graph/badge.svg)](https://codecov.io/gh/theiskaa/field_suggestion)
-[![**Package** Version](https://img.shields.io/pub/v/field_suggestion?color=blue)](https://github.com/theiskaa/field_suggestion "Published package version")
-[![LICENSE](https://img.shields.io/badge/License-MIT-red.svg)](https://github.com/theiskaa/field_suggestion/blob/develop/LICENSE "Project's LICENSE section")
+<h1 align="center">Field Suggestions</h1>
+
+ <p align="center">
+  <div align="center">
+  <a href="https://codecov.io/gh/theiskaa/field_suggestion">
+    <img src="https://codecov.io/gh/theiskaa/field_suggestion/branch/develop/graph/badge.svg"
+      alt="Coverage" />
+  </a>
+    <a href="https://github.com/theiskaa/field_suggestion/blob/develop/LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-red.svg"
+      alt="License: MIT" />
+  </a>
+  <br>
+    <a href="https://pub.dev/packages/field_suggestion">
+    <img src="https://img.shields.io/pub/v/field_suggestion?color=blue"
+      alt="pub version" />
+  </a>
+  <a href="https://github.com/theiskaa/field_suggestion/releases">
+    <img src="https://img.shields.io/github/v/release/theiskaa/field_suggestion?label=last%20release"
+      alt="last release" />
+  </a>
+  <a href="https://github.com/theiskaa/anon/stargazers">
+    <img src="https://img.shields.io/github/stars/theiskaa/field_suggestion?label=%20stargazers&style=social"
+      alt="Stars" />
+  </a>
+  <br>
+  <a href="https://discord.gg/uMp9ee5HV4">
+    <img src="https://img.shields.io/discord/830139463673053240?color=blue&label=anoncord&logo=discord"
+      alt="Anoncord" />
+  </a>   
+</div><br>
 
 ---
 ## Installing
@@ -29,24 +56,32 @@ Now in your Flutter code, you can use:
 ```dart
 import 'package:field_suggestion/field_suggestion.dart';
 ```
----
 
 
 # Usage and overview
-**Require to create a `TextEditingController` and suggestions list, e.g:**
+**Require to create a `TextEditingController` and suggestions list. E.g:**
 
 ```dart
 final textEditingController = TextEditingController();
+
 // And 
 List<String> suggestionList = [
  'test@gmail.com',
  'test1@gmail.com',
  'test2@gmail.com',
 ];
+
+// Or
+
+List<int> numSuggestions = [
+  13187829696,
+  13102743803,
+  15412917703,
+];
 ```
 
 
-## Basic/Default usage.
+## Basic usage.
 <img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/default.gif" align = "right" height = "200px">
 
 ```dart
@@ -57,17 +92,15 @@ FieldSuggestion(
 ),
 ```
 
----
-
 ## Custom usage.
 <img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/custom.gif" align = "right" height = "230px">
 
 ```dart
 FieldSuggestion(
   textController: textEditingController,
-  suggestionList: suggestionList,
+  suggestionList: numSuggestions,
   fieldDecoration: InputDecoration(
-    hintText: "Email",
+    hintText: "Phone number",
     enabledBorder: const OutlineInputBorder(),
     focusedBorder: const OutlineInputBorder(),
   ),
@@ -108,7 +141,7 @@ And now we can close box when we tap on the screen. (You can do it everywhere, w
    Widget build(BuildContext context) {
      return GestureDetector(
        onTap: () => _boxController.close(),
-       child: Scaffold(
+       child: Scaffold( 
          body: Center(
            child: FieldSuggestion(
              hint: 'test',

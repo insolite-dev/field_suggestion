@@ -23,11 +23,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final firstTextController = TextEditingController();
   final secondTextController = TextEditingController();
-  final thirdTextController = TextEditingController();
 
   final firstBoxController = BoxController();
   final secondBoxController = BoxController();
-  final thirdBoxController = BoxController();
 
   List<String> stringSuggestions = [
     'test@gmail.com',
@@ -65,22 +63,13 @@ class _HomePageState extends State<HomePage> {
 
                 const SizedBox(height: 100),
 
-                // With num type variables.
+                // Custom usage with num type variables.
                 FieldSuggestion(
                   boxController: secondBoxController,
                   textController: secondTextController,
                   suggestionList: numSuggestions,
-                  hint: 'Phone Number',
-                ),
-                const SizedBox(height: 100),
-
-                // Custom usage.
-                FieldSuggestion(
-                  boxController: thirdBoxController,
-                  textController: thirdTextController,
-                  suggestionList: stringSuggestions,
                   fieldDecoration: InputDecoration(
-                    hintText: "Email",
+                    hintText: "Phone Number",
                     enabledBorder: const OutlineInputBorder(),
                     focusedBorder: const OutlineInputBorder(),
                   ),

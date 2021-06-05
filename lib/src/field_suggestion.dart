@@ -35,7 +35,7 @@ class FieldSuggestion extends StatefulWidget {
   final TextEditingController textController;
 
   /// The main list which would be displayed into suggestion box.
-  /// Able to use as `List<String>`, `List<int>`, and `List<double>`
+  /// Able to use as `List<String>`, `List<int>`, and `List<double>`.
   final List<dynamic> suggestionList;
 
   /// To set custom `onTap` method.
