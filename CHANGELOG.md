@@ -1,3 +1,6 @@
+## [v0.1.4] - 5/06/21
+- **Num. type list autocompleting support**
+Now users can use their `suggestionList` as `List<String>`, `List<double>`, and `List<int>`.
 ## [v0.1.3] - 30/05/21
 - **Enabled null safety**
 ## [v0.1.2] - 30/05/21
