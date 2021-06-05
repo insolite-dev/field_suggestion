@@ -24,18 +24,28 @@ class _HomePageState extends State<HomePage> {
   final firstTextController = TextEditingController();
   final secondTextController = TextEditingController();
 
-  final suggestionBoxController = BoxController();
+  final firstBoxController = BoxController();
+  final secondBoxController = BoxController();
 
-  List<String> suggestionList = [
+  List<String> stringSuggestions = [
     'test@gmail.com',
     'test1@gmail.com',
     'test2@gmail.com',
   ];
 
+  List<int> numSuggestions = [
+    13187829696,
+    13102743803,
+    15412917703,
+  ];
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => suggestionBoxController.close!(),
+      onTap: () {
+        firstBoxController.close!();
+        secondBoxController.close!();
+      },
       child: Scaffold(
         appBar: AppBar(title: const Text("FieldSuggestion Example")),
         body: SingleChildScrollView(
@@ -45,20 +55,21 @@ class _HomePageState extends State<HomePage> {
               children: [
                 // Basic usage.
                 FieldSuggestion(
+                  boxController: firstBoxController,
                   textController: firstTextController,
-                  suggestionList: suggestionList,
+                  suggestionList: stringSuggestions,
                   hint: 'Email',
                 ),
 
                 const SizedBox(height: 100),
 
-                // Custom usage.
+                // Custom usage with num type variables.
                 FieldSuggestion(
-                  boxController: suggestionBoxController,
+                  boxController: secondBoxController,
                   textController: secondTextController,
-                  suggestionList: suggestionList,
+                  suggestionList: numSuggestions,
                   fieldDecoration: InputDecoration(
-                    hintText: "Email",
+                    hintText: "Phone Number",
                     enabledBorder: const OutlineInputBorder(),
                     focusedBorder: const OutlineInputBorder(),
                   ),

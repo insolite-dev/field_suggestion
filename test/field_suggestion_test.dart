@@ -31,8 +31,8 @@ void main() {
   // And test `fieldDecoration` property as custom InputDecoration.
   FieldSuggestion thirdFieldSuggestion;
 
-  // To test `slideAnimationStyle` property as [SlideAnimationStyle.UTD].
-  // And custom gestures.
+  // To test `slideAnimationStyle` property as [SlideAnimationStyle.UTD],
+  // custom gestures and number type suggestion list.
   FieldSuggestion fourthFieldSuggestion;
 
   // To test slideTweenOffset property as custom value, default gestures.
@@ -56,6 +56,7 @@ void main() {
   BoxController boxController;
 
   const suggestions = ['test@gmail.com', 'test1@gmail.com', 'test2@gmail.com'];
+  const numSuggestions = [13187829696, 13102743803, 15412917703];
   var suggestion = ['test@gmail.com'];
 
   final findFieldSuggestion = find.byKey(Key('suggestion.field'));
@@ -106,7 +107,7 @@ void main() {
     fourthFieldSuggestion = FieldSuggestion(
       key: Key('fourth.suggestion.field'),
       textController: fourthTextEditingController,
-      suggestionList: suggestion,
+      suggestionList: numSuggestions,
       disabledDefaultOnTap: true,
       disabledDefaultOnIconTap: true,
       onTap: () {},
@@ -246,7 +247,7 @@ void main() {
       expect(findFourthFieldSuggestion, findsOneWidget);
 
       // Enter text to fourthFieldSuggestion and reload page.
-      await tester.enterText(findFourthFieldSuggestion, 'test');
+      await tester.enterText(findFourthFieldSuggestion, '13187829696');
       await tester.pumpAndSettle();
 
       final suggestedItem = find.byType(SuggestionItem);
