@@ -31,7 +31,7 @@
 </div><br>
 
 ---
-## Installing
+# Installing
 
 ### Depend on it
 

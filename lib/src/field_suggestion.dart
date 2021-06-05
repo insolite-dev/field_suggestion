@@ -1,6 +1,6 @@
-import 'package:field_suggestion/src/box_controller.dart';
 import 'package:flutter/material.dart';
 
+import 'package:field_suggestion/src/box_controller.dart';
 import 'package:field_suggestion/src/styles.dart';
 import 'package:field_suggestion/src/suggestion_item.dart';
 import 'package:field_suggestion/src/utils.dart';

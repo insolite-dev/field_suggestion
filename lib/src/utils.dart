@@ -1,5 +1,3 @@
-import 'package:flutter/widgets.dart';
-
 // Method to get right max height for Suggestion Box,
 // by listening [wDivider] and [sizeByItem] properties.
 double maxSuggestionBoxHeight({
@@ -25,7 +23,6 @@ double maxSuggestionBoxHeight({
       return size * 2.toDouble();
     case 3:
       return size * 3.toDouble();
-      break;
     default:
       return size * 4.toDouble();
   }
