@@ -4,6 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:field_suggestion/field_suggestion.dart';
 import 'package:field_suggestion/src/suggestion_item.dart';
 
+import 'src/test_model.dart';
+
 void main() {
   // To test [fieldSuggestion].
   late Widget mainWidget;
@@ -36,7 +38,7 @@ void main() {
   FieldSuggestion fourthFieldSuggestion;
 
   // To test slideTweenOffset property as custom value, default gestures.
-  // And external control.
+  // external control, and Custom model class list.
   FieldSuggestion fifthFieldSuggestion;
 
   // For [fieldSuggestion].
@@ -53,11 +55,12 @@ void main() {
 
   // For [fifthFieldSuggestion].
   TextEditingController fifthTextEditingController;
+
   BoxController boxController;
 
-  const suggestions = ['test@gmail.com', 'test1@gmail.com', 'test2@gmail.com'];
-  const numSuggestions = [13187829696, 13102743803, 15412917703];
-  var suggestion = ['test@gmail.com'];
+  const suggestions = ['test@gmail.com'];
+  var numSuggestions = [13187829696, 99873124124];
+  var testModelSuggestions = [TestModel(title: 'Some test')];
 
   final findFieldSuggestion = find.byKey(Key('suggestion.field'));
   final findSecondFieldSuggestion = find.byKey(Key('seccond.suggestion.field'));
@@ -98,7 +101,7 @@ void main() {
     thirdFieldSuggestion = FieldSuggestion(
       key: Key('third.suggestion.field'),
       textController: thirdTextEditingController,
-      suggestionList: suggestions,
+      suggestionList: numSuggestions,
       wSlideAnimation: true,
       fieldDecoration: InputDecoration(labelText: 'Type.'),
       slideAnimationStyle: SlideAnimationStyle.BTU,
@@ -120,7 +123,8 @@ void main() {
       key: Key('fifth.suggestion.field'),
       boxController: boxController,
       textController: fifthTextEditingController,
-      suggestionList: suggestion,
+      searchBy: 'title',
+      suggestionList: testModelSuggestions,
       closeBoxAfterSelect: false,
       wSlideAnimation: true,
       slideTweenOffset: Tween<Offset>(begin: Offset(-8, 0), end: Offset.zero),
@@ -163,7 +167,7 @@ void main() {
   });
 
   group('[FieldSuggestion]', () {
-    testWidgets('Should expect initial values', (WidgetTester tester) async {
+    testWidgets('should contain initial values', (WidgetTester tester) async {
       await tester.pumpWidget(mainWidget);
 
       // mainWidget tests.
@@ -180,16 +184,16 @@ void main() {
       expect(find.byType(Material), findsNWidgets(2));
       expect(find.byType(Overlay), findsOneWidget);
       expect(find.byType(SlideTransition), findsNWidgets(2));
-      expect(find.byType(SizedBox), findsNWidgets(10));
-      expect(find.byType(Container), findsNWidgets(10));
+      expect(find.byType(SizedBox), findsNWidgets(4));
+      expect(find.byType(Container), findsNWidgets(4));
       expect(find.byType(CompositedTransformTarget), findsNWidgets(2));
-      expect(find.byType(ConstrainedBox), findsNWidgets(10));
+      expect(find.byType(ConstrainedBox), findsNWidgets(4));
       expect(find.byType(Opacity), findsOneWidget);
       expect(find.byType(ListView), findsOneWidget);
       expect(find.byType(SlideTransition), findsNWidgets(2));
-      expect(find.byType(Column), findsNWidgets(3));
-      expect(find.byType(Padding), findsNWidgets(17));
-      expect(find.byType(SuggestionItem), findsNWidgets(3));
+      expect(find.byType(Column), findsOneWidget);
+      expect(find.byType(Padding), findsNWidgets(5));
+      expect(find.byType(SuggestionItem), findsOneWidget);
       expect(find.byType(TextField), findsOneWidget);
 
       // Test closing suggestion box, by giving unmatched value.
@@ -231,7 +235,10 @@ void main() {
       expect(findThirdFieldSuggestion, findsOneWidget);
 
       // Enter text to thirdFieldSuggestion and reload page.
-      await tester.enterText(findThirdFieldSuggestion, 'test');
+      await tester.enterText(findThirdFieldSuggestion, '1');
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text(numSuggestions[0].toString()));
       await tester.pumpAndSettle();
     });
 
