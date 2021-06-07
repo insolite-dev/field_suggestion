@@ -35,8 +35,45 @@ class FieldSuggestion extends StatefulWidget {
   final TextEditingController textController;
 
   /// The main list which would be displayed into suggestion box.
-  /// Able to use as `List<String>`, `List<int>`, and `List<double>`.
+  /// Able to use as `List<String>`, `List<int>`, `List<double>` and Custom model class.
+  ///
+  /// For Example: `List<UserModel>`.
+  /// If you wanna do this then `searchBy` property must be initilazed.
+  /// **And one important part is that your model class must to have [toJson] method.**
+  ///
+  /// ### Complete model example which can be used in [suggestionList]:
+  /// ```dart
+  /// class UserModel {
+  ///   final String? email;
+  ///   final String? password;
+  ///
+  ///   const UserModel({this.email, this.password});
+  ///
+  ///   Map<String, dynamic> toJson() => {
+  ///         'email': this.email,
+  ///         'password': this.password,
+  ///       };
+  /// }
+  /// ```
   final List<dynamic> suggestionList;
+
+  /// It must be initilazed when suggestionList isn't `List<String>`, `List<int>`, or `List<double>`.
+  ///
+  /// Howeveer, when you give a suggestion list which includes custom classes,
+  /// then you must to add the propert's name which you wanna search by.
+  /// ---
+  /// **For example:**
+  ///
+  /// I have a class like:
+  /// ```dart
+  /// class UserModel{
+  ///  final String? email;
+  ///  final String? password;
+  /// }
+  /// ```
+  /// And my [suggestionList]'s runtimeType is List<UserModel>.
+  /// Then have to add `searchBy: 'email'` or `searchBy: 'password'` to [FieldSuggestion] widget.
+  final String? searchBy;
 
   /// To set custom `onTap` method.
   /// e.g you need open a page, when item selected.
@@ -182,6 +219,7 @@ class FieldSuggestion extends StatefulWidget {
     Key? key,
     required this.textController,
     required this.suggestionList,
+    this.searchBy,
 
     // SuggestionBox properties.
     this.boxController,
@@ -280,15 +318,29 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     else {
       final inputText = widget.textController.text;
 
-      // Upper case every item which were into [suggestionList] for easy separation.
-      // And than create [matchers] list by listening `textController`.
-      matchers = widget.suggestionList.where((item) {
-        if (widget.suggestionList is List<int> ||
-            widget.suggestionList is List<double>)
-          return item.toString().contains(inputText.toString());
+      if (isClassList(widget.suggestionList)) {
+        // At this time, `searchBy` must not be null.
+        if (widget.searchBy == null) {
+          throw FlutterError(
+            "If given suggestionList's runtimeType isn't List<String>, List<int> or List<double>. That means, you was gave a List which includes dart classes. So then [searchBy] can't be null.",
+          );
+        }
+        matchers = renderClassList(
+          widget.suggestionList,
+          inputText,
+          widget.searchBy,
+        );
+      } else {
+        // Upper case every item which were into [suggestionList] for easy separation.
+        // And then create [matchers] list by listening `textController`.
+        matchers = widget.suggestionList.where((item) {
+          if (widget.suggestionList is List<int> ||
+              widget.suggestionList is List<double>)
+            return item.toString().contains(inputText.toString());
 
-        return item.toUpperCase().contains(inputText.toUpperCase());
-      }).toList();
+          return item.toUpperCase().contains(inputText.toUpperCase());
+        }).toList();
+      }
 
       if ((matchers.isNotEmpty && matchers[0] != inputText) ||
           !widget.closeBoxAfterSelect) {
@@ -375,11 +427,13 @@ class _FieldSuggestionState extends State<FieldSuggestion>
   // It fills value of field with title of selected item.
   // And if `closeBoxAfterSelect` is enabled (as default it's enabled),
   // it closes suggestions box after tapping the item.
-  onItemTap(String selectedItem) {
+  onItemTap(dynamic selectedItem) {
     if (widget.disabledDefaultOnTap) return widget.onTap!();
 
     _customSetState(() {
-      widget.textController.text = selectedItem;
+      widget.textController.text = isClassList(widget.suggestionList)
+          ? selectedItem['${widget.searchBy}'].toString()
+          : selectedItem.toString();
       widget.textController.selection = TextSelection.fromPosition(
         TextPosition(offset: widget.textController.text.length),
       );
@@ -483,9 +537,11 @@ class _FieldSuggestionState extends State<FieldSuggestion>
               padding: const EdgeInsets.symmetric(vertical: 3),
               child: SuggestionItem(
                 key: const Key('suggested.item'),
-                title: "${matchers[index]}",
+                title: isClassList(widget.suggestionList)
+                    ? "${matchers[index][widget.searchBy]}"
+                    : "${matchers[index]}",
                 style: widget.suggestionItemStyle,
-                onTap: () => onItemTap(matchers[index].toString()),
+                onTap: () => onItemTap(matchers[index]),
                 onIconTap: () => onTrallingTap(matchers[index]),
               ),
             ),

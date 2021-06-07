@@ -1,6 +1,8 @@
 import 'package:field_suggestion/field_suggestion.dart';
 import 'package:flutter/material.dart';
 
+import 'user_model.dart';
+
 void main() => runApp(App());
 
 class App extends StatelessWidget {
@@ -39,6 +41,12 @@ class _HomePageState extends State<HomePage> {
     15412917703,
   ];
 
+  List<UserModel> userSuggestions = [
+    UserModel(email: 'test@gmail.com', password: 'test123'),
+    UserModel(email: 'test1@gmail.com', password: 'test123'),
+    UserModel(email: 'test2@gmail.com', password: 'test123')
+  ];
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -55,10 +63,10 @@ class _HomePageState extends State<HomePage> {
               children: [
                 // Basic usage.
                 FieldSuggestion(
+                  hint: 'Email',
                   boxController: firstBoxController,
                   textController: firstTextController,
                   suggestionList: stringSuggestions,
-                  hint: 'Email',
                 ),
 
                 const SizedBox(height: 100),
@@ -93,6 +101,18 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
+                ),
+                const SizedBox(height: 100),
+
+                // Usage with custom class suggestions.
+                FieldSuggestion(
+                  hint: 'Email',
+                  // If y're using list where are classes,
+                  // Don't forget adding search by property.
+                  searchBy: 'email',
+                  boxController: firstBoxController,
+                  textController: firstTextController,
+                  suggestionList: userSuggestions,
                 ),
               ],
             ),
