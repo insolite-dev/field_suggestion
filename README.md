@@ -1,4 +1,8 @@
-<h1 align="center">Field Suggestions</h1>
+<p align="center">
+  <img width="230" src="https://raw.githubusercontent.com/theiskaa/field_suggestion/feature/model-class-rendering/example/assets/logo.png" alt="Field Suggesion's Logo">
+  <h1 align="center">Field Suggestions</h1>
+</p>
+
 
  <p align="center">
   <div align="center">
@@ -30,7 +34,7 @@
   </a>   
 </div><br>
 
----
+
 # Installing
 
 ### Depend on it
@@ -77,6 +81,14 @@ List<int> numSuggestions = [
   13187829696,
   13102743803,
   15412917703,
+];
+
+// Or 
+// Note: Take look at [Class suggestions] part.
+List<UserModel> userSuggestions = [
+  UserModel(email: 'test@gmail.com', password: 'test123'),
+  UserModel(email: 'test1@gmail.com', password: 'test123'),
+  UserModel(email: 'test2@gmail.com', password: 'test123')
 ];
 ```
 
@@ -155,6 +167,38 @@ And now we can close box when we tap on the screen. (You can do it everywhere, w
    }
  }
 ```
+
+## Class suggestions
+UserModel class we would use it into `suggestionList`.
+**Note:** You must have `toJson` method into your model class.
+```dart
+class UserModel {
+  final String? email;
+  final String? password;
+
+  const UserModel({this.email, this.password});
+
+  // If we wanna use this model class into FieldSuggestion.
+  // Then we must have toJson method, like this:
+  Map<String, dynamic> toJson() => {
+        'email': this.email,
+        'password': this.password,
+      };
+}
+```
+If we gave a `userSuggestions` which is `List<UserModel>`. 
+Then we must add the `searchBy` property.
+Our model has just *email* and *password*, right? So then we can implement it like:
+`searchBy: 'email'` or `searchBy: 'password'`.
+```dart
+FieldSuggestion(
+  hint: 'Email',
+  textController: textEditingController,
+  suggestionList: userSuggestions,
+  searchBy: 'email' // Or 'password'
+),
+```
+
 
 # Contributions
 **If you find a bug or want a feature, but don't know how to fix/implement it, please fill an *[issue](https://github.com/theiskaa/field_suggestion/issues)*.**
