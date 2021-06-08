@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="230" src="https://raw.githubusercontent.com/theiskaa/field_suggestion/feature/model-class-rendering/example/assets/logo.png" alt="Field Suggesion's Logo">
+  <img width="230" src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/logo.png" alt="Field Suggesion's Logo">
   <h1 align="center">Field Suggestions</h1>
 </p>
 

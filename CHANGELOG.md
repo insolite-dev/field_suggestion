@@ -1,3 +1,6 @@
+## [v0.1.5] - 8/06/21
+- **Model class type list autocompleting support**
+Now users can use their `suggestionList` as  `List<CustomModel>`
 ## [v0.1.4] - 5/06/21
 - **Num. type list autocompleting support**
 Now users can use their `suggestionList` as `List<String>`, `List<double>`, and `List<int>`.
