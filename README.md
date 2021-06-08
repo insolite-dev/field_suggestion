@@ -169,8 +169,8 @@ And now we can close box when we tap on the screen. (You can do it everywhere, w
 ```
 
 ## Class suggestions
-UserModel class we would use it into `suggestionList`.
-**Note:** You must have `toJson` method into your model class.
+`UserModel` class, we would use it into `suggestionList`.
+**Note:** You must have `toJson` method in your model class.
 ```dart
 class UserModel {
   final String? email;
