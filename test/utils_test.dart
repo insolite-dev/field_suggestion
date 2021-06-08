@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:field_suggestion/src/utils.dart';
 
+import 'src/test_model.dart';
+
 void main() {
   group('[Utils]', () {
     test("`maxSuggestionBoxHeight` test", () {
@@ -50,6 +52,30 @@ void main() {
       expect(defaultSize3, 180);
       expect(defaultSize, 260);
       expect(sizeByItemSetted, 120);
+    });
+
+    test('isClassList', () {
+      List<String> stringList = ['one', 'two', 'three'];
+      List<int> intList = [1, 2, 3];
+      List<double> doubleList = [1.0, 2.0, 3.0];
+      List<TestModel> modelList = [TestModel(title: 'Some test')];
+
+      expect(isClassList(stringList), false);
+      expect(isClassList(intList), false);
+      expect(isClassList(doubleList), false);
+      expect(isClassList(modelList), true);
+    });
+
+    test('renderClassList', () {
+      List<TestModel> modelList = [TestModel(title: 'Some test')];
+
+      var renderedMatchersList = renderClassList(modelList, 'Some', 'title');
+      List<Map<String, dynamic>> mockRenderedMatchersList = [
+        modelList[0].toJson()
+      ];
+
+      expect(renderedMatchersList is List<Map<String, dynamic>>, true);
+      expect(renderedMatchersList, mockRenderedMatchersList);
     });
   });
 }
