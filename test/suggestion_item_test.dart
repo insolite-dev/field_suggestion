@@ -11,6 +11,7 @@ void main() {
   setUpAll(() {
     // Initilaze [SuggestionItem] widget with custom properties.
     suggestionItem = SuggestionItem(
+      disableItemTrailing: false,
       style: SuggestionItemStyle.DefaultStyle,
       onTap: () {},
       onIconTap: () {},

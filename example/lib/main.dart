@@ -25,9 +25,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final firstTextController = TextEditingController();
   final secondTextController = TextEditingController();
+  final thirdTextController = TextEditingController();
 
   final firstBoxController = BoxController();
   final secondBoxController = BoxController();
+  final thirdBoxController = BoxController();
 
   List<String> stringSuggestions = [
     'test@gmail.com',
@@ -63,8 +65,8 @@ class _HomePageState extends State<HomePage> {
               children: [
                 // Basic usage.
                 FieldSuggestion(
-                  hint: 'Email',
-                  boxController: firstBoxController,
+                  hint: 'Email', // optional
+                  boxController: firstBoxController, // optional
                   textController: firstTextController,
                   suggestionList: stringSuggestions,
                 ),
@@ -73,9 +75,9 @@ class _HomePageState extends State<HomePage> {
 
                 // Custom usage with num type variables.
                 FieldSuggestion(
+                  textController: secondTextController, // Required
+                  suggestionList: numSuggestions, // Required
                   boxController: secondBoxController,
-                  textController: secondTextController,
-                  suggestionList: numSuggestions,
                   fieldDecoration: InputDecoration(
                     hintText: "Phone Number",
                     enabledBorder: const OutlineInputBorder(),
@@ -87,9 +89,20 @@ class _HomePageState extends State<HomePage> {
                   slideAnimationStyle: SlideAnimationStyle.LTR,
                   slideCurve: Curves.linearToEaseOut,
                   animationDuration: const Duration(milliseconds: 300),
-                  suggestionItemStyle:
-                      SuggestionItemStyle.WhiteNeumorphismedStyle,
-                  suggestionBoxStyle: SuggestionBoxStyle(
+                  itemStyle: SuggestionItemStyle(
+                    leading: const Icon(Icons.person),
+                    borderRadius: const BorderRadius.all(Radius.circular(5)),
+                    boxShadow: [
+                      const BoxShadow(
+                        blurRadius: 1,
+                        spreadRadius: 1,
+                        offset: Offset(0, 2),
+                        color: Color(0xffD5D5D5),
+                      ),
+                    ],
+                  ),
+                  disableItemTrailing: true,
+                  boxStyle: SuggestionBoxStyle(
                     backgroundColor: Colors.white,
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
@@ -102,6 +115,7 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
+
                 const SizedBox(height: 100),
 
                 // Usage with custom class suggestions.
@@ -110,8 +124,8 @@ class _HomePageState extends State<HomePage> {
                   // If y're using list where are classes,
                   // Don't forget adding search by property.
                   searchBy: 'email',
-                  boxController: firstBoxController,
-                  textController: firstTextController,
+                  boxController: thirdBoxController,
+                  textController: thirdTextController,
                   suggestionList: userSuggestions,
                 ),
               ],
