@@ -158,7 +158,6 @@ class FieldSuggestion extends StatefulWidget {
   /// ```
   final SuggestionItemStyle itemStyle;
 
-
   /// Disables default trailing [X] icon.
   /// As default it isn't disabled so `false`.
   final bool disableItemTrailing;
