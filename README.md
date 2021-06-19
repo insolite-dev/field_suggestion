@@ -1,8 +1,6 @@
 <p align="center">
-  <img width="230" src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/logo.png" alt="Field Suggesion's Logo">
-  <h1 align="center">Field Suggestions</h1>
+  <img width="250" src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/logo.png" alt="Field Suggesion's Logo">
 </p>
-
 
  <p align="center">
   <div align="center">
@@ -34,37 +32,9 @@
   </a>   
 </div><br>
 
+# Usage & Overview
 
-# Installing
-
-### Depend on it
-
-Add this to your package's `pubspec.yaml` file:
-
-```yaml
-dependencies:
-  field_suggestion: <latest_version>
-```
-
-### Install it
-
-You can install packages from the command line:
-
-```sh
-$ flutter pub get
-```
-### Import it
-
-Now in your Flutter code, you can use:
-
-```dart
-import 'package:field_suggestion/field_suggestion.dart';
-```
-
-
-# Usage and overview
-**Require to create a `TextEditingController` and suggestions list. E.g:**
-
+Make ready your home widget by creating required options for FieldSuggestion.
 ```dart
 final textEditingController = TextEditingController();
 
@@ -76,7 +46,6 @@ List<String> suggestionList = [
 ];
 
 // Or
-
 List<int> numSuggestions = [
   13187829696,
   13102743803,
@@ -109,8 +78,8 @@ FieldSuggestion(
 
 ```dart
 FieldSuggestion(
-  textController: secondTextController, // Required
-  suggestionList: numSuggestions, // Required
+  textController: secondTextController,
+  suggestionList: numSuggestions,
   boxController: secondBoxController,
   fieldDecoration: InputDecoration(
     hintText: "Phone Number",
