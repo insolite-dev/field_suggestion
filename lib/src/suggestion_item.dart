@@ -7,6 +7,7 @@ class SuggestionItem extends StatelessWidget {
   final Function onTap;
   final Function onIconTap;
   final String title;
+  final bool disableItemTrailing;
 
   const SuggestionItem({
     Key? key,
@@ -14,35 +15,38 @@ class SuggestionItem extends StatelessWidget {
     required this.onTap,
     required this.onIconTap,
     required this.title,
+    required this.disableItemTrailing,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: style.margin,
-      decoration: _buildBoxDecoration(),
+      decoration: buildBoxDecoration(),
       child: ListTile(
         hoverColor: Colors.transparent,
         onTap: onTap as void Function()?,
-        title: _buildTitle(),
-        trailing: _buildIconButton(),
+        title: buildTitle(),
+        trailing:
+            !disableItemTrailing ? buildIconButton() : const SizedBox.shrink(),
+        leading: style.leading,
       ),
     );
   }
 
-  Text _buildTitle() => Text(
+  Text buildTitle() => Text(
         title,
         style: style.titleStyle,
       );
 
-  IconButton _buildIconButton() => IconButton(
-        key: Key('SuggestionItem.icon'),
+  IconButton buildIconButton() => IconButton(
+        key: const Key('SuggestionItem.icon'),
         splashColor: Colors.transparent,
         icon: Icon(style.icon, color: style.iconColor, size: style.iconSize),
         onPressed: onIconTap as void Function()?,
       );
 
-  BoxDecoration _buildBoxDecoration() {
+  BoxDecoration buildBoxDecoration() {
     return BoxDecoration(
       color: style.backgroundColor,
       border: style.border,

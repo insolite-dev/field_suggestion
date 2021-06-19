@@ -128,7 +128,7 @@ class FieldSuggestion extends StatefulWidget {
   /// SuggestionBoxStyle(...)
   /// /// With following properties:  [backgroundColor], [border], [borderRadius], [gradient], [boxShadow], [padding], [shape].
   /// ```
-  final SuggestionBoxStyle suggestionBoxStyle;
+  final SuggestionBoxStyle boxStyle;
 
   /// `wDivider` if it equeals `true`,
   /// User would see a simple line, every suggestionItem's front.
@@ -156,7 +156,11 @@ class FieldSuggestion extends StatefulWidget {
   /// ```
   /// SuggestionItemStyle.BlackNeumorphismedStyle
   /// ```
-  final SuggestionItemStyle suggestionItemStyle;
+  final SuggestionItemStyle itemStyle;
+
+  /// Disables default trailing [X] icon.
+  /// As default it isn't disabled so `false`.
+  final bool disableItemTrailing;
 
   /// Field hint property to set it without [fieldDecoration].
   final String? hint;
@@ -224,7 +228,7 @@ class FieldSuggestion extends StatefulWidget {
     // SuggestionBox properties.
     this.boxController,
     this.spacer = 5.0,
-    this.suggestionBoxStyle = SuggestionBoxStyle.DefaultStyle,
+    this.boxStyle = SuggestionBoxStyle.DefaultStyle,
     this.divider = const Divider(),
     this.wDivider = false,
     this.sizeByItem,
@@ -237,12 +241,13 @@ class FieldSuggestion extends StatefulWidget {
     this.slideAnimationStyle = SlideAnimationStyle.RTL,
 
     // SuggestionItem properties.
-    this.suggestionItemStyle = SuggestionItemStyle.DefaultStyle,
+    this.itemStyle = SuggestionItemStyle.DefaultStyle,
     this.onTap,
     this.onIconTap,
     this.disabledDefaultOnTap = false,
     this.disabledDefaultOnIconTap = false,
     this.scrollController,
+    this.disableItemTrailing = false,
 
     // FieldSuggestion properties.
     this.hint,
@@ -528,24 +533,17 @@ class _FieldSuggestionState extends State<FieldSuggestion>
   }
 
   // Items which were mapped from matchers in [suggestionList].
-  Container suggestionListItem(int index) => Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 3),
-              child: SuggestionItem(
-                key: const Key('suggested.item'),
-                title: isClassList(widget.suggestionList)
-                    ? "${matchers[index][widget.searchBy]}"
-                    : "${matchers[index]}",
-                style: widget.suggestionItemStyle,
-                onTap: () => onItemTap(matchers[index]),
-                onIconTap: () => onTrallingTap(matchers[index]),
-              ),
-            ),
-          ],
+  Widget suggestionListItem(int index) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 3),
+        child: SuggestionItem(
+          key: const Key('suggested.item'),
+          disableItemTrailing: widget.disableItemTrailing,
+          title: isClassList(widget.suggestionList)
+              ? "${matchers[index][widget.searchBy]}"
+              : "${matchers[index]}",
+          style: widget.itemStyle,
+          onTap: () => onItemTap(matchers[index]),
+          onIconTap: () => onTrallingTap(matchers[index]),
         ),
       );
 
@@ -565,9 +563,9 @@ class _FieldSuggestionState extends State<FieldSuggestion>
 
   // Get [_suggestionBoxStyle] by listening custom style widget [widget.suggestionBoxStyle].
   Decoration get _suggestionBoxStyle => BoxDecoration(
-        color: widget.suggestionBoxStyle.backgroundColor,
-        borderRadius: widget.suggestionBoxStyle.borderRadius,
-        boxShadow: widget.suggestionBoxStyle.boxShadow,
-        border: widget.suggestionBoxStyle.border,
+        color: widget.boxStyle.backgroundColor,
+        borderRadius: widget.boxStyle.borderRadius,
+        boxShadow: widget.boxStyle.boxShadow,
+        border: widget.boxStyle.border,
       );
 }

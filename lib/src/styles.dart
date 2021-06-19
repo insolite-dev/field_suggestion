@@ -84,6 +84,7 @@ class SuggestionBoxStyle {
 /// **Or set as custom:**
 /// ```dart
 /// SuggestionItemStyle(
+///  leading: const Icon(Icons.person)
 ///  backgroundColor: Colors.white,
 ///  icon: Icons.clear,
 ///  iconColor: Colors.red[700],
@@ -93,6 +94,10 @@ class SuggestionBoxStyle {
 /// );
 /// ```
 class SuggestionItemStyle {
+  /// [leading] widget for suggestion item.
+  /// Can be imagine as ListTile's leading.
+  final Widget? leading;
+
   /// [backgroundColor] of `SuggestionItem` card.
   final Color? backgroundColor;
 
@@ -120,7 +125,8 @@ class SuggestionItemStyle {
   final EdgeInsetsGeometry? margin;
 
   const SuggestionItemStyle({
-    this.backgroundColor,
+    this.leading,
+    this.backgroundColor = const Color(0xFFFFFFFF),
     this.titleStyle,
     this.icon = Icons.clear,
     this.iconSize,
