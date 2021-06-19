@@ -109,10 +109,11 @@ FieldSuggestion(
 
 ```dart
 FieldSuggestion(
-  textController: textEditingController,
-  suggestionList: numSuggestions,
+  textController: secondTextController, // Required
+  suggestionList: numSuggestions, // Required
+  boxController: secondBoxController,
   fieldDecoration: InputDecoration(
-    hintText: "Phone number",
+    hintText: "Phone Number",
     enabledBorder: const OutlineInputBorder(),
     focusedBorder: const OutlineInputBorder(),
   ),
@@ -122,8 +123,20 @@ FieldSuggestion(
   slideAnimationStyle: SlideAnimationStyle.LTR,
   slideCurve: Curves.linearToEaseOut,
   animationDuration: const Duration(milliseconds: 300),
-  suggestionItemStyle: SuggestionItemStyle.WhiteNeumorphismedStyle,
-  suggestionBoxStyle: SuggestionBoxStyle(
+  itemStyle: SuggestionItemStyle(
+    leading: const Icon(Icons.person),
+    borderRadius: const BorderRadius.all(Radius.circular(5)),
+    boxShadow: [
+      const BoxShadow(
+        blurRadius: 1,
+        spreadRadius: 1,
+        offset: Offset(0, 2),
+        color: Color(0xffD5D5D5),
+      ),
+    ],
+  ),
+  disableItemTrailing: true,
+  boxStyle: SuggestionBoxStyle(
     backgroundColor: Colors.white,
     borderRadius: BorderRadius.circular(15),
     boxShadow: [
@@ -135,7 +148,7 @@ FieldSuggestion(
       ),
     ],
   ),
-)
+),
 ```
 
 ## External control
