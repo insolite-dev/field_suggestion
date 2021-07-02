@@ -84,6 +84,7 @@ void main() {
       wDivider: true,
       wSlideAnimation: true,
       wOpacityAnimation: true,
+      onItemSelected: (val) {},
     );
 
     secondFieldSuggestion = FieldSuggestion(
@@ -115,6 +116,7 @@ void main() {
       disabledDefaultOnIconTap: true,
       onTap: () {},
       onIconTap: () {},
+      onItemSelected: (val) {},
       wSlideAnimation: true,
       slideAnimationStyle: SlideAnimationStyle.UTD,
     );

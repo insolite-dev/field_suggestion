@@ -78,6 +78,9 @@ class _HomePageState extends State<HomePage> {
                   textController: secondTextController, // Required
                   suggestionList: numSuggestions, // Required
                   boxController: secondBoxController,
+                  onItemSelected: (value) {
+                    // Do Something...
+                  },
                   fieldDecoration: InputDecoration(
                     hintText: "Phone Number",
                     enabledBorder: const OutlineInputBorder(),
@@ -127,6 +130,12 @@ class _HomePageState extends State<HomePage> {
                   boxController: thirdBoxController,
                   textController: thirdTextController,
                   suggestionList: userSuggestions,
+                  onItemSelected: (value) {
+                    // The field suggestion needs toJson mehtod inside your model right?
+                    // So that's mean it converts your model to json.
+                    // Then the output has to be JSON (Map). So now we can get our value's email.
+                    print(value['email']);
+                  },
                 ),
               ],
             ),
