@@ -24,12 +24,7 @@
   <a href="https://github.com/theiskaa/anon/stargazers">
     <img src="https://img.shields.io/github/stars/theiskaa/field_suggestion?label=%20stargazers&style=social"
       alt="Stars" />
-  </a>
-  <br>
-  <a href="https://discord.gg/uMp9ee5HV4">
-    <img src="https://img.shields.io/discord/830139463673053240?color=blue&label=anoncord&logo=discord"
-      alt="Anoncord" />
-  </a>   
+  </a> 
 </div><br>
 
 # Usage & Overview
@@ -81,6 +76,9 @@ FieldSuggestion(
   textController: secondTextController,
   suggestionList: numSuggestions,
   boxController: secondBoxController,
+  onItemSelected: (value) {
+    // Do Something...
+  },
   fieldDecoration: InputDecoration(
     hintText: "Phone Number",
     enabledBorder: const OutlineInputBorder(),
