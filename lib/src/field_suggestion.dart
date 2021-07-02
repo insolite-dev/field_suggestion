@@ -78,11 +78,22 @@ class FieldSuggestion extends StatefulWidget {
   /// To set custom `onTap` method.
   /// e.g you need open a page, when item selected.
   /// Then you should use [onTap] as Navigator..
-  final VoidCallback? onTap;
+  final Function? onTap;
 
   /// As default we use `onIconTap` for remove tapped item which are in [suggestionList] and [matchers] list.
   /// This property make able to customize action.
-  final VoidCallback? onIconTap;
+  final Function? onIconTap;
+
+  /// As default its null.
+  ///
+  /// Takes the selected item's data. It could be everytype variable.
+  /// Maybe String or number or custom class and etc.
+  ///
+  /// Example:
+  /// ```dart
+  /// onItemSelected: (value) => print(value);
+  /// ```
+  final Function(dynamic)? onItemSelected;
 
   /// Controller to use suggeestion box externally.
   /// It makes able to "show" and "close" suggestion box, whenever/everywhere you want.
@@ -175,7 +186,7 @@ class FieldSuggestion extends StatefulWidget {
   final FocusNode? focusNode;
 
   /// Custom onChanged method for [FieldSuggestion].
-  final Function(String)? onChanged;
+  final Function(String)? onFieldChanged;
 
   /// To controle size of `field`.
   final int? maxLines;
@@ -244,6 +255,7 @@ class FieldSuggestion extends StatefulWidget {
     this.itemStyle = SuggestionItemStyle.DefaultStyle,
     this.onTap,
     this.onIconTap,
+    this.onItemSelected,
     this.disabledDefaultOnTap = false,
     this.disabledDefaultOnIconTap = false,
     this.scrollController,
@@ -254,7 +266,7 @@ class FieldSuggestion extends StatefulWidget {
     this.fieldDecoration,
     this.fieldType,
     this.maxLines,
-    this.onChanged,
+    this.onFieldChanged,
     this.focusNode,
   }) : super(key: key);
 
@@ -433,7 +445,11 @@ class _FieldSuggestionState extends State<FieldSuggestion>
   // And if `closeBoxAfterSelect` is enabled (as default it's enabled),
   // it closes suggestions box after tapping the item.
   onItemTap(dynamic selectedItem) {
-    if (widget.disabledDefaultOnTap) return widget.onTap!();
+    if (widget.disabledDefaultOnTap) {
+      widget.onTap!();
+      if (widget.onItemSelected != null) widget.onItemSelected!(selectedItem);
+      return;
+    }
 
     _customSetState(() {
       widget.textController.text = isClassList(widget.suggestionList)
@@ -445,6 +461,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     });
 
     if (widget.onTap != null) widget.onTap!();
+    if (widget.onItemSelected != null) widget.onItemSelected!(selectedItem);
     if (widget.closeBoxAfterSelect) closeBox();
   }
 
@@ -552,7 +569,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
         child: TextField(
           keyboardType: widget.fieldType,
           focusNode: widget.focusNode,
-          onChanged: widget.onChanged,
+          onChanged: widget.onFieldChanged,
           controller: widget.textController,
           maxLines: (widget.maxLines != null) ? widget.maxLines : 1,
           decoration: (widget.fieldDecoration != null)
