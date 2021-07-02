@@ -21,10 +21,6 @@
     <img src="https://img.shields.io/github/v/release/theiskaa/field_suggestion?label=last%20release"
       alt="last release" />
   </a>
-  <a href="https://github.com/theiskaa/anon/stargazers">
-    <img src="https://img.shields.io/github/stars/theiskaa/field_suggestion?label=%20stargazers&style=social"
-      alt="Stars" />
-  </a> 
 </div><br>
 
 # Usage & Overview
