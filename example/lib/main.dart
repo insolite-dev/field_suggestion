@@ -131,9 +131,9 @@ class _HomePageState extends State<HomePage> {
                   textController: thirdTextController,
                   suggestionList: userSuggestions,
                   onItemSelected: (value) {
-                    // The field suggestion needs toJson mehtod inside your model right? 
+                    // The field suggestion needs toJson mehtod inside your model right?
                     // So that's mean it converts your model to json.
-                    // Then the output have to be json (Map). So now we can get our value's email.
+                    // Then the output has to be JSON (Map). So now we can get our value's email.
                     print(value['email']);
                   },
                 ),
