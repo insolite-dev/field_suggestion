@@ -4,22 +4,17 @@
 
  <p align="center">
   <div align="center">
-  <a href="https://codecov.io/gh/theiskaa/field_suggestion">
-    <img src="https://codecov.io/gh/theiskaa/field_suggestion/branch/develop/graph/badge.svg"
-      alt="Coverage" />
-  </a>
-    <a href="https://github.com/theiskaa/field_suggestion/blob/develop/LICENSE">
-    <img src="https://img.shields.io/badge/License-MIT-red.svg"
-      alt="License: MIT" />
-  </a>
-  <br>
-    <a href="https://pub.dev/packages/field_suggestion">
+  <a href="https://pub.dev/packages/field_suggestion">
     <img src="https://img.shields.io/pub/v/field_suggestion?color=blue"
       alt="pub version" />
   </a>
-  <a href="https://github.com/theiskaa/field_suggestion/releases">
-    <img src="https://img.shields.io/github/v/release/theiskaa/field_suggestion?label=last%20release"
-      alt="last release" />
+  <a href="https://github.com/theiskaa/field_suggestion/blob/develop/LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-red.svg"
+      alt="License: MIT" />
+  </a>
+  <a href="https://codecov.io/gh/theiskaa/field_suggestion">
+    <img src="https://codecov.io/gh/theiskaa/field_suggestion/branch/develop/graph/badge.svg"
+      alt="Coverage" />
   </a>
 </div><br>
 
