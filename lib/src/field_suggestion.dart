@@ -126,12 +126,15 @@ class FieldSuggestion extends StatefulWidget {
   /// And now we can close box when we tap on the screen.
   final BoxController? boxController;
 
+  /// As default it will be your [searchBy]'s first value.
   ///
-  ///
-  ///
-  ///
+  /// If you wanna see other values as a title, just provide a property from [searchBy] list.
   final String? itemTitleBy;
 
+  /// As default it's [null].
+  ///
+  /// If you wanna subtitle on suggestion item, just provide a property from [searchBy] list.
+  /// It automatically will be enabled.
   final String? itemSubtitleBy;
 
   /// For calucalte size of suggestionBox by per item.
@@ -463,7 +466,8 @@ class _FieldSuggestionState extends State<FieldSuggestion>
 
     _customSetState(() {
       widget.textController.text = isClassList(widget.suggestionList)
-          ? selectedItem['${widget.itemTitleBy}'].toString()
+          ? selectedItem['${widget.itemTitleBy ?? widget.searchBy![0]}']
+              .toString()
           : selectedItem.toString();
       widget.textController.selection = TextSelection.fromPosition(
         TextPosition(offset: widget.textController.text.length),
@@ -566,11 +570,9 @@ class _FieldSuggestionState extends State<FieldSuggestion>
           key: const Key('suggested.item'),
           disableItemTrailing: widget.disableItemTrailing,
           title: isClassList(widget.suggestionList)
-              ? "${matchers[index][widget.itemTitleBy]}"
+              ? "${matchers[index][widget.itemTitleBy] ?? matchers[index][widget.searchBy![0]]}"
               : "${matchers[index]}",
-          subTitle: isClassList(widget.suggestionList)
-              ? "${matchers[index][widget.itemSubtitleBy]}"
-              : null,
+          subTitle: "${matchers[index][widget.itemSubtitleBy]}",
           style: widget.itemStyle,
           onTap: () => onItemTap(matchers[index]),
           onIconTap: () => onTrallingTap(matchers[index]),

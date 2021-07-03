@@ -104,6 +104,9 @@ class SuggestionItemStyle {
   /// [titleStyle] of `SuggestionItem`'s title.
   final TextStyle? titleStyle;
 
+  /// [subtitleStyle] of `SuggestionItem`'s title.
+  final TextStyle? subtitleStyle;
+
   /// [icon] of `SuggestionItem` which .
   final IconData icon;
   final double? iconSize;
@@ -128,6 +131,7 @@ class SuggestionItemStyle {
     this.leading,
     this.backgroundColor = const Color(0xFFFFFFFF),
     this.titleStyle,
+    this.subtitleStyle,
     this.icon = Icons.clear,
     this.iconSize,
     this.iconColor = Colors.red,
@@ -146,6 +150,7 @@ class SuggestionItemStyle {
     iconColor: Colors.red,
     iconSize: 20,
     titleStyle: TextStyle(color: Colors.black),
+    subtitleStyle: TextStyle(color: Colors.black45),
     borderRadius: const BorderRadius.all(Radius.circular(5)),
   );
 
@@ -157,6 +162,7 @@ class SuggestionItemStyle {
     iconColor: Colors.red,
     iconSize: 20,
     titleStyle: TextStyle(color: Colors.black),
+    subtitleStyle: TextStyle(color: Colors.black45),
     borderRadius: const BorderRadius.all(Radius.circular(5)),
     boxShadow: [
       BoxShadow(
@@ -176,6 +182,7 @@ class SuggestionItemStyle {
     iconColor: Colors.red,
     iconSize: 20,
     titleStyle: TextStyle(color: Colors.white),
+    subtitleStyle: TextStyle(color: Colors.white60),
     borderRadius: const BorderRadius.all(Radius.circular(5)),
     boxShadow: [
       BoxShadow(
