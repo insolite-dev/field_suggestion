@@ -73,7 +73,7 @@ class FieldSuggestion extends StatefulWidget {
   /// ```
   /// And my [suggestionList]'s runtimeType is List<UserModel>.
   /// Then have to add `searchBy: 'email'` or `searchBy: 'password'` to [FieldSuggestion] widget.
-  final String? searchBy;
+  final List<String>? searchBy;
 
   /// To set custom `onTap` method.
   /// e.g you need open a page, when item selected.
@@ -125,6 +125,14 @@ class FieldSuggestion extends StatefulWidget {
   /// Here we just wrapped our `Scaffold` with `GestureDetector` to handle gestures on the screen.
   /// And now we can close box when we tap on the screen.
   final BoxController? boxController;
+
+  ///
+  ///
+  ///
+  ///
+  final String? itemTitleBy;
+
+  final String? itemSubtitleBy;
 
   /// For calucalte size of suggestionBox by per item.
   /// So if `sizeByItem == 1` then size will be `60`.
@@ -256,6 +264,8 @@ class FieldSuggestion extends StatefulWidget {
     this.onTap,
     this.onIconTap,
     this.onItemSelected,
+    this.itemTitleBy,
+    this.itemSubtitleBy,
     this.disabledDefaultOnTap = false,
     this.disabledDefaultOnIconTap = false,
     this.scrollController,
@@ -453,7 +463,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
 
     _customSetState(() {
       widget.textController.text = isClassList(widget.suggestionList)
-          ? selectedItem['${widget.searchBy}'].toString()
+          ? selectedItem['${widget.itemTitleBy}'].toString()
           : selectedItem.toString();
       widget.textController.selection = TextSelection.fromPosition(
         TextPosition(offset: widget.textController.text.length),
@@ -556,8 +566,11 @@ class _FieldSuggestionState extends State<FieldSuggestion>
           key: const Key('suggested.item'),
           disableItemTrailing: widget.disableItemTrailing,
           title: isClassList(widget.suggestionList)
-              ? "${matchers[index][widget.searchBy]}"
+              ? "${matchers[index][widget.itemTitleBy]}"
               : "${matchers[index]}",
+          subTitle: isClassList(widget.suggestionList)
+              ? "${matchers[index][widget.itemSubtitleBy]}"
+              : null,
           style: widget.itemStyle,
           onTap: () => onItemTap(matchers[index]),
           onIconTap: () => onTrallingTap(matchers[index]),

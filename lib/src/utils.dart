@@ -31,14 +31,26 @@ double maxSuggestionBoxHeight({
 // Takes a list which runtime type is List<DartClass>, user input and searchBy hint.
 // Converts list's each item to json and creates matchers list.
 List<dynamic> renderClassList(
-    List<dynamic> suggestions, String input, dynamic searchBy) {
+    List<dynamic> suggestions, String input, List<String>? searchBy) {
   List<Map<String, dynamic>> _jsonModelList = [];
   List<dynamic> _matchers;
 
   suggestions.forEach((item) => _jsonModelList.add(item.toJson()));
 
-  _matchers = _jsonModelList.where((item) {
-    return item['$searchBy'].toUpperCase().contains(input.toUpperCase());
+  _matchers = _jsonModelList.where((el) {
+    List<bool> trues = [];
+    List<bool> falses = [];
+
+    trues.clear();
+    falses.clear();
+
+    searchBy!.forEach((searchEl) {
+      var val = el['$searchEl'].toUpperCase().contains(input.toUpperCase());
+
+      val ? trues.add(val) : falses.add(val);
+    });
+
+    return trues.isNotEmpty;
   }).toList();
 
   return _matchers;
