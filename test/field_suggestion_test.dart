@@ -125,7 +125,7 @@ void main() {
       key: Key('fifth.suggestion.field'),
       boxController: boxController,
       textController: fifthTextEditingController,
-      searchBy: 'title',
+      searchBy: ['title'],
       suggestionList: testModelSuggestions,
       closeBoxAfterSelect: false,
       wSlideAnimation: true,

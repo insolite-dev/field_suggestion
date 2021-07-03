@@ -28,7 +28,7 @@ double maxSuggestionBoxHeight({
   }
 }
 
-// Takes a list which runtime type is List<DartClass>, user input and searchBy hint.
+// It takes a list (which runtime type is List<DartClass>), user input and searchBy hint.
 // Converts list's each item to json and creates matchers list.
 List<dynamic> renderClassList(
     List<dynamic> suggestions, String input, List<String>? searchBy) {

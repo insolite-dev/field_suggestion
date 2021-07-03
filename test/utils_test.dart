@@ -69,7 +69,7 @@ void main() {
     test('renderClassList', () {
       List<TestModel> modelList = [TestModel(title: 'Some test')];
 
-      var renderedMatchersList = renderClassList(modelList, 'Some', 'title');
+      var renderedMatchersList = renderClassList(modelList, 'Some', ['title']);
       List<Map<String, dynamic>> mockRenderedMatchersList = [
         modelList[0].toJson()
       ];

@@ -361,6 +361,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
           widget.searchBy,
         );
       } else {
+        // TODO: Fix problem - Expected a value of type int but got one of type null.
         // Upper case every item which were into [suggestionList] for easy separation.
         // And then create [matchers] list by listening `textController`.
         matchers = widget.suggestionList.where((item) {
@@ -564,20 +565,24 @@ class _FieldSuggestionState extends State<FieldSuggestion>
   }
 
   // Items which were mapped from matchers in [suggestionList].
-  Widget suggestionListItem(int index) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 3),
-        child: SuggestionItem(
-          key: const Key('suggested.item'),
-          disableItemTrailing: widget.disableItemTrailing,
-          title: isClassList(widget.suggestionList)
-              ? "${matchers[index][widget.itemTitleBy] ?? matchers[index][widget.searchBy![0]]}"
-              : "${matchers[index]}",
-          subTitle: "${matchers[index][widget.itemSubtitleBy]}",
-          style: widget.itemStyle,
-          onTap: () => onItemTap(matchers[index]),
-          onIconTap: () => onTrallingTap(matchers[index]),
-        ),
-      );
+  Widget suggestionListItem(int index) {
+    isClassList(widget.suggestionList);
+    print("${matchers[index]}");
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3),
+      child: SuggestionItem(
+        key: const Key('suggested.item'),
+        disableItemTrailing: widget.disableItemTrailing,
+        title: isClassList(widget.suggestionList)
+            ? "${matchers[index][widget.itemTitleBy] ?? matchers[index][widget.searchBy![0]]}"
+            : "${matchers[index]}",
+        subTitle: "${matchers[index][widget.itemSubtitleBy]}",
+        style: widget.itemStyle,
+        onTap: () => onItemTap(matchers[index]),
+        onIconTap: () => onTrallingTap(matchers[index]),
+      ),
+    );
+  }
 
   Widget fieldSuggestion() => CompositedTransformTarget(
         link: _layerLink,
