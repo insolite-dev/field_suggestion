@@ -160,9 +160,11 @@ class UserModel {
 }
 ```
 If we gave a `userSuggestions` which is `List<UserModel>`. 
-Then we must add the `searchBy` property. Otherwise we will get an error 
+Then we must add the `searchBy` property. Otherwise we will get an error like:
+
 `If given suggestionList's runtimeType isn't List<String>, List<int> or List<double>. That means, you was gave a List which includes dart classes. So then [searchBy] can't be null.`
-Our model has *email*, *username* and, *password*, right? So then we can implement it like:
+
+Our model has *email*, *username*, and *password*, right? So then we can implement it like:
 `searchBy: ['email']` or `searchBy: ['email', 'username']`.
 
 <img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/obj-list.gif" align = "right" height = "250px">
