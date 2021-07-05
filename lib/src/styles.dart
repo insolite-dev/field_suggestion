@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Slide animation types for SuggestionBox.
-/// It's just able to use while [wSlideAnimation] is [true].
+/// It's just able to use when [wSlideAnimation] is [true].
 ///
 /// **[RTL] - Right to left.**
 ///
@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 enum SlideAnimationStyle { RTL, LTR, BTU, UTD }
 
 /// Custom style class for [SuggestionBox].
+///
 /// **Use cases:**
 /// ```dart
 /// SuggestionBoxStyle.DefaultStyle
@@ -57,7 +58,7 @@ class SuggestionBoxStyle {
     this.shape = BoxShape.rectangle,
   });
 
-  /// The default style, wich is setted otomaticaly.
+  /// The default style, wich is setted automatically.
   /// Includes just basic white theme design.
   static const DefaultStyle = const SuggestionBoxStyle(
     backgroundColor: Colors.white,
@@ -95,7 +96,7 @@ class SuggestionBoxStyle {
 /// ```
 class SuggestionItemStyle {
   /// [leading] widget for suggestion item.
-  /// Can be imagine as ListTile's leading.
+  /// (Can be imagine as ListTile's leading.)
   final Widget? leading;
 
   /// [backgroundColor] of `SuggestionItem` card.
@@ -103,6 +104,9 @@ class SuggestionItemStyle {
 
   /// [titleStyle] of `SuggestionItem`'s title.
   final TextStyle? titleStyle;
+
+  /// [subtitleStyle] of `SuggestionItem`'s title.
+  final TextStyle? subtitleStyle;
 
   /// [icon] of `SuggestionItem` which .
   final IconData icon;
@@ -128,6 +132,7 @@ class SuggestionItemStyle {
     this.leading,
     this.backgroundColor = const Color(0xFFFFFFFF),
     this.titleStyle,
+    this.subtitleStyle,
     this.icon = Icons.clear,
     this.iconSize,
     this.iconColor = Colors.red,
@@ -138,7 +143,7 @@ class SuggestionItemStyle {
     this.margin,
   });
 
-  /// The default style, wich is setted otomaticaly.
+  /// The default style, wich is setted automatically.
   /// Includes just basic white theme design
   static const DefaultStyle = const SuggestionItemStyle(
     backgroundColor: Colors.white,
@@ -146,6 +151,7 @@ class SuggestionItemStyle {
     iconColor: Colors.red,
     iconSize: 20,
     titleStyle: TextStyle(color: Colors.black),
+    subtitleStyle: TextStyle(color: Colors.black45),
     borderRadius: const BorderRadius.all(Radius.circular(5)),
   );
 
@@ -157,6 +163,7 @@ class SuggestionItemStyle {
     iconColor: Colors.red,
     iconSize: 20,
     titleStyle: TextStyle(color: Colors.black),
+    subtitleStyle: TextStyle(color: Colors.black45),
     borderRadius: const BorderRadius.all(Radius.circular(5)),
     boxShadow: [
       BoxShadow(
@@ -176,6 +183,7 @@ class SuggestionItemStyle {
     iconColor: Colors.red,
     iconSize: 20,
     titleStyle: TextStyle(color: Colors.white),
+    subtitleStyle: TextStyle(color: Colors.white60),
     borderRadius: const BorderRadius.all(Radius.circular(5)),
     boxShadow: [
       BoxShadow(

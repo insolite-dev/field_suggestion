@@ -16,16 +16,13 @@ void main() {
       onTap: () {},
       onIconTap: () {},
       title: "Suggested Item",
+      subTitle: "Suggested Items's subtitle",
     );
 
     // initilaze [mainWidget].
     mainWidget = MaterialApp(
       title: "Suggestion Item",
-      home: Scaffold(
-        body: Center(
-          child: suggestionItem,
-        ),
-      ),
+      home: Scaffold(body: Center(child: suggestionItem)),
     );
   });
 

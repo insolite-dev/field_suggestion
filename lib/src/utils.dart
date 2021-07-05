@@ -1,14 +1,11 @@
-// Method to get right max height for Suggestion Box,
+// Method to get right max height for Suggestion Box
 // by listening [wDivider] and [sizeByItem] properties.
 double maxSuggestionBoxHeight({
   required bool wDivider,
   required int? sizeByItem,
   required List matchersList,
 }) {
-  double size;
-
-  // Set size by listening [wDivider].
-  size = (wDivider) ? 65 : 60;
+  double size = (wDivider) ? 65 : 60;
 
   // Set size by listening [sizeByItem].
   if (sizeByItem != null) {
@@ -28,26 +25,35 @@ double maxSuggestionBoxHeight({
   }
 }
 
-// Takes a list which runtime type is List<DartClass>, user input and searchBy hint.
+// It takes a list (which runtime type is List<DartClass>), user input and searchBy hints.
 // Converts list's each item to json and creates matchers list.
-List<dynamic> renderClassList(
-    List<dynamic> suggestions, String input, dynamic searchBy) {
+List<dynamic> renderObjList(
+    List<dynamic> suggestions, String input, List<String>? searchBy) {
   List<Map<String, dynamic>> _jsonModelList = [];
   List<dynamic> _matchers;
 
   suggestions.forEach((item) => _jsonModelList.add(item.toJson()));
 
-  _matchers = _jsonModelList.where((item) {
-    return item['$searchBy'].toUpperCase().contains(input.toUpperCase());
+  _matchers = _jsonModelList.where((el) {
+    List<bool> matchedItems = [];
+    matchedItems.clear();
+
+    searchBy!.forEach((searchEl) {
+      var val = el['$searchEl'].toUpperCase().contains(input.toUpperCase());
+
+      if (val) matchedItems.add(val);
+    });
+
+    return matchedItems.isNotEmpty;
   }).toList();
 
   return _matchers;
 }
 
-/// Detects class lists. If given list not matchs
-/// no one which types [FieldSuggestion] support, that means the list is model class list. so [true].
+/// Checks given list's runtimeType and returns result.
+/// If given list's runtimeType isn't String, int or double list that means the list contains [Objects]. so [true].
 /// If matchs then it would return [false].
-bool isClassList(List list) {
+bool isObjList(List list) {
   if (list is! List<String> && list is! List<int> && list is! List<double>) {
     return true;
   }

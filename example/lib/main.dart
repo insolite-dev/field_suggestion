@@ -44,9 +44,9 @@ class _HomePageState extends State<HomePage> {
   ];
 
   List<UserModel> userSuggestions = [
-    UserModel(email: 'test@gmail.com', password: 'test123'),
-    UserModel(email: 'test1@gmail.com', password: 'test123'),
-    UserModel(email: 'test2@gmail.com', password: 'test123')
+    UserModel(email: 'test@gmail.com', username: 'user1', password: '1234567'),
+    UserModel(email: 'test1@gmail.com', username: 'user2', password: 'test123'),
+    UserModel(email: 'test2@gmail.com', username: 'user3', password: 'test123')
   ];
 
   @override
@@ -55,6 +55,7 @@ class _HomePageState extends State<HomePage> {
       onTap: () {
         firstBoxController.close!();
         secondBoxController.close!();
+        thirdBoxController.close!();
       },
       child: Scaffold(
         appBar: AppBar(title: const Text("FieldSuggestion Example")),
@@ -126,7 +127,11 @@ class _HomePageState extends State<HomePage> {
                   hint: 'Email',
                   // If y're using list where are classes,
                   // Don't forget adding search by property.
-                  searchBy: 'email',
+                  searchBy: ['email', 'username'],
+                  itemTitleBy: 'username',
+                  // If you provide [itemSubtitleBy] then suggestion item's
+                  // subtitle automaticallty will be enabled.
+                  itemSubtitleBy: 'email',
                   boxController: thirdBoxController,
                   textController: thirdTextController,
                   suggestionList: userSuggestions,
@@ -134,7 +139,7 @@ class _HomePageState extends State<HomePage> {
                     // The field suggestion needs toJson mehtod inside your model right?
                     // So that's mean it converts your model to json.
                     // Then the output has to be JSON (Map). So now we can get our value's email.
-                    print(value['email']);
+                    print(value['passoword']);
                   },
                 ),
               ],

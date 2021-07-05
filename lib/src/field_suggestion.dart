@@ -6,7 +6,8 @@ import 'package:field_suggestion/src/suggestion_item.dart';
 import 'package:field_suggestion/src/utils.dart';
 
 /// [FieldSuggestion] require to take `textController` and `suggestionList`.
-/// `textController` listen changing on field, and after listening it's create a custom matchers list.
+///
+/// `textController` listens changing on the field, and after listening it's create a custom matchers list.
 /// Which is would be come with `SuggestionBox`.
 /// #### Basic usage:
 /// ```dart
@@ -72,8 +73,8 @@ class FieldSuggestion extends StatefulWidget {
   /// }
   /// ```
   /// And my [suggestionList]'s runtimeType is List<UserModel>.
-  /// Then have to add `searchBy: 'email'` or `searchBy: 'password'` to [FieldSuggestion] widget.
-  final String? searchBy;
+  /// Then have to add `searchBy: ['email']` or `searchBy: ['password']` or maybe together: `searchBy: ['email', 'password']`
+  final List<String>? searchBy;
 
   /// To set custom `onTap` method.
   /// e.g you need open a page, when item selected.
@@ -86,8 +87,7 @@ class FieldSuggestion extends StatefulWidget {
 
   /// As default its null.
   ///
-  /// Takes the selected item's data. It could be everytype variable.
-  /// Maybe String or number or custom class and etc.
+  /// Function which takes the selected item's data. and makes that convenient.
   ///
   /// Example:
   /// ```dart
@@ -125,6 +125,17 @@ class FieldSuggestion extends StatefulWidget {
   /// Here we just wrapped our `Scaffold` with `GestureDetector` to handle gestures on the screen.
   /// And now we can close box when we tap on the screen.
   final BoxController? boxController;
+
+  /// As default it will be your [searchBy]'s first value.
+  ///
+  /// If you wanna see other values as a title, just provide a property from [searchBy] list.
+  final String? itemTitleBy;
+
+  /// As default it's [null].
+  ///
+  /// If you wanna subtitle on suggestion item, just provide a property from [searchBy] list.
+  /// It automatically will be enabled.
+  final String? itemSubtitleBy;
 
   /// For calucalte size of suggestionBox by per item.
   /// So if `sizeByItem == 1` then size will be `60`.
@@ -256,6 +267,8 @@ class FieldSuggestion extends StatefulWidget {
     this.onTap,
     this.onIconTap,
     this.onItemSelected,
+    this.itemTitleBy,
+    this.itemSubtitleBy,
     this.disabledDefaultOnTap = false,
     this.disabledDefaultOnIconTap = false,
     this.scrollController,
@@ -276,6 +289,9 @@ class FieldSuggestion extends StatefulWidget {
 
 class _FieldSuggestionState extends State<FieldSuggestion>
     with TickerProviderStateMixin {
+  @override
+  Widget build(BuildContext context) => fieldSuggestion();
+
   // Sets boxController values by current state values.
   _FieldSuggestionState(BoxController? _boxController) {
     if (_boxController != null) {
@@ -311,7 +327,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     // Add listener to textController, for listen field and create matchers list.
     widget.textController.addListener(_textListener);
 
-    // Initilaze animations if any animaton is enabled.
+    // Initilaze animations if any animaton was enabled.
     if (widget.wOpacityAnimation || widget.wSlideAnimation) {
       _animationController = AnimationController(
         vsync: this,
@@ -335,26 +351,28 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     else {
       final inputText = widget.textController.text;
 
-      if (isClassList(widget.suggestionList)) {
+      if (isObjList(widget.suggestionList)) {
         // At this time, `searchBy` must not be null.
+        // Because renderObjList (which fill's matchers) must have [searchBy] properties,
+        // to know which variable you wanna search by.
         if (widget.searchBy == null) {
           throw FlutterError(
             "If given suggestionList's runtimeType isn't List<String>, List<int> or List<double>. That means, you was gave a List which includes dart classes. So then [searchBy] can't be null.",
           );
         }
-        matchers = renderClassList(
+        matchers = renderObjList(
           widget.suggestionList,
           inputText,
           widget.searchBy,
         );
       } else {
-        // Upper case every item which were into [suggestionList] for easy separation.
-        // And then create [matchers] list by listening `textController`.
         matchers = widget.suggestionList.where((item) {
+          // Need list type checking here because if list contains int or double,
+          // then we needn't to upper case item data and also we can't do it in dart.
           if (widget.suggestionList is List<int> ||
-              widget.suggestionList is List<double>)
+              widget.suggestionList is List<double>) {
             return item.toString().contains(inputText.toString());
-
+          }
           return item.toUpperCase().contains(inputText.toUpperCase());
         }).toList();
       }
@@ -443,7 +461,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
   // Default tap method of SuggestionItem.
   // It fills value of field with title of selected item.
   // And if `closeBoxAfterSelect` is enabled (as default it's enabled),
-  // it closes suggestions box after tapping the item.
+  // It closes suggestions box after tapping the item.
   onItemTap(dynamic selectedItem) {
     if (widget.disabledDefaultOnTap) {
       widget.onTap!();
@@ -452,8 +470,9 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     }
 
     _customSetState(() {
-      widget.textController.text = isClassList(widget.suggestionList)
-          ? selectedItem['${widget.searchBy}'].toString()
+      widget.textController.text = isObjList(widget.suggestionList)
+          ? selectedItem['${widget.itemTitleBy ?? widget.searchBy![0]}']
+              .toString()
           : selectedItem.toString();
       widget.textController.selection = TextSelection.fromPosition(
         TextPosition(offset: widget.textController.text.length),
@@ -465,7 +484,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     if (widget.closeBoxAfterSelect) closeBox();
   }
 
-  // Default tap method of tralling of SuggestionItem.
+  // Default tap method of SuggestionItem's tralling .
   // It removes selected item from [widget.suggestionList] and [matchers].
   onTrallingTap(dynamic selectedItem) {
     if (widget.disabledDefaultOnIconTap) return widget.onIconTap!();
@@ -476,9 +495,6 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     if (widget.onIconTap != null) widget.onIconTap!();
     (matchers.length != 0) ? showBox() : closeBox();
   }
-
-  @override
-  Widget build(BuildContext context) => fieldSuggestion();
 
   // Creates SuggestionsBox as overlay,
   // it's sticking to down of [fieldSuggestion] by using [_layerLink].
@@ -510,9 +526,8 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     _overlaysList.add(_overlayEntry);
   }
 
-  // If the value present in the [textController],
-  // matches whatever value in the list you have defined,
-  // then the buildSuggestionBox will appear.
+  // If the value present in the [textController], matches whatever value in the
+  // list you have defined, then the buildSuggestionBox will appear.
   Widget _buildSuggestionBox(BuildContext context) {
     Widget _suggestionBox = Opacity(
       opacity: (widget.wOpacityAnimation) ? _opacity.value : 1,
@@ -549,20 +564,32 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     return Material(child: box);
   }
 
-  // Items which were mapped from matchers in [suggestionList].
-  Widget suggestionListItem(int index) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 3),
-        child: SuggestionItem(
-          key: const Key('suggested.item'),
-          disableItemTrailing: widget.disableItemTrailing,
-          title: isClassList(widget.suggestionList)
-              ? "${matchers[index][widget.searchBy]}"
-              : "${matchers[index]}",
-          style: widget.itemStyle,
-          onTap: () => onItemTap(matchers[index]),
-          onIconTap: () => onTrallingTap(matchers[index]),
-        ),
-      );
+  /// A card which returns suggestion item widget.
+  /// It used in ListView builder so it has ability to fill its data by given index/
+  Widget suggestionListItem(int index) {
+    // If suggestion list contains objects then it will return title from itemTitleBy or searchBy's first item.
+    // Unless it will return directly a title from matchers list.
+    var title = isObjList(widget.suggestionList)
+        ? "${matchers[index][widget.itemTitleBy] ?? matchers[index][widget.searchBy![0]]}"
+        : "${matchers[index]}";
+
+    var subTitle = (widget.itemSubtitleBy != null)
+        ? "${matchers[index][widget.itemSubtitleBy]}"
+        : null;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3),
+      child: SuggestionItem(
+        key: const Key('suggested.item'),
+        disableItemTrailing: widget.disableItemTrailing,
+        title: title,
+        subTitle: subTitle,
+        style: widget.itemStyle,
+        onTap: () => onItemTap(matchers[index]),
+        onIconTap: () => onTrallingTap(matchers[index]),
+      ),
+    );
+  }
 
   Widget fieldSuggestion() => CompositedTransformTarget(
         link: _layerLink,
