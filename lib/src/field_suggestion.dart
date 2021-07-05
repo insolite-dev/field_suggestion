@@ -6,7 +6,8 @@ import 'package:field_suggestion/src/suggestion_item.dart';
 import 'package:field_suggestion/src/utils.dart';
 
 /// [FieldSuggestion] require to take `textController` and `suggestionList`.
-/// `textController` listen changing on field, and after listening it's create a custom matchers list.
+///
+/// `textController` listens changing on the field, and after listening it's create a custom matchers list.
 /// Which is would be come with `SuggestionBox`.
 /// #### Basic usage:
 /// ```dart
@@ -72,7 +73,7 @@ class FieldSuggestion extends StatefulWidget {
   /// }
   /// ```
   /// And my [suggestionList]'s runtimeType is List<UserModel>.
-  /// Then have to add `searchBy: 'email'` or `searchBy: 'password'` to [FieldSuggestion] widget.
+  /// Then have to add `searchBy: ['email']` or `searchBy: ['password']` or maybe together: `searchBy: ['email', 'password']`
   final List<String>? searchBy;
 
   /// To set custom `onTap` method.
@@ -86,8 +87,7 @@ class FieldSuggestion extends StatefulWidget {
 
   /// As default its null.
   ///
-  /// Takes the selected item's data. It could be everytype variable.
-  /// Maybe String or number or custom class and etc.
+  /// Function which takes the selected item's data. and makes that convenient.
   ///
   /// Example:
   /// ```dart
@@ -289,6 +289,9 @@ class FieldSuggestion extends StatefulWidget {
 
 class _FieldSuggestionState extends State<FieldSuggestion>
     with TickerProviderStateMixin {
+  @override
+  Widget build(BuildContext context) => fieldSuggestion();
+
   // Sets boxController values by current state values.
   _FieldSuggestionState(BoxController? _boxController) {
     if (_boxController != null) {
@@ -458,7 +461,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
   // Default tap method of SuggestionItem.
   // It fills value of field with title of selected item.
   // And if `closeBoxAfterSelect` is enabled (as default it's enabled),
-  // it closes suggestions box after tapping the item.
+  // It closes suggestions box after tapping the item.
   onItemTap(dynamic selectedItem) {
     if (widget.disabledDefaultOnTap) {
       widget.onTap!();
@@ -481,7 +484,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     if (widget.closeBoxAfterSelect) closeBox();
   }
 
-  // Default tap method of tralling of SuggestionItem.
+  // Default tap method of SuggestionItem's tralling .
   // It removes selected item from [widget.suggestionList] and [matchers].
   onTrallingTap(dynamic selectedItem) {
     if (widget.disabledDefaultOnIconTap) return widget.onIconTap!();
@@ -492,9 +495,6 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     if (widget.onIconTap != null) widget.onIconTap!();
     (matchers.length != 0) ? showBox() : closeBox();
   }
-
-  @override
-  Widget build(BuildContext context) => fieldSuggestion();
 
   // Creates SuggestionsBox as overlay,
   // it's sticking to down of [fieldSuggestion] by using [_layerLink].
@@ -526,9 +526,8 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     _overlaysList.add(_overlayEntry);
   }
 
-  // If the value present in the [textController],
-  // matches whatever value in the list you have defined,
-  // then the buildSuggestionBox will appear.
+  // If the value present in the [textController], matches whatever value in the 
+  // list you have defined, then the buildSuggestionBox will appear.
   Widget _buildSuggestionBox(BuildContext context) {
     Widget _suggestionBox = Opacity(
       opacity: (widget.wOpacityAnimation) ? _opacity.value : 1,
@@ -565,7 +564,8 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     return Material(child: box);
   }
 
-  // Items which were mapped from matchers in [suggestionList].
+  /// A card which returns suggestion item widget.
+  /// It used in ListView builder so it has ability to fill its data by given index/
   Widget suggestionListItem(int index) {
     // If suggestion list contains objects then it will return title from itemTitleBy or searchBy's first item.
     // Unless it will return directly a title from matchers list.

@@ -1,14 +1,11 @@
-// Method to get right max height for Suggestion Box,
+// Method to get right max height for Suggestion Box
 // by listening [wDivider] and [sizeByItem] properties.
 double maxSuggestionBoxHeight({
   required bool wDivider,
   required int? sizeByItem,
   required List matchersList,
 }) {
-  double size;
-
-  // Set size by listening [wDivider].
-  size = (wDivider) ? 65 : 60;
+  double size = (wDivider) ? 65 : 60;
 
   // Set size by listening [sizeByItem].
   if (sizeByItem != null) {
@@ -28,7 +25,7 @@ double maxSuggestionBoxHeight({
   }
 }
 
-// It takes a list (which runtime type is List<DartClass>), user input and searchBy hint.
+// It takes a list (which runtime type is List<DartClass>), user input and searchBy hints.
 // Converts list's each item to json and creates matchers list.
 List<dynamic> renderObjList(
     List<dynamic> suggestions, String input, List<String>? searchBy) {
@@ -39,7 +36,6 @@ List<dynamic> renderObjList(
 
   _matchers = _jsonModelList.where((el) {
     List<bool> matchedItems = [];
-
     matchedItems.clear();
 
     searchBy!.forEach((searchEl) {
@@ -55,7 +51,7 @@ List<dynamic> renderObjList(
 }
 
 /// Checks given list's runtimeType and returns result.
-/// If given list's runtimeType isn't no one which [FieldSuggestion] bascily support, that means the list contains [Objects]. so [true].
+/// If given list's runtimeType isn't String, int or double list that means the list contains [Objects]. so [true].
 /// If matchs then it would return [false].
 bool isObjList(List list) {
   if (list is! List<String> && list is! List<int> && list is! List<double>) {

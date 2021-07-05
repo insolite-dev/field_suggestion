@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Slide animation types for SuggestionBox.
-/// It's just able to use while [wSlideAnimation] is [true].
+/// It's just able to use when [wSlideAnimation] is [true].
 ///
 /// **[RTL] - Right to left.**
 ///
@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 enum SlideAnimationStyle { RTL, LTR, BTU, UTD }
 
 /// Custom style class for [SuggestionBox].
+/// 
 /// **Use cases:**
 /// ```dart
 /// SuggestionBoxStyle.DefaultStyle
@@ -57,7 +58,7 @@ class SuggestionBoxStyle {
     this.shape = BoxShape.rectangle,
   });
 
-  /// The default style, wich is setted otomaticaly.
+  /// The default style, wich is setted automatically.
   /// Includes just basic white theme design.
   static const DefaultStyle = const SuggestionBoxStyle(
     backgroundColor: Colors.white,
@@ -95,7 +96,7 @@ class SuggestionBoxStyle {
 /// ```
 class SuggestionItemStyle {
   /// [leading] widget for suggestion item.
-  /// Can be imagine as ListTile's leading.
+  /// (Can be imagine as ListTile's leading.)
   final Widget? leading;
 
   /// [backgroundColor] of `SuggestionItem` card.
@@ -142,7 +143,7 @@ class SuggestionItemStyle {
     this.margin,
   });
 
-  /// The default style, wich is setted otomaticaly.
+  /// The default style, wich is setted automatically.
   /// Includes just basic white theme design
   static const DefaultStyle = const SuggestionItemStyle(
     backgroundColor: Colors.white,
