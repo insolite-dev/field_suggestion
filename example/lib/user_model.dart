@@ -6,7 +6,7 @@ class UserModel {
   const UserModel({this.email, this.username, this.password});
 
   // If we wanna use this model class into FieldSuggestion.
-  // Then we must to have toJson method, like this:
+  // Then we must to have toJson method. Like that:
   Map<String, dynamic> toJson() => {
         'email': this.email,
         'username': this.username,

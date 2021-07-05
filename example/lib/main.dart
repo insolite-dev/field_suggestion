@@ -129,6 +129,8 @@ class _HomePageState extends State<HomePage> {
                   // Don't forget adding search by property.
                   searchBy: ['email', 'username'],
                   itemTitleBy: 'username',
+                  // If you provide [itemSubtitleBy] then suggestion item's 
+                  // subtitle automaticallty will be enabled.
                   itemSubtitleBy: 'email',
                   boxController: thirdBoxController,
                   textController: thirdTextController,

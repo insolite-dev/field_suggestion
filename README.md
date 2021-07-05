@@ -41,9 +41,9 @@ List<int> numSuggestions = [
 // Or 
 // Note: Take look at [Class suggestions] part.
 List<UserModel> userSuggestions = [
-  UserModel(email: 'test@gmail.com', password: 'test123'),
-  UserModel(email: 'test1@gmail.com', password: 'test123'),
-  UserModel(email: 'test2@gmail.com', password: 'test123')
+  UserModel(email: 'test@gmail.com', username: 'user1', password: '1234567'),
+  UserModel(email: 'test1@gmail.com', username: 'user2', password: 'test123'),
+  UserModel(email: 'test2@gmail.com', username: 'user3', password: 'test123')
 ];
 ```
 
@@ -145,28 +145,46 @@ And now we can close box when we tap on the screen. (You can do it everywhere, w
 ```dart
 class UserModel {
   final String? email;
+  final String? username;
   final String? password;
 
-  const UserModel({this.email, this.password});
+  const UserModel({this.email, this.username, this.password});
 
-  // If we wanna use this model class into FieldSuggestion.
-  // Then we must have toJson method, like this:
+  // If we wanna use this model class into FieldSuggestion,
+  // then we must to have toJson method. Like that:
   Map<String, dynamic> toJson() => {
         'email': this.email,
+        'username': this.username,
         'password': this.password,
       };
 }
 ```
 If we gave a `userSuggestions` which is `List<UserModel>`. 
-Then we must add the `searchBy` property.
-Our model has just *email* and *password*, right? So then we can implement it like:
-`searchBy: 'email'` or `searchBy: 'password'`.
+Then we must add the `searchBy` property. Otherwise we will get an error 
+`If given suggestionList's runtimeType isn't List<String>, List<int> or List<double>. That means, you was gave a List which includes dart classes. So then [searchBy] can't be null.`
+Our model has *email*, *username* and, *password*, right? So then we can implement it like:
+`searchBy: ['email']` or `searchBy: ['email', 'username']`.
+
+<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/obj-list.gif" align = "right" height = "250px">
 ```dart
 FieldSuggestion(
   hint: 'Email',
-  textController: textEditingController,
+  // If y're using list where are classes,
+  // Don't forget adding search by property.
+  searchBy: ['email', 'username'],
+  itemTitleBy: 'username',
+  // If you provide [itemSubtitleBy] then suggestion 
+  // item's subtitle automaticallty will be enabled.
+  itemSubtitleBy: 'email',
+  boxController: thirdBoxController,
+  textController: thirdTextController,
   suggestionList: userSuggestions,
-  searchBy: 'email' // Or 'password'
+  onItemSelected: (value) {
+    // The field suggestion needs toJson mehtod inside your model right?
+    // So that's mean it converts your model to json.
+    // Then the output has to be JSON (Map). So now we can get our value's email.
+    print(value['passoword']);
+  },
 ),
 ```
 
