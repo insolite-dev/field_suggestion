@@ -166,6 +166,7 @@ Our model has *email*, *username* and, *password*, right? So then we can impleme
 `searchBy: ['email']` or `searchBy: ['email', 'username']`.
 
 <img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/obj-list.gif" align = "right" height = "250px">
+
 ```dart
 FieldSuggestion(
   hint: 'Email',
