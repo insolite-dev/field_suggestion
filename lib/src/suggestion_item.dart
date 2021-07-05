@@ -29,9 +29,9 @@ class SuggestionItem extends StatelessWidget {
         hoverColor: Colors.transparent,
         onTap: onTap as void Function()?,
         title: Text(title, style: style.titleStyle),
-        subtitle: (subTitle == "null")
-            ? null
-            : Text(subTitle!, style: style.subtitleStyle),
+        subtitle: (subTitle != null)
+            ? Text(subTitle!, style: style.subtitleStyle)
+            : null,
         trailing:
             !disableItemTrailing ? buildIconButton() : const SizedBox.shrink(),
         leading: style.leading,

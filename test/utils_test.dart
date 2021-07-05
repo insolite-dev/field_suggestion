@@ -60,16 +60,16 @@ void main() {
       List<double> doubleList = [1.0, 2.0, 3.0];
       List<TestModel> modelList = [TestModel(title: 'Some test')];
 
-      expect(isClassList(stringList), false);
-      expect(isClassList(intList), false);
-      expect(isClassList(doubleList), false);
-      expect(isClassList(modelList), true);
+      expect(isObjList(stringList), false);
+      expect(isObjList(intList), false);
+      expect(isObjList(doubleList), false);
+      expect(isObjList(modelList), true);
     });
 
     test('renderClassList', () {
       List<TestModel> modelList = [TestModel(title: 'Some test')];
 
-      var renderedMatchersList = renderClassList(modelList, 'Some', ['title']);
+      var renderedMatchersList = renderObjList(modelList, 'Some', ['title']);
       List<Map<String, dynamic>> mockRenderedMatchersList = [
         modelList[0].toJson()
       ];

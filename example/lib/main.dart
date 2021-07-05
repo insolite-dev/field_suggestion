@@ -55,6 +55,7 @@ class _HomePageState extends State<HomePage> {
       onTap: () {
         firstBoxController.close!();
         secondBoxController.close!();
+        thirdBoxController.close!();
       },
       child: Scaffold(
         appBar: AppBar(title: const Text("FieldSuggestion Example")),

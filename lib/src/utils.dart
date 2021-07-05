@@ -30,7 +30,7 @@ double maxSuggestionBoxHeight({
 
 // It takes a list (which runtime type is List<DartClass>), user input and searchBy hint.
 // Converts list's each item to json and creates matchers list.
-List<dynamic> renderClassList(
+List<dynamic> renderObjList(
     List<dynamic> suggestions, String input, List<String>? searchBy) {
   List<Map<String, dynamic>> _jsonModelList = [];
   List<dynamic> _matchers;
@@ -38,28 +38,26 @@ List<dynamic> renderClassList(
   suggestions.forEach((item) => _jsonModelList.add(item.toJson()));
 
   _matchers = _jsonModelList.where((el) {
-    List<bool> trues = [];
-    List<bool> falses = [];
+    List<bool> matchedItems = [];
 
-    trues.clear();
-    falses.clear();
+    matchedItems.clear();
 
     searchBy!.forEach((searchEl) {
       var val = el['$searchEl'].toUpperCase().contains(input.toUpperCase());
 
-      val ? trues.add(val) : falses.add(val);
+      if (val) matchedItems.add(val);
     });
 
-    return trues.isNotEmpty;
+    return matchedItems.isNotEmpty;
   }).toList();
 
   return _matchers;
 }
 
-/// Detects class lists. If given list not matchs
-/// no one which types [FieldSuggestion] support, that means the list is model class list. so [true].
+/// Checks given list's runtimeType and returns result.
+/// If given list's runtimeType isn't no one which [FieldSuggestion] bascily support, that means the list contains [Objects]. so [true].
 /// If matchs then it would return [false].
-bool isClassList(List list) {
+bool isObjList(List list) {
   if (list is! List<String> && list is! List<int> && list is! List<double>) {
     return true;
   }
