@@ -126,6 +126,7 @@ void main() {
       boxController: boxController,
       textController: fifthTextEditingController,
       searchBy: ['title'],
+      itemSubtitleBy: 'title',
       suggestionList: testModelSuggestions,
       closeBoxAfterSelect: false,
       wSlideAnimation: true,
