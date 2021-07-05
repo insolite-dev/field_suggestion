@@ -1,3 +1,13 @@
+# [v0.1.7] - 5/07/21
+### News:
+
+- Resolved: [#22](https://github.com/theiskaa/field_suggestion/issues/22) and [#23](https://github.com/theiskaa/field_suggestion/issues/23)
+
+**Features**:
+- onItemSelected property added
+- subtitle added for suggestion item.
+- searchBy converted to list so that's mean users are able to give mutiple properties to search. [See more.](https://github.com/theiskaa/field_suggestion/pull/25)
+
 # [v0.1.6] - 19/06/21
 ### News:
 - Logo was redesigned 🎉 New logo: 
