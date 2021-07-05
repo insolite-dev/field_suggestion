@@ -526,7 +526,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     _overlaysList.add(_overlayEntry);
   }
 
-  // If the value present in the [textController], matches whatever value in the 
+  // If the value present in the [textController], matches whatever value in the
   // list you have defined, then the buildSuggestionBox will appear.
   Widget _buildSuggestionBox(BuildContext context) {
     Widget _suggestionBox = Opacity(

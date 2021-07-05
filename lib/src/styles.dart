@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 enum SlideAnimationStyle { RTL, LTR, BTU, UTD }
 
 /// Custom style class for [SuggestionBox].
-/// 
+///
 /// **Use cases:**
 /// ```dart
 /// SuggestionBoxStyle.DefaultStyle
