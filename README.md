@@ -191,8 +191,5 @@ FieldSuggestion(
 ),
 ```
 
-
-# Contributions
-**If you find a bug or want a feature, but don't know how to fix/implement it, please fill an *[issue](https://github.com/theiskaa/field_suggestion/issues)*.**
-
-**If you fixed a bug or implemented a new feature, please send a *[pull request](https://github.com/theiskaa/field_suggestion/pulls)*.**
+## Contributing
+For information regarding contributions, please refer to [CONTRIBUTING.md](https://github.com/theiskaa/field_suggestion/blob/develop/CONTRIBUTING.md) file.
