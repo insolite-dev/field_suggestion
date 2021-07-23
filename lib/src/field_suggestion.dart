@@ -29,9 +29,9 @@ import 'package:field_suggestion/src/utils.dart';
 ///   ...
 /// ),
 /// ```
-/// 
+///
 /// ---
-/// 
+///
 /// Or if you wanna make your suggestion items more specific/custom, you can use FieldSuggestion.builder(...)
 /// Require to take `suggestionList`, `textController`, and `itemBuilder`.
 ///
@@ -55,7 +55,7 @@ import 'package:field_suggestion/src/utils.dart';
 /// ```
 ///
 /// ### To get more, please check [official documentation](https://github.com/theiskaa/field_suggestion/blob/develop/README.md)
-/// 
+///
 class FieldSuggestion extends StatefulWidget {
   /// The text editing controller for listen field value changes.
   final TextEditingController textController;
@@ -351,9 +351,10 @@ class FieldSuggestion extends StatefulWidget {
   /// }
   /// ```
   factory FieldSuggestion.builder({
+    Key? key,
     required List<dynamic> suggestionList,
-    required Widget Function(BuildContext, int) itemBuilder,
     required TextEditingController textController,
+    required Widget Function(BuildContext, int) itemBuilder,
     BoxController? boxController,
     List<String>? searchBy,
     String? hint,
@@ -377,6 +378,7 @@ class FieldSuggestion extends StatefulWidget {
     bool closeBoxAfterSelect = true,
   }) {
     return FieldSuggestion(
+      key: key,
       itemBuilder: itemBuilder,
       textController: textController,
       suggestionList: suggestionList,
