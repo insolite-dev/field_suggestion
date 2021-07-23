@@ -142,6 +142,28 @@ class _HomePageState extends State<HomePage> {
                     print(value['passoword']);
                   },
                 ),
+
+                const SizedBox(height: 100),
+                
+                // Usage of FieldSuggestion.builder
+                FieldSuggestion.builder(
+                  textController: firstTextController,
+                  suggestionList: stringSuggestions,
+                  itemBuilder: (BuildContext context, int index) {
+                    // Here you can make your suggestion item.
+                    return GestureDetector(
+                      onTap: () =>
+                          firstTextController.text = stringSuggestions[index],
+                      onDoubleTap: () =>
+                          stringSuggestions.remove(stringSuggestions[index]),
+                      child: Card(
+                        child: ListTile(
+                          title: Text(stringSuggestions[index]),
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
           ),
