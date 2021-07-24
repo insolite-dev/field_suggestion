@@ -114,6 +114,7 @@ Also you can create your own suggestionItems by using `FieldSuggestion.builder()
 Require to take `suggestionList`, `textController`, and `itemBuilder`.
 
 <img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/external-control.gif" align = "right" height = "300px">
+
 ```dart
 class BuilderExample extends StatelessWidget {
   final textEditingController = TextEditingController();
