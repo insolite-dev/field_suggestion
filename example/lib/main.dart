@@ -144,26 +144,36 @@ class _HomePageState extends State<HomePage> {
                 ),
 
                 const SizedBox(height: 100),
-                
+
                 // Usage of FieldSuggestion.builder
                 FieldSuggestion.builder(
+                  hint: 'Email',
                   textController: firstTextController,
                   suggestionList: stringSuggestions,
                   itemBuilder: (BuildContext context, int index) {
-                    // Here you can make your suggestion item.
                     return GestureDetector(
                       onTap: () =>
                           firstTextController.text = stringSuggestions[index],
-                      onDoubleTap: () =>
-                          stringSuggestions.remove(stringSuggestions[index]),
                       child: Card(
                         child: ListTile(
                           title: Text(stringSuggestions[index]),
+                          leading: Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                                color: Colors.blueGrey, shape: BoxShape.circle),
+                            child: Center(
+                              child: Text(
+                                  stringSuggestions[index][0].toUpperCase()),
+                            ),
+                          ),
                         ),
                       ),
                     );
                   },
                 ),
+
+                const SizedBox(height: 100),
               ],
             ),
           ),
