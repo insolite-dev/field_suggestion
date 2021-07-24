@@ -18,6 +18,11 @@
   </a>
 </div><br>
 
+## Additional sources
+ - **Medium Article about using FieldSuggestion - [Autocomplete fields in Flutter](https://theiskaa.medium.com/autocomplete-fields-in-flutter-ec4eb6ec5ad7)**
+
+---
+
 # Usage & Overview
 
 Make ready your home widget by creating required options for FieldSuggestion.
@@ -110,7 +115,7 @@ FieldSuggestion(
 ```
 
 ## Builder
-Also you can create your own suggestionItems by using `FieldSuggestion.builder()`.
+Also you can create your own suggestion items by using `FieldSuggestion.builder()`.
 Require to take `suggestionList`, `textController`, and `itemBuilder`.
 
 <img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/builder.gif" align = "right" height = "300px">
