@@ -113,7 +113,7 @@ FieldSuggestion(
 Also you can create your own suggestionItems by using `FieldSuggestion.builder()`.
 Require to take `suggestionList`, `textController`, and `itemBuilder`.
 
-<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/external-control.gif" align = "right" height = "300px">
+<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/builder.gif" align = "right" height = "300px">
 
 ```dart
 class BuilderExample extends StatelessWidget {
@@ -159,7 +159,7 @@ class BuilderExample extends StatelessWidget {
 Here we just wrapped our `Scaffold` with `GestureDetector` to handle gestures on the screen.
 And now we can close box when we tap on the screen. (You can do it everywhere, where you used `FieldSuggestion` with `BoxController`).
 
-<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/builder.gif" align = "right" height = "250px">
+<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/external-control.gif" align = "right" height = "250px">
 
 ```dart
  class Example extends StatelessWidget {
