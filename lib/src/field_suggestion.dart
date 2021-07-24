@@ -332,15 +332,26 @@ class FieldSuggestion extends StatefulWidget {
   ///   Widget build(BuildContext context) {
   ///     return Scaffold(
   ///       body: FieldSuggestion.builder(
+  ///         hint: 'Email',
   ///         textController: textEditingController,
   ///         suggestionList: suggestionsList,
   ///         itemBuilder: (BuildContext context, int index) {
   ///           return GestureDetector(
   ///             onTap: () => textEditingController.text = suggestionsList[index],
-  ///             onDoubleTap: () => suggestionsList.remove(suggestionsList[index]),
   ///             child: Card(
   ///               child: ListTile(
   ///                 title: Text(suggestionsList[index]),
+  ///                 leading: Container(
+  ///                   height: 30,
+  ///                   width: 30,
+  ///                   decoration: BoxDecoration(
+  ///                     color: Colors.blueGrey,
+  ///                     shape: BoxShape.circle,
+  ///                   ),
+  ///                   child: Center(
+  ///                     child: Text(suggestionsList[index][0].toUpperCase()),
+  ///                   ),
+  ///                 ),
   ///               ),
   ///             ),
   ///           );
