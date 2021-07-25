@@ -692,7 +692,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
                 : (_, __) {
                     // We need indexes to determine right index of concrete item.
                     var indexes = matchers.map((e) {
-                      // If suggestion list isn't Object list then just return index of "e". 
+                      // If suggestion list isn't Object list then just return index of "e".
                       if (!isObjList(widget.suggestionList))
                         return widget.suggestionList.indexOf(e);
 
