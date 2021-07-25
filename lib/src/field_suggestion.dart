@@ -687,7 +687,31 @@ class _FieldSuggestionState extends State<FieldSuggestion>
             itemCount: matchers.length,
             separatorBuilder: (_, __) =>
                 (widget.wDivider) ? widget.divider : const SizedBox.shrink(),
-            itemBuilder: widget.itemBuilder ?? (_, i) => suggestionListItem(i),
+            itemBuilder: (widget.itemBuilder == null)
+                ? (_, i) => suggestionListItem(i)
+                : (_, __) {
+                    // We need indexes to determine right index of concrete item.
+                    var indexes = matchers.map((e) {
+                      // If suggestion list isn't Object list then just return index of "e". 
+                      if (!isObjList(widget.suggestionList))
+                        return widget.suggestionList.indexOf(e);
+
+                      // Create suggestion list as map-string to find correct matcher.
+                      var suggestions = widget.suggestionList
+                          .map((e) => e.toJson().toString())
+                          .toList();
+
+                      return suggestions.indexOf(e.toString());
+                    }).toList();
+
+                    return ListView(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: indexes
+                          .map((i) => widget.itemBuilder!(context, i))
+                          .toList(),
+                    );
+                  },
           ),
         ),
       ),
