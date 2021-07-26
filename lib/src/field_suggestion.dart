@@ -435,6 +435,10 @@ class _FieldSuggestionState extends State<FieldSuggestion>
   // matching the text of the [widget.textController] in a list.
   List<dynamic> matchers = <dynamic>[];
 
+  // Used to find right index of concrete item when it's object.
+  // We return it on ln 702-704.
+  List<dynamic> objectSuggestionsAsJson = <dynamic>[];
+
   OverlayEntry? _overlayEntry;
 
   LayerLink _layerLink = LayerLink();
@@ -443,7 +447,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
   late Animation<double> _opacity;
   Animation<Offset>? _slide;
 
-  // Overly list to manage overlays.
+  // List which helps to manage overlays.
   var _overlaysList = [];
 
   @override
@@ -455,6 +459,12 @@ class _FieldSuggestionState extends State<FieldSuggestion>
   @override
   void initState() {
     super.initState();
+
+    if (isObjList(widget.suggestionList)) {
+      objectSuggestionsAsJson =
+          widget.suggestionList.map((e) => e.toJson().toString()).toList();
+    }
+
     // Add listener to textController, for listen field and create matchers list.
     widget.textController.addListener(_textListener);
 
@@ -511,13 +521,8 @@ class _FieldSuggestionState extends State<FieldSuggestion>
       if ((matchers.isNotEmpty && matchers[0] != inputText) ||
           !widget.closeBoxAfterSelect) {
         showBox();
-      } else {
+      } else
         closeBox();
-        if (widget.closeBoxAfterSelect)
-          widget.textController.selection = TextSelection.fromPosition(
-            TextPosition(offset: widget.textController.text.length),
-          );
-      }
     }
   }
 
@@ -689,28 +694,17 @@ class _FieldSuggestionState extends State<FieldSuggestion>
                 (widget.wDivider) ? widget.divider : const SizedBox.shrink(),
             itemBuilder: (widget.itemBuilder == null)
                 ? (_, i) => suggestionListItem(i)
-                : (_, __) {
+                : (_, i) {
                     // We need indexes to determine right index of concrete item.
                     var indexes = matchers.map((e) {
                       // If suggestion list isn't Object list then just return index of "e".
                       if (!isObjList(widget.suggestionList))
                         return widget.suggestionList.indexOf(e);
 
-                      // Create suggestion list as map-string to find correct matcher.
-                      var suggestions = widget.suggestionList
-                          .map((e) => e.toJson().toString())
-                          .toList();
-
-                      return suggestions.indexOf(e.toString());
+                      return objectSuggestionsAsJson.indexOf(e.toString());
                     }).toList();
 
-                    return ListView(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: indexes
-                          .map((i) => widget.itemBuilder!(context, i))
-                          .toList(),
-                    );
+                    return widget.itemBuilder!(context, indexes[i]);
                   },
           ),
         ),

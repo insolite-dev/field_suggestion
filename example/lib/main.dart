@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage> {
   final firstTextController = TextEditingController();
   final secondTextController = TextEditingController();
   final thirdTextController = TextEditingController();
+  final textEditingController = TextEditingController();
 
   final firstBoxController = BoxController();
   final secondBoxController = BoxController();
@@ -148,12 +149,12 @@ class _HomePageState extends State<HomePage> {
                 // Usage of FieldSuggestion.builder
                 FieldSuggestion.builder(
                   hint: 'Email',
-                  textController: firstTextController,
+                  textController: textEditingController,
                   suggestionList: stringSuggestions,
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       onTap: () =>
-                          firstTextController.text = stringSuggestions[index],
+                          textEditingController.text = stringSuggestions[index],
                       child: Card(
                         child: ListTile(
                           title: Text(stringSuggestions[index]),
