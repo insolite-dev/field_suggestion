@@ -13,6 +13,7 @@ Require to take `suggestionList`, `textController`, and `itemBuilder`.
 
 <img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/builder.gif" height = "200px">
 # [v0.1.7] - 5/07/21
+
 ### News:
 
 - Resolved: [#22](https://github.com/theiskaa/field_suggestion/issues/22) and [#23](https://github.com/theiskaa/field_suggestion/issues/23)
