@@ -1,3 +1,17 @@
+# [v0.1.8] - 21/07/21
+### News:
+
+- Resolved: [#26](https://github.com/theiskaa/field_suggestion/issues/26)
+
+**Features**:
+- Added builder factory (i.e FielsSuggestion.builder)
+By using builder users can make custom suggestion items. So that improves package's UI/UX.
+Now it has more ability to customize as we wish. So that menans
+
+**Example**:
+Require to take `suggestionList`, `textController`, and `itemBuilder`.
+
+<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/builder.gif" height = "200px">
 # [v0.1.7] - 5/07/21
 ### News:
 

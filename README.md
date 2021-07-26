@@ -23,7 +23,9 @@
 
 ---
 
-# Usage & Overview
+## Installing
+See the installing guidline from - [field_suggestion/install](https://pub.dev/packages/field_suggestion/install)
+## Usage & Overview
 
 Make ready your home widget by creating required options for FieldSuggestion.
 ```dart
@@ -118,7 +120,7 @@ FieldSuggestion(
 Also you can create your own suggestion items by using `FieldSuggestion.builder()`.
 Require to take `suggestionList`, `textController`, and `itemBuilder`.
 
-<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/builder.gif" align = "right" height = "300px">
+<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/builder.gif" align = "right" height = "250px">
 
 ```dart
 class BuilderExample extends StatelessWidget {
