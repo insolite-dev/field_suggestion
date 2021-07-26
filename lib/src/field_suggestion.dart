@@ -29,8 +29,33 @@ import 'package:field_suggestion/src/utils.dart';
 ///   ...
 /// ),
 /// ```
-/// To get more info about [FieldSuggestion].
-/// Check [README.md](https://github.com/theiskaa/field_suggestion/blob/develop/README.md) of repository.
+///
+/// ---
+///
+/// Or if you wanna make your suggestion items more specific/custom, you can use FieldSuggestion.builder(...)
+/// Require to take `suggestionList`, `textController`, and `itemBuilder`.
+///
+/// **Example:**
+/// ```dart
+/// FieldSuggestion.builder(
+///   textController: textEditingController,
+///   suggestionList: suggestionsList,
+///   itemBuilder: (BuildContext context, int index) {
+///      return GestureDetector(
+///         onTap: () => textEditingController.text = suggestionsList[index],
+///         onDoubleTap: () => suggestionsList.remove(suggestionsList[index]),
+///         child: Card(
+///           child: ListTile(
+///             title: Text(suggestionsList[index]),
+///           ),
+///         ),
+///       );
+///    },
+/// ),
+/// ```
+///
+/// ### To get more, please check [official documentation](https://github.com/theiskaa/field_suggestion/blob/develop/README.md)
+///
 class FieldSuggestion extends StatefulWidget {
   /// The text editing controller for listen field value changes.
   final TextEditingController textController;
@@ -241,11 +266,18 @@ class FieldSuggestion extends StatefulWidget {
   /// **Note:** when you use `slideTweenOffset`, otomaticly `slideAnimationStyle` would be disabled.
   final Tween<Offset>? slideTweenOffset;
 
+  /// Used to make custom suggestion items. So it designed for just development.
+  /// However maybe it could be used as customization property.
+  ///
+  /// **But suggested to use `FieldSuggestion.builder()`**
+  final Widget Function(BuildContext, int)? itemBuilder;
+
   const FieldSuggestion({
     Key? key,
     required this.textController,
     required this.suggestionList,
     this.searchBy,
+    this.itemBuilder,
 
     // SuggestionBox properties.
     this.boxController,
@@ -285,6 +317,105 @@ class FieldSuggestion extends StatefulWidget {
 
   @override
   _FieldSuggestionState createState() => _FieldSuggestionState(boxController);
+
+  /// Makes able to make very custom suggestion items.
+  ///
+  /// Require to take `suggestionList`, `textController`, and `itemBuilder`.
+  ///
+  /// **Example:**
+  /// ```dart
+  /// class BuilderExample extends StatelessWidget {
+  ///   final textEditingController = TextEditingController();
+  ///   List<String> suggestionsList = ['test@gmail.com', 'test1@gmail.com'];
+  ///
+  ///   @override
+  ///   Widget build(BuildContext context) {
+  ///     return Scaffold(
+  ///       body: FieldSuggestion.builder(
+  ///         hint: 'Email',
+  ///         textController: textEditingController,
+  ///         suggestionList: suggestionsList,
+  ///         itemBuilder: (BuildContext context, int index) {
+  ///           return GestureDetector(
+  ///             onTap: () => textEditingController.text = suggestionsList[index],
+  ///             child: Card(
+  ///               child: ListTile(
+  ///                 title: Text(suggestionsList[index]),
+  ///                 leading: Container(
+  ///                   height: 30,
+  ///                   width: 30,
+  ///                   decoration: BoxDecoration(
+  ///                     color: Colors.blueGrey,
+  ///                     shape: BoxShape.circle,
+  ///                   ),
+  ///                   child: Center(
+  ///                     child: Text(suggestionsList[index][0].toUpperCase()),
+  ///                   ),
+  ///                 ),
+  ///               ),
+  ///             ),
+  ///           );
+  ///         },
+  ///       ),
+  ///     );
+  ///   }
+  /// }
+  /// ```
+  factory FieldSuggestion.builder({
+    Key? key,
+    required List<dynamic> suggestionList,
+    required TextEditingController textController,
+    required Widget Function(BuildContext, int) itemBuilder,
+    BoxController? boxController,
+    List<String>? searchBy,
+    String? hint,
+    int? sizeByItem,
+    SuggestionBoxStyle boxStyle = SuggestionBoxStyle.DefaultStyle,
+    bool wDivider = false,
+    Widget divider = const Divider(),
+    InputDecoration? fieldDecoration,
+    TextInputType? fieldType,
+    FocusNode? focusNode,
+    Function(String)? onFieldChanged,
+    int? maxLines,
+    final ScrollController? scrollController,
+    double spacer = 5.0,
+    bool wOpacityAnimation = false,
+    Duration animationDuration = const Duration(milliseconds: 400),
+    bool wSlideAnimation = false,
+    SlideAnimationStyle slideAnimationStyle = SlideAnimationStyle.RTL,
+    Curve slideCurve = Curves.decelerate,
+    Tween<Offset>? slideTweenOffset,
+    bool closeBoxAfterSelect = true,
+  }) {
+    return FieldSuggestion(
+      key: key,
+      itemBuilder: itemBuilder,
+      textController: textController,
+      suggestionList: suggestionList,
+      boxController: boxController,
+      searchBy: searchBy,
+      hint: hint,
+      sizeByItem: sizeByItem,
+      boxStyle: boxStyle,
+      wDivider: wDivider,
+      divider: divider,
+      fieldDecoration: fieldDecoration,
+      fieldType: fieldType,
+      focusNode: focusNode,
+      onFieldChanged: onFieldChanged,
+      maxLines: maxLines,
+      scrollController: scrollController,
+      spacer: spacer,
+      wOpacityAnimation: wOpacityAnimation,
+      animationDuration: animationDuration,
+      wSlideAnimation: wSlideAnimation,
+      slideAnimationStyle: slideAnimationStyle,
+      slideCurve: slideCurve,
+      slideTweenOffset: slideTweenOffset,
+      closeBoxAfterSelect: closeBoxAfterSelect,
+    );
+  }
 }
 
 class _FieldSuggestionState extends State<FieldSuggestion>
@@ -304,6 +435,10 @@ class _FieldSuggestionState extends State<FieldSuggestion>
   // matching the text of the [widget.textController] in a list.
   List<dynamic> matchers = <dynamic>[];
 
+  // Used to find right index of concrete item when it's object.
+  // We return it on ln 702-704.
+  List<dynamic> objectSuggestionsAsJson = <dynamic>[];
+
   OverlayEntry? _overlayEntry;
 
   LayerLink _layerLink = LayerLink();
@@ -312,7 +447,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
   late Animation<double> _opacity;
   Animation<Offset>? _slide;
 
-  // Overly list to manage overlays.
+  // List which helps to manage overlays.
   var _overlaysList = [];
 
   @override
@@ -324,6 +459,12 @@ class _FieldSuggestionState extends State<FieldSuggestion>
   @override
   void initState() {
     super.initState();
+
+    if (isObjList(widget.suggestionList)) {
+      objectSuggestionsAsJson =
+          widget.suggestionList.map((e) => e.toJson().toString()).toList();
+    }
+
     // Add listener to textController, for listen field and create matchers list.
     widget.textController.addListener(_textListener);
 
@@ -346,9 +487,9 @@ class _FieldSuggestionState extends State<FieldSuggestion>
   }
 
   void _textListener() {
-    if (widget.textController.text.length == 0)
+    if (widget.textController.text.length == 0) {
       closeBox();
-    else {
+    } else {
       final inputText = widget.textController.text;
 
       if (isObjList(widget.suggestionList)) {
@@ -551,7 +692,20 @@ class _FieldSuggestionState extends State<FieldSuggestion>
             itemCount: matchers.length,
             separatorBuilder: (_, __) =>
                 (widget.wDivider) ? widget.divider : const SizedBox.shrink(),
-            itemBuilder: (context, index) => suggestionListItem(index),
+            itemBuilder: (widget.itemBuilder == null)
+                ? (_, i) => suggestionListItem(i)
+                : (_, i) {
+                    // We need indexes to determine right index of concrete item.
+                    var indexes = matchers.map((e) {
+                      // If suggestion list isn't Object list then just return index of "e".
+                      if (!isObjList(widget.suggestionList))
+                        return widget.suggestionList.indexOf(e);
+
+                      return objectSuggestionsAsJson.indexOf(e.toString());
+                    }).toList();
+
+                    return widget.itemBuilder!(context, indexes[i]);
+                  },
           ),
         ),
       ),

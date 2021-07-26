@@ -22,6 +22,12 @@ void main() {
   // To test [fifthFieldSuggestion]
   late Widget fifthMainWidget;
 
+  // To test [sixthFieldSuggestion]
+  late Widget sixthMainWidget;
+
+  // To test [seventhFieldSuggestion]
+  late Widget seventhMainWidget;
+
   // To test inital values of [FieldSuggestion].
   FieldSuggestion fieldSuggestion;
 
@@ -41,6 +47,12 @@ void main() {
   // external control, and Custom model class list.
   FieldSuggestion fifthFieldSuggestion;
 
+  // To test FieldSuggestion.builder(...) with object list
+  FieldSuggestion sixthFieldSuggestion;
+
+  // To test FieldSuggestion.builder(...) with non object list
+  FieldSuggestion seventhFieldSuggestion;
+
   // For [fieldSuggestion].
   TextEditingController textEditingController;
 
@@ -56,6 +68,12 @@ void main() {
   // For [fifthFieldSuggestion].
   TextEditingController fifthTextEditingController;
 
+  // For [sixthFieldSuggestion].
+  TextEditingController sixthTextEditingController;
+
+  // For [seventhFieldSuggestion].
+  TextEditingController seventhTextEditingController;
+
   BoxController boxController;
 
   const suggestions = ['test@gmail.com'];
@@ -67,6 +85,9 @@ void main() {
   final findThirdFieldSuggestion = find.byKey(Key('third.suggestion.field'));
   final findFourthFieldSuggestion = find.byKey(Key('fourth.suggestion.field'));
   final findFifthFieldSuggestion = find.byKey(Key('fifth.suggestion.field'));
+  final findSixthFieldSuggestion = find.byKey(Key('sixth.suggestion.field'));
+  final findSeventhFieldSuggestion =
+      find.byKey(Key('seventh.suggestion.field'));
 
   setUpAll(() {
     textEditingController = TextEditingController();
@@ -74,6 +95,8 @@ void main() {
     thirdTextEditingController = TextEditingController();
     fourthTextEditingController = TextEditingController();
     fifthTextEditingController = TextEditingController();
+    sixthTextEditingController = TextEditingController();
+    seventhTextEditingController = TextEditingController();
 
     boxController = BoxController();
 
@@ -133,39 +156,54 @@ void main() {
       slideTweenOffset: Tween<Offset>(begin: Offset(-8, 0), end: Offset.zero),
     );
 
+    sixthFieldSuggestion = FieldSuggestion.builder(
+      key: Key('sixth.suggestion.field'),
+      searchBy: ['title'],
+      suggestionList: testModelSuggestions,
+      itemBuilder: (context, index) => SizedBox(),
+      textController: sixthTextEditingController,
+    );
+
+    seventhFieldSuggestion = FieldSuggestion.builder(
+      key: Key('seventh.suggestion.field'),
+      suggestionList: numSuggestions,
+      itemBuilder: (context, index) => SizedBox(),
+      textController: seventhTextEditingController,
+    );
+
     mainWidget = MaterialApp(
       title: "Suggestion Field",
-      home: Scaffold(
-        body: Center(child: fieldSuggestion),
-      ),
+      home: Scaffold(body: Center(child: fieldSuggestion)),
     );
 
     secondMainWidget = MaterialApp(
       title: "Second Suggestion Field",
-      home: Scaffold(
-        body: Center(child: secondFieldSuggestion),
-      ),
+      home: Scaffold(body: Center(child: secondFieldSuggestion)),
     );
 
     thirdMainWidget = MaterialApp(
       title: "Third Suggestion Field",
-      home: Scaffold(
-        body: Center(child: thirdFieldSuggestion),
-      ),
+      home: Scaffold(body: Center(child: thirdFieldSuggestion)),
     );
 
     fourthMainWidget = MaterialApp(
       title: "Fourth Suggestion Field",
-      home: Scaffold(
-        body: Center(child: fourthFieldSuggestion),
-      ),
+      home: Scaffold(body: Center(child: fourthFieldSuggestion)),
     );
 
     fifthMainWidget = MaterialApp(
       title: "Fifth Suggestion Field",
-      home: Scaffold(
-        body: Center(child: fifthFieldSuggestion),
-      ),
+      home: Scaffold(body: Center(child: fifthFieldSuggestion)),
+    );
+
+    sixthMainWidget = MaterialApp(
+      title: "Sixth Suggestion Field",
+      home: Scaffold(body: Center(child: sixthFieldSuggestion)),
+    );
+
+    seventhMainWidget = MaterialApp(
+      title: "Seventh Suggestion Field",
+      home: Scaffold(body: Center(child: seventhFieldSuggestion)),
     );
   });
 
@@ -211,7 +249,7 @@ void main() {
       await tester.pumpAndSettle();
     });
 
-    testWidgets('Test [slideAnimationStyle: SlideAnimationStyle.LTR]',
+    testWidgets('test [slideAnimationStyle: SlideAnimationStyle.LTR]',
         (WidgetTester tester) async {
       await tester.pumpWidget(secondMainWidget);
 
@@ -226,7 +264,7 @@ void main() {
       await tester.pumpAndSettle();
     });
 
-    testWidgets('Test [slideAnimationStyle: SlideAnimationStyle.BTU]',
+    testWidgets('test [slideAnimationStyle: SlideAnimationStyle.BTU]',
         (WidgetTester tester) async {
       await tester.pumpWidget(thirdMainWidget);
 
@@ -245,7 +283,7 @@ void main() {
     });
 
     testWidgets(
-        'Test [slideAnimationStyle: SlideAnimationStyle.UTD]  + custom gestures',
+        'test [slideAnimationStyle: SlideAnimationStyle.UTD]  + custom gestures',
         (WidgetTester tester) async {
       await tester.pumpWidget(fourthMainWidget);
 
@@ -266,7 +304,7 @@ void main() {
       await tester.tap(tralling);
     });
 
-    testWidgets('Test [slideTweenOffset] as custom property + default gestures',
+    testWidgets('test [slideTweenOffset] as custom property + default gestures',
         (WidgetTester tester) async {
       await tester.pumpWidget(fifthMainWidget);
 
@@ -290,6 +328,44 @@ void main() {
 
       await tester.tap(tralling);
       await tester.pumpAndSettle();
+    });
+
+    testWidgets('test FieldSuggestion.builder(...) with Object (model) list',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(sixthMainWidget);
+
+      // sixthMainWidget tests.
+      expect(find.byType(MaterialApp), findsOneWidget);
+      expect(find.byType(Scaffold), findsOneWidget);
+      expect(find.byType(Center), findsOneWidget);
+      expect(findSixthFieldSuggestion, findsOneWidget);
+
+      // Enter text to sixthFieldSuggestion and reload page.
+      await tester.enterText(findSixthFieldSuggestion, 'test');
+      await tester.pumpAndSettle();
+
+      final suggestedItem = find.byType(SizedBox);
+
+      expect(suggestedItem, findsNWidgets(2));
+    });
+    testWidgets(
+        'test FieldSuggestion.builder(...) with Non Object (model) list',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(seventhMainWidget);
+
+      // seventhMainWidget tests.
+      expect(find.byType(MaterialApp), findsOneWidget);
+      expect(find.byType(Scaffold), findsOneWidget);
+      expect(find.byType(Center), findsOneWidget);
+      expect(findSeventhFieldSuggestion, findsOneWidget);
+
+      // Enter text to seventhFieldSuggestion and reload page.
+      await tester.enterText(findSeventhFieldSuggestion, '1');
+      await tester.pumpAndSettle();
+
+      final suggestedItem = find.byType(SizedBox);
+
+      expect(suggestedItem, findsNWidgets(2));
     });
   });
 }

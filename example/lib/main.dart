@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage> {
   final firstTextController = TextEditingController();
   final secondTextController = TextEditingController();
   final thirdTextController = TextEditingController();
+  final textEditingController = TextEditingController();
 
   final firstBoxController = BoxController();
   final secondBoxController = BoxController();
@@ -142,6 +143,38 @@ class _HomePageState extends State<HomePage> {
                     print(value['passoword']);
                   },
                 ),
+
+                const SizedBox(height: 100),
+
+                // Usage of FieldSuggestion.builder
+                FieldSuggestion.builder(
+                  hint: 'Email',
+                  textController: textEditingController,
+                  suggestionList: stringSuggestions,
+                  itemBuilder: (BuildContext context, int index) {
+                    return GestureDetector(
+                      onTap: () =>
+                          textEditingController.text = stringSuggestions[index],
+                      child: Card(
+                        child: ListTile(
+                          title: Text(stringSuggestions[index]),
+                          leading: Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                                color: Colors.blueGrey, shape: BoxShape.circle),
+                            child: Center(
+                              child: Text(
+                                  stringSuggestions[index][0].toUpperCase()),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+
+                const SizedBox(height: 100),
               ],
             ),
           ),

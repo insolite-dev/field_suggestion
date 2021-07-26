@@ -18,6 +18,11 @@
   </a>
 </div><br>
 
+## Additional sources
+ - **Medium Article about using FieldSuggestion - [Autocomplete fields in Flutter](https://theiskaa.medium.com/autocomplete-fields-in-flutter-ec4eb6ec5ad7)**
+
+---
+
 # Usage & Overview
 
 Make ready your home widget by creating required options for FieldSuggestion.
@@ -108,6 +113,52 @@ FieldSuggestion(
   ),
 ),
 ```
+
+## Builder
+Also you can create your own suggestion items by using `FieldSuggestion.builder()`.
+Require to take `suggestionList`, `textController`, and `itemBuilder`.
+
+<img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/builder.gif" align = "right" height = "300px">
+
+```dart
+class BuilderExample extends StatelessWidget {
+  final textEditingController = TextEditingController();
+  List<String> suggestionsList = ['test@gmail.com', 'test1@gmail.com'];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: FieldSuggestion.builder(
+        hint: 'Email',
+        textController: textEditingController,
+        suggestionList: suggestionsList,
+        itemBuilder: (BuildContext context, int index) {
+          return GestureDetector(
+            onTap: () => textEditingController.text = suggestionsList[index],
+            child: Card(
+              child: ListTile(
+                title: Text(suggestionsList[index]),
+                leading: Container(
+                  height: 30,
+                  width: 30,
+                  decoration: BoxDecoration(
+                    color: Colors.blueGrey,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text(suggestionsList[index][0].toUpperCase()),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+```
+
 
 ## External control
 Here we just wrapped our `Scaffold` with `GestureDetector` to handle gestures on the screen.
