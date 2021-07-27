@@ -74,7 +74,7 @@ void main() {
   // For [seventhFieldSuggestion].
   TextEditingController seventhTextEditingController;
 
-  BoxController boxController;
+  late BoxController boxController;
 
   const suggestions = ['test@gmail.com'];
   var numSuggestions = [13187829696, 99873124124];
@@ -157,10 +157,11 @@ void main() {
     );
 
     sixthFieldSuggestion = FieldSuggestion.builder(
+      boxController: boxController,
       key: Key('sixth.suggestion.field'),
       searchBy: ['title'],
       suggestionList: testModelSuggestions,
-      itemBuilder: (context, index) => SizedBox(),
+      itemBuilder: (context, index) => SizedBox(height: 10, key: Key('item')),
       textController: sixthTextEditingController,
     );
 
@@ -344,9 +345,12 @@ void main() {
       await tester.enterText(findSixthFieldSuggestion, 'test');
       await tester.pumpAndSettle();
 
-      final suggestedItem = find.byType(SizedBox);
+      final suggestedItem = find.byKey(Key('item'));
 
-      expect(suggestedItem, findsNWidgets(2));
+      expect(suggestedItem, findsNWidgets(1));
+      testModelSuggestions.removeAt(0);
+      boxController.refresh!();
+      await tester.pumpAndSettle();
     });
     testWidgets(
         'test FieldSuggestion.builder(...) with Non Object (model) list',
