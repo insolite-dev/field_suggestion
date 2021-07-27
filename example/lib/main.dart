@@ -151,6 +151,7 @@ class _HomePageState extends State<HomePage> {
                   hint: 'Email',
                   textController: textEditingController,
                   suggestionList: stringSuggestions,
+                  boxController: firstBoxController,
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       onTap: () =>
@@ -158,6 +159,14 @@ class _HomePageState extends State<HomePage> {
                       child: Card(
                         child: ListTile(
                           title: Text(stringSuggestions[index]),
+                          trailing: IconButton(
+                            onPressed: () {
+                              stringSuggestions
+                                  .remove(stringSuggestions[index]);
+                              firstBoxController.refresh!();
+                            },
+                            icon: Icon(Icons.clear),
+                          ),
                           leading: Container(
                             height: 30,
                             width: 30,
@@ -165,7 +174,8 @@ class _HomePageState extends State<HomePage> {
                                 color: Colors.blueGrey, shape: BoxShape.circle),
                             child: Center(
                               child: Text(
-                                  stringSuggestions[index][0].toUpperCase()),
+                                stringSuggestions[index][0].toUpperCase(),
+                              ),
                             ),
                           ),
                         ),

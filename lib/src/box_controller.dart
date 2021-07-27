@@ -2,4 +2,5 @@
 class BoxController {
   void Function()? close;
   void Function()? show;
+  void Function()? refresh;
 }

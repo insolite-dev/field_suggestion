@@ -423,11 +423,12 @@ class _FieldSuggestionState extends State<FieldSuggestion>
   @override
   Widget build(BuildContext context) => fieldSuggestion();
 
-  // Sets boxController values by current state values.
+  // Initialize BoxController closures.
   _FieldSuggestionState(BoxController? _boxController) {
     if (_boxController != null) {
       _boxController.close = closeBox;
       _boxController.show = showBox;
+      _boxController.refresh = refresh;
     }
   }
 
@@ -486,44 +487,62 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     }
   }
 
-  void _textListener() {
-    if (widget.textController.text.length == 0) {
-      closeBox();
-    } else {
-      final inputText = widget.textController.text;
+  // Used to refresh state/view.
+  // Basically just calls _textListener function, because it's enough to reset/refresh FieldSuggestion.
+  // Also used as BoxController's refresh function.
+  void refresh() {
+    setState(() {});
+    _textListener();
+  }
 
-      if (isObjList(widget.suggestionList)) {
-        // At this time, `searchBy` must not be null.
-        // Because renderObjList (which fill's matchers) must have [searchBy] properties,
-        // to know which variable you wanna search by.
-        if (widget.searchBy == null) {
-          throw FlutterError(
-            "If given suggestionList's runtimeType isn't List<String>, List<int> or List<double>. That means, you was gave a List which includes dart classes. So then [searchBy] can't be null.",
-          );
-        }
-        matchers = renderObjList(
-          widget.suggestionList,
-          inputText,
-          widget.searchBy,
+  void _textListener() {
+    final inputText = widget.textController.text;
+    final isSelected =
+        matchers.isNotEmpty && (matchers[0].toString() == inputText);
+
+    if (widget.textController.text.length == 0 || isSelected) {
+      closeBox();
+      if (isSelected) {
+        widget.textController.selection = TextSelection.fromPosition(
+          TextPosition(offset: inputText.length),
         );
-      } else {
-        matchers = widget.suggestionList.where((item) {
-          // Need list type checking here because if list contains int or double,
-          // then we needn't to upper case item data and also we can't do it in dart.
-          if (widget.suggestionList is List<int> ||
-              widget.suggestionList is List<double>) {
-            return item.toString().contains(inputText.toString());
-          }
-          return item.toUpperCase().contains(inputText.toUpperCase());
-        }).toList();
+      }
+      return;
+    }
+
+    if (isObjList(widget.suggestionList)) {
+      // Refresh objectSuggestionsAsJson if something was changed in widget.suggestionList.
+      if (widget.suggestionList.length != objectSuggestionsAsJson.length) {
+        objectSuggestionsAsJson =
+            widget.suggestionList.map((e) => e.toJson().toString()).toList();
       }
 
-      if ((matchers.isNotEmpty && matchers[0] != inputText) ||
-          !widget.closeBoxAfterSelect) {
-        showBox();
-      } else
-        closeBox();
+      // At this time, `searchBy` must not be null.
+      // Because renderObjList (which fill's matchers) must have [searchBy] properties,
+      // to know which variable you wanna search by.
+      if (widget.searchBy == null) {
+        throw FlutterError(
+          "If given suggestionList's runtimeType isn't List<String>, List<int> or List<double>. That means, you was gave a List which includes dart classes. So then [searchBy] can't be null.",
+        );
+      }
+      matchers = renderObjList(
+        widget.suggestionList,
+        inputText,
+        widget.searchBy,
+      );
+    } else {
+      matchers = widget.suggestionList.where((item) {
+        // If we call toUperrCase on int or on double then we'll get error.
+        // So that's why we check type of list and return suitable method.
+        if (widget.suggestionList is List<int> ||
+            widget.suggestionList is List<double>) {
+          return item.toString().contains(inputText.toString());
+        }
+        return item.toUpperCase().contains(inputText.toUpperCase());
+      }).toList();
     }
+
+    if (matchers.isNotEmpty) showBox();
   }
 
   // Detects [slideAnimationStyle] and sets valid [_offsetTween].
@@ -695,9 +714,9 @@ class _FieldSuggestionState extends State<FieldSuggestion>
             itemBuilder: (widget.itemBuilder == null)
                 ? (_, i) => suggestionListItem(i)
                 : (_, i) {
-                    // We need indexes to determine right index of concrete item.
+                    // We need indexes to determine right index of concrete item to pass it to builder.
                     var indexes = matchers.map((e) {
-                      // If suggestion list isn't Object list then just return index of "e".
+                      // If suggestion list isn't Object list then just return index of current element.
                       if (!isObjList(widget.suggestionList))
                         return widget.suggestionList.indexOf(e);
 
