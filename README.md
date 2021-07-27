@@ -19,12 +19,12 @@
 </div><br>
 
 ## Additional sources
- - **Medium Article about using FieldSuggestion - [Autocomplete fields in Flutter](https://theiskaa.medium.com/autocomplete-fields-in-flutter-ec4eb6ec5ad7)**
+ - **Medium Article about FieldSuggestion - [Autocomplete fields in Flutter](https://theiskaa.medium.com/autocomplete-fields-in-flutter-ec4eb6ec5ad7)**
 
 ---
 
 ## Installing
-See the installing guidline from - [field_suggestion/install](https://pub.dev/packages/field_suggestion/install)
+**See the official installing guidline from - [field_suggestion/install](https://pub.dev/packages/field_suggestion/install)**
 ## Usage & Overview
 
 Make ready your home widget by creating required options for FieldSuggestion.
