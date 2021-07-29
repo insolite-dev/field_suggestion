@@ -284,7 +284,7 @@ void main() {
     });
 
     testWidgets(
-        'test [slideAnimationStyle: SlideAnimationStyle.UTD]  + custom gestures',
+        'test [slideAnimationStyle: SlideAnimationStyle.UTD] + custom gestures',
         (WidgetTester tester) async {
       await tester.pumpWidget(fourthMainWidget);
 
@@ -319,12 +319,27 @@ void main() {
       await tester.enterText(findFifthFieldSuggestion, 'test');
       await tester.pumpAndSettle();
 
+      boxController.close!();
+      boxController.show!();
+
       final suggestedItem = find.byType(SuggestionItem);
       final tralling = find.byIcon(Icons.clear);
 
       expect(tralling, findsOneWidget);
 
       await tester.tap(suggestedItem);
+      await tester.pumpAndSettle();
+
+      // Clear field and re-enter value
+      await tester.enterText(findFifthFieldSuggestion, '');
+      await tester.pumpAndSettle();
+
+      // First we enter just 'te' to make able appearing of box.
+      await tester.enterText(findFifthFieldSuggestion, 'te');
+      await tester.pumpAndSettle();
+
+      // Then just complate it.
+      await tester.enterText(findFifthFieldSuggestion, 'test');
       await tester.pumpAndSettle();
 
       await tester.tap(tralling);

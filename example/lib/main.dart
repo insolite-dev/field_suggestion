@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePage> {
                     // The field suggestion needs toJson mehtod inside your model right?
                     // So that's mean it converts your model to json.
                     // Then the output has to be JSON (Map). So now we can get our value's email.
-                    print(value['passoword']);
+                    print(value['username']);
                   },
                 ),
 
