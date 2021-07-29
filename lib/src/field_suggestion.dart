@@ -497,12 +497,16 @@ class _FieldSuggestionState extends State<FieldSuggestion>
 
   void _textListener() {
     final inputText = widget.textController.text;
-    final isSelected =
-        matchers.isNotEmpty && (matchers[0].toString() == inputText);
+    bool isSelectedMatcher = isSelected(
+      widget.suggestionList,
+      inputText,
+      matchers,
+      widget.searchBy ?? [],
+    );
 
-    if (widget.textController.text.length == 0 || isSelected) {
+    if (widget.textController.text.length == 0 || isSelectedMatcher) {
       closeBox();
-      if (isSelected) {
+      if (isSelectedMatcher) {
         widget.textController.selection = TextSelection.fromPosition(
           TextPosition(offset: inputText.length),
         );
@@ -542,7 +546,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
       }).toList();
     }
 
-    if (matchers.isNotEmpty) showBox();
+    return (matchers.isNotEmpty) ? showBox() : closeBox();
   }
 
   // Detects [slideAnimationStyle] and sets valid [_offsetTween].

@@ -50,6 +50,25 @@ List<dynamic> renderObjList(
   return _matchers;
 }
 
+/// Basically used to detect if selected item matchs with any suggested value.
+/// The reason of making "isSelected" as model is we have to check values by "searchBy" properties.
+bool isSelected(
+    List<dynamic> suggestions, String input, List matchers, List searchBy) {
+  int diff = 0;
+  if (matchers.isEmpty) return false;
+
+  if (isObjList(suggestions)) {
+    searchBy.forEach((el) {
+      if (matchers[0]['$el'].toString().toUpperCase() == input.toUpperCase())
+        diff++;
+    });
+  } else {
+    if (matchers[0].toString() == input) diff++;
+  }
+
+  return diff > 0;
+}
+
 /// Checks given list's runtimeType and returns result.
 /// If given list's runtimeType isn't String, int or double list that means the list contains [Objects]. so [true].
 /// If matchs then it would return [false].
