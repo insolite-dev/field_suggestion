@@ -54,6 +54,10 @@ List<UserModel> userSuggestions = [
 ];
 ```
 
+By resolving [#31](https://github.com/theiskaa/field_suggestion/issues/31) we can highlight matchers (suggestions).
+So, to do that field suggestion includes special made package [highlightable](https://pub.dev/packages/highlightable). 
+However, also you can use it without field suggestion. 
+See the additional sources part and official repo of highlightable to learn how to use it in field suggestion and also without field suggestion 
 
 ## Basic usage.
 <img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/default.gif" align = "right" height = "200px">
