@@ -20,7 +20,10 @@
 
 ## Additional sources
  - **Medium Article about FieldSuggestion - [Autocomplete fields in Flutter](https://theiskaa.medium.com/autocomplete-fields-in-flutter-ec4eb6ec5ad7)**
-
+ <a href="https://theiskaa.medium.com/autocomplete-fields-in-flutter-ec4eb6ec5ad7">
+     <img align="center" width="300" src="https://user-images.githubusercontent.com/59066341/129528482-910218f8-5b96-4608-a10a-eddd625c6f25.gif" alt="Example From Medium Article">
+  </a>
+  
 ---
 
 ## Installing
