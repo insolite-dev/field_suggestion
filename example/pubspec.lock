@@ -50,6 +50,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
+  field_suggestion:
+    dependency: "direct main"
+    description:
+      path: ".."
+      relative: true
+    source: path
+    version: "0.1.9"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -61,7 +68,7 @@ packages:
     source: sdk
     version: "0.0.0"
   highlightable:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: highlightable
       url: "https://pub.dartlang.org"

@@ -20,7 +20,10 @@
 
 ## Additional sources
  - **Medium Article about FieldSuggestion - [Autocomplete fields in Flutter](https://theiskaa.medium.com/autocomplete-fields-in-flutter-ec4eb6ec5ad7)**
-
+ <a href="https://theiskaa.medium.com/autocomplete-fields-in-flutter-ec4eb6ec5ad7">
+     <img align="center" width="300" src="https://user-images.githubusercontent.com/59066341/129528482-910218f8-5b96-4608-a10a-eddd625c6f25.gif" alt="Example From Medium Article">
+  </a>
+  
 ---
 
 ## Installing
@@ -54,6 +57,10 @@ List<UserModel> userSuggestions = [
 ];
 ```
 
+By resolving [#31](https://github.com/theiskaa/field_suggestion/issues/31) we can highlight matchers (suggestions).
+So, to do that field suggestion includes special made package [highlightable](https://pub.dev/packages/highlightable). 
+However, also you can use it without field suggestion. 
+See the additional sources part and official repo of highlightable to learn how to use it in field suggestion and also without field suggestion 
 
 ## Basic usage.
 <img src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/default.gif" align = "right" height = "200px">
