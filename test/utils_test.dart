@@ -66,16 +66,35 @@ void main() {
       expect(isObjList(modelList), true);
     });
 
-    test('renderClassList', () {
+    test('renderObjList', () {
       List<TestModel> modelList = [TestModel(title: 'Some test')];
 
-      var renderedMatchersList = renderObjList(modelList, 'Some', searchBy: ['title']);
+      var renderedMatchersList = renderObjList(
+        modelList,
+        'Some',
+        searchBy: ['title'],
+      );
+
+      var renderedMatchersListCustomSearch = renderObjList(
+        modelList,
+        'Some',
+        customSearch: (item, input) {
+          return item.title.contains(input);
+        },
+      );
+
       List<Map<String, dynamic>> mockRenderedMatchersList = [
         modelList[0].toJson()
       ];
 
       expect(renderedMatchersList is List<Map<String, dynamic>>, true);
       expect(renderedMatchersList, mockRenderedMatchersList);
+
+      expect(
+        renderedMatchersListCustomSearch is List<Map<String, dynamic>>,
+        true,
+      );
+      expect(renderedMatchersListCustomSearch, mockRenderedMatchersList);
     });
   });
 }
