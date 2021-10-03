@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'package:field_suggestion/src/box_controller.dart';
-import 'package:field_suggestion/src/styles.dart';
-import 'package:field_suggestion/src/suggestion_item.dart';
-import 'package:field_suggestion/src/utils.dart';
+import 'box_controller.dart';
+import 'styles.dart';
+import 'suggestion_item.dart';
+import 'utils.dart';
+import 'errors.dart';
 
-/// [FieldSuggestion] require to take `textController` and `suggestionList`.
+/// Widget that heps us to create highly customizable, simple, and controllable autocomplete fields.
+///
+/// Require to take `textController` and `suggestionList`.
 ///
 /// `textController` listens changing on the field, and after listening it's create a custom matchers list.
 /// Which is would be come with `SuggestionBox`.
@@ -40,6 +43,7 @@ import 'package:field_suggestion/src/utils.dart';
 /// FieldSuggestion.builder(
 ///   textController: textEditingController,
 ///   suggestionList: suggestionsList,
+///   customSearch: (item, input) => item.contains(input),
 ///   itemBuilder: (BuildContext context, int index) {
 ///      return GestureDetector(
 ///         onTap: () => textEditingController.text = suggestionsList[index],
@@ -54,7 +58,7 @@ import 'package:field_suggestion/src/utils.dart';
 /// ),
 /// ```
 ///
-/// ### To get more, please check [official documentation](https://github.com/theiskaa/field_suggestion/blob/develop/README.md)
+/// ### For more information go to [official documentation](https://github.com/theiskaa/field_suggestion/blob/develop/README.md)
 ///
 class FieldSuggestion extends StatefulWidget {
   /// The text editing controller for listen field value changes.
@@ -272,12 +276,26 @@ class FieldSuggestion extends StatefulWidget {
   /// **But suggested to use `FieldSuggestion.builder()`**
   final Widget Function(BuildContext, int)? itemBuilder;
 
+  /// Makes able to implement custom search/sort function, instead default contains method.
+  ///
+  /// Recivies item and current input of user. Then you have to return a non-nullable bool value.
+  /// You could do comparing with item and input. Or even return your own custom value.
+  ///
+  /// Example:
+  /// ```dart
+  /// FieldSuggestion(
+  ///  customSearch: (item, input) => item.contains(input), // Default comparing.
+  /// )
+  /// ```
+  final bool Function(dynamic, String)? customSearch;
+
   const FieldSuggestion({
     Key? key,
     required this.textController,
     required this.suggestionList,
     this.searchBy,
     this.itemBuilder,
+    this.customSearch,
 
     // SuggestionBox properties.
     this.boxController,
@@ -387,6 +405,7 @@ class FieldSuggestion extends StatefulWidget {
     Curve slideCurve = Curves.decelerate,
     Tween<Offset>? slideTweenOffset,
     bool closeBoxAfterSelect = true,
+    bool Function(dynamic, String)? customSearch,
   }) {
     return FieldSuggestion(
       key: key,
@@ -414,6 +433,7 @@ class FieldSuggestion extends StatefulWidget {
       slideCurve: slideCurve,
       slideTweenOffset: slideTweenOffset,
       closeBoxAfterSelect: closeBoxAfterSelect,
+      customSearch: customSearch,
     );
   }
 }
@@ -432,6 +452,20 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     }
   }
 
+  // The main overlay entry. Used to display suggestions box.
+  OverlayEntry? _overlayEntry;
+
+  // List which helps to manage overlays.
+  var _overlaysList = [];
+
+  // FieldSuggestion has two main parts:
+  // Field and SuggestionsBox. LayerLink help us to use them together.
+  LayerLink _layerLink = LayerLink();
+
+  late AnimationController _animationController;
+  late Animation<double> _opacity;
+  Animation<Offset>? _slide;
+
   // To collect and list the [widget.suggestionList] elements
   // matching the text of the [widget.textController] in a list.
   List<dynamic> matchers = <dynamic>[];
@@ -439,17 +473,6 @@ class _FieldSuggestionState extends State<FieldSuggestion>
   // Used to find right index of concrete item when it's object.
   // We return it on ln 702-704.
   List<dynamic> objectSuggestionsAsJson = <dynamic>[];
-
-  OverlayEntry? _overlayEntry;
-
-  LayerLink _layerLink = LayerLink();
-
-  late AnimationController _animationController;
-  late Animation<double> _opacity;
-  Animation<Offset>? _slide;
-
-  // List which helps to manage overlays.
-  var _overlaysList = [];
 
   @override
   void dispose() {
@@ -521,18 +544,19 @@ class _FieldSuggestionState extends State<FieldSuggestion>
             widget.suggestionList.map((e) => e.toJson().toString()).toList();
       }
 
-      // At this time, `searchBy` must not be null.
+      // At this time, `searchBy` and `customSearch` must not be null.
       // Because renderObjList (which fill's matchers) must have [searchBy] properties,
-      // to know which variable you wanna search by.
-      if (widget.searchBy == null) {
-        throw FlutterError(
-          "If given suggestionList's runtimeType isn't List<String>, List<int> or List<double>. That means, you was gave a List which includes dart classes. So then [searchBy] can't be null.",
-        );
+      // Or if [searchBy] is empty then [customSearch] must be not null.
+      // Because if [customSearch] isn't implemented, widget need to know which properties to search by.
+      if (widget.searchBy == null && widget.customSearch == null) {
+        throw FlutterError(Errors.searchByORcustomSearchIsNull);
       }
+
       matchers = renderObjList(
         widget.suggestionList,
         inputText,
-        widget.searchBy,
+        searchBy: widget.searchBy,
+        customSearch: widget.customSearch,
       );
     } else {
       matchers = widget.suggestionList.where((item) {
@@ -540,8 +564,23 @@ class _FieldSuggestionState extends State<FieldSuggestion>
         // So that's why we check type of list and return suitable method.
         if (widget.suggestionList is List<int> ||
             widget.suggestionList is List<double>) {
+          // If custom search was enabled, checks matching from custom search function.
+          if (widget.customSearch != null) {
+            return widget.customSearch!(item.toString(), inputText.toString());
+          }
+
+          // Default searching style. Returns if [item] contains [inputText].
           return item.toString().contains(inputText.toString());
         }
+
+        // If custom search was enabled, checks matching from custom search function.
+        if (widget.customSearch != null) {
+          return widget.customSearch!(
+            item.toUpperCase(),
+            inputText.toUpperCase(),
+          );
+        }
+
         return item.toUpperCase().contains(inputText.toUpperCase());
       }).toList();
     }
