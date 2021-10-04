@@ -32,7 +32,7 @@ void main() {
   FieldSuggestion fieldSuggestion;
 
   // To test `slideAnimationStyle` property as [SlideAnimationStyle.LTR].
-  // And test `wDivider` property as custom widget.
+  // customSearch implementation and test `wDivider` property as custom widget.
   FieldSuggestion secondFieldSuggestion;
 
   // To test `slideAnimationStyle` property as [SlideAnimationStyle.BTU].
@@ -114,6 +114,7 @@ void main() {
       key: Key('seccond.suggestion.field'),
       textController: secondTextEditingController,
       suggestionList: suggestions,
+      customSearch: (_, __) => true,
       wDivider: true,
       divider: Divider(),
       disabledDefaultOnIconTap: true,
@@ -137,6 +138,9 @@ void main() {
       suggestionList: numSuggestions,
       disabledDefaultOnTap: true,
       disabledDefaultOnIconTap: true,
+      customSearch: (item, input) {
+        return item.toString().contains(input.toString());
+      },
       onTap: () {},
       onIconTap: () {},
       onItemSelected: (val) {},

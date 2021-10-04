@@ -25,10 +25,14 @@ double maxSuggestionBoxHeight({
   }
 }
 
-// It takes a list (which runtime type is List<DartClass>), user input and searchBy hints.
+// It takes a list (which runtime type is List<DartClass>), user input, searchBy hints and customSearch function.
 // Converts list's each item to json and creates matchers list.
 List<dynamic> renderObjList(
-    List<dynamic> suggestions, String input, List<String>? searchBy) {
+  List<dynamic> suggestions,
+  String input, {
+  List<String>? searchBy,
+  bool Function(dynamic, String)? customSearch,
+}) {
   List<Map<String, dynamic>> _jsonModelList = [];
   List<dynamic> _matchers;
 
@@ -38,11 +42,18 @@ List<dynamic> renderObjList(
     List<bool> matchedItems = [];
     matchedItems.clear();
 
-    searchBy!.forEach((searchEl) {
-      var val = el['$searchEl'].toUpperCase().contains(input.toUpperCase());
+    // Parse by [customSearch].
+    if (customSearch != null) {
+      final res = customSearch(suggestions[_jsonModelList.indexOf(el)], input);
+      if (res) matchedItems.add(res);
+    } else {
+      // Parse by default contains method.
 
-      if (val) matchedItems.add(val);
-    });
+      for (var searchEl in searchBy!) {
+        final res = el['$searchEl'].toUpperCase().contains(input.toUpperCase());
+        if (res) matchedItems.add(res);
+      }
+    }
 
     return matchedItems.isNotEmpty;
   }).toList();
@@ -58,10 +69,11 @@ bool isSelected(
   if (matchers.isEmpty) return false;
 
   if (isObjList(suggestions)) {
-    searchBy.forEach((el) {
-      if (matchers[0]['$el'].toString().toUpperCase() == input.toUpperCase())
+    for (var el in searchBy) {
+      if (matchers[0]['$el'].toString().toUpperCase() == input.toUpperCase()) {
         diff++;
-    });
+      }
+    }
   } else {
     if (matchers[0].toString() == input) diff++;
   }

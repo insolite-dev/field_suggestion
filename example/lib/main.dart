@@ -80,6 +80,10 @@ class _HomePageState extends State<HomePage> {
                   textController: secondTextController, // Required
                   suggestionList: numSuggestions, // Required
                   boxController: secondBoxController,
+                  customSearch: (item, input) {
+                    // Default searching functionality
+                    return item.toString().contains(input);
+                  },
                   onItemSelected: (value) {
                     // Do Something...
                   },
@@ -128,6 +132,11 @@ class _HomePageState extends State<HomePage> {
                   hint: 'Email',
                   // If y're using list where are classes,
                   // Don't forget adding search by property.
+                  // Or use [customSearch] property to implement custom searching functionality.
+                  //
+                  // customSearch: (item, input) {
+                  //   return item.email.toString().contains(input);
+                  // },
                   searchBy: ['email', 'username'],
                   itemTitleBy: 'username',
                   // If you provide [itemSubtitleBy] then suggestion item's
