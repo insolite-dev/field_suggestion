@@ -276,9 +276,9 @@ class FieldSuggestion extends StatefulWidget {
   /// **But suggested to use `FieldSuggestion.builder()`**
   final Widget Function(BuildContext, int)? itemBuilder;
 
-  /// Makes able to implement custom search/sort function, instead default contains method.
+  /// Makes able to implement custom search/sort function instead of default contains functionality.
   ///
-  /// Recivies item and current input of user. Then you have to return a non-nullable bool value.
+  /// Recivies item and current input of user. Then you have to return a non-nullable boolean value.
   /// You could do comparing with item and input. Or even return your own custom value.
   ///
   /// Example:

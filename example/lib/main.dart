@@ -80,7 +80,10 @@ class _HomePageState extends State<HomePage> {
                   textController: secondTextController, // Required
                   suggestionList: numSuggestions, // Required
                   boxController: secondBoxController,
-                  customSearch: (_, __) => true, // Suggestion box won't close.
+                  customSearch: (item, input) {
+                    // Default searching functionality
+                    return item.toString().contains(input);
+                  },
                   onItemSelected: (value) {
                     // Do Something...
                   },
