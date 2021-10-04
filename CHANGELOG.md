@@ -1,3 +1,16 @@
+# [v0.2.1] - 04/10/2021
+### News:
+- Resolved: [#34](https://github.com/theiskaa/field_suggestion/issues/31)
+- Improved documentation - [Official Documentation](https://github.com/theiskaa/field_suggestion/wiki)
+
+**Overview:**
+
+Now we can use our own searching strategies/functionalities instead of using default contains functionality.
+
+And now we have cleaner and better documentation
+
+---
+
 # [v0.2.0] - 17/08/2021
 ### News:
 - Resolved: [#31](https://github.com/theiskaa/field_suggestion/issues/31)
