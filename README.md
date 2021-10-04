@@ -21,7 +21,7 @@
 ## Installing
 See the official installing guidline from - [field_suggestion/install](https://pub.dev/packages/field_suggestion/install)
 
-## Official Wiki (Documentation)
+## Official Documentation (Wiki)
 Read the official documentation from [field_suggestion/wiki](https://github.com/theiskaa/field_suggestion/wiki)
 
 ## Additional sources
