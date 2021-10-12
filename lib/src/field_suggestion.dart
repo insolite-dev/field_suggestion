@@ -260,7 +260,7 @@ class FieldSuggestion extends StatefulWidget {
   /// Custom enum for set tween offset of slide animation.
   ///
   /// **Rigth to left [RTL], Left to right [LTR], Bottom to up [BTU], Up to down [UTD].**
-  final SlideAnimationStyle slideAnimationStyle;
+  final SlideStyle slideStyle;
 
   /// Curve to initilaze custom transition curve.
   final Curve slideCurve;
@@ -310,7 +310,7 @@ class FieldSuggestion extends StatefulWidget {
     this.wSlideAnimation = false,
     this.slideCurve = Curves.decelerate,
     this.slideTweenOffset,
-    this.slideAnimationStyle = SlideAnimationStyle.RTL,
+    this.slideStyle = SlideStyle.RTL,
 
     // SuggestionItem properties.
     this.itemStyle = SuggestionItemStyle.DefaultStyle,
@@ -401,7 +401,7 @@ class FieldSuggestion extends StatefulWidget {
     bool wOpacityAnimation = false,
     Duration animationDuration = const Duration(milliseconds: 400),
     bool wSlideAnimation = false,
-    SlideAnimationStyle slideAnimationStyle = SlideAnimationStyle.RTL,
+    SlideStyle slideStyle = SlideStyle.RTL,
     Curve slideCurve = Curves.decelerate,
     Tween<Offset>? slideTweenOffset,
     bool closeBoxAfterSelect = true,
@@ -429,7 +429,7 @@ class FieldSuggestion extends StatefulWidget {
       wOpacityAnimation: wOpacityAnimation,
       animationDuration: animationDuration,
       wSlideAnimation: wSlideAnimation,
-      slideAnimationStyle: slideAnimationStyle,
+      slideStyle: slideStyle,
       slideCurve: slideCurve,
       slideTweenOffset: slideTweenOffset,
       closeBoxAfterSelect: closeBoxAfterSelect,
@@ -506,32 +506,46 @@ class _FieldSuggestionState extends State<FieldSuggestion>
         ).animate(_animationController);
       }
 
-      if (widget.wSlideAnimation) return initilazeSlideAnimation();
+      // Set slide animations if it was enalbed.
+      if (widget.wSlideAnimation) {
+        _slide = FieldAnimationStyle.chooseBoxAnimation(
+          slideStyle: widget.slideStyle,
+          animationController: _animationController,
+          slideTweenOffset: widget.slideTweenOffset,
+          slideCurve: widget.slideCurve,
+        );
+      }
     }
   }
 
+  // Basically, used to avoid "setState() called after dispose()" issue.
+  void _mountedSetState(void Function() fn) {
+    if (this.mounted) return setState(fn);
+  }
+
   // Used to refresh state/view.
-  // Basically just calls _textListener function, because it's enough to reset/refresh FieldSuggestion.
+  // Basically, just calls _textListener function, because it's enough to reset/refresh FieldSuggestion.
   // Also used as BoxController's refresh function.
   void refresh() {
-    setState(() {});
+    _mountedSetState(() {});
     _textListener();
   }
 
   void _textListener() {
-    final inputText = widget.textController.text;
-    bool isSelectedMatcher = isSelected(
+    final input = widget.textController.text;
+
+    bool isMatcherSelected = isSelected(
       widget.suggestionList,
-      inputText,
+      input,
       matchers,
       widget.searchBy ?? [],
     );
 
-    if (widget.textController.text.length == 0 || isSelectedMatcher) {
+    if (widget.textController.text.length == 0 || isMatcherSelected) {
       closeBox();
-      if (isSelectedMatcher) {
+      if (isMatcherSelected) {
         widget.textController.selection = TextSelection.fromPosition(
-          TextPosition(offset: inputText.length),
+          TextPosition(offset: input.length),
         );
       }
       return;
@@ -554,7 +568,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
 
       matchers = renderObjList(
         widget.suggestionList,
-        inputText,
+        input,
         searchBy: widget.searchBy,
         customSearch: widget.customSearch,
       );
@@ -566,76 +580,26 @@ class _FieldSuggestionState extends State<FieldSuggestion>
             widget.suggestionList is List<double>) {
           // If custom search was enabled, checks matching from custom search function.
           if (widget.customSearch != null) {
-            return widget.customSearch!(item.toString(), inputText.toString());
+            return widget.customSearch!(item.toString(), input.toString());
           }
 
-          // Default searching style. Returns if [item] contains [inputText].
-          return item.toString().contains(inputText.toString());
+          // Default searching style. Returns if [item] contains [input].
+          return item.toString().contains(input.toString());
         }
 
         // If custom search was enabled, checks matching from custom search function.
         if (widget.customSearch != null) {
           return widget.customSearch!(
             item.toUpperCase(),
-            inputText.toUpperCase(),
+            input.toUpperCase(),
           );
         }
 
-        return item.toUpperCase().contains(inputText.toUpperCase());
+        return item.toUpperCase().contains(input.toUpperCase());
       }).toList();
     }
 
     return (matchers.isNotEmpty) ? showBox() : closeBox();
-  }
-
-  // Detects [slideAnimationStyle] and sets valid [_offsetTween].
-  // After that initilazes [_slide] animation, with setted [_offsetTween].
-  void initilazeSlideAnimation() {
-    var _offsetTween;
-    if (widget.slideTweenOffset != null)
-      _offsetTween = widget.slideTweenOffset;
-    else {
-      switch (widget.slideAnimationStyle) {
-        case SlideAnimationStyle.RTL:
-          _offsetTween = Tween<Offset>(
-            begin: Offset(5, 0),
-            end: Offset.zero,
-          );
-          break;
-        case SlideAnimationStyle.LTR:
-          _offsetTween = Tween<Offset>(
-            begin: Offset(-5, 0),
-            end: Offset.zero,
-          );
-          break;
-        case SlideAnimationStyle.BTU:
-          _offsetTween = Tween<Offset>(
-            begin: Offset(0, 5),
-            end: Offset.zero,
-          );
-          break;
-        case SlideAnimationStyle.UTD:
-          _offsetTween = Tween<Offset>(
-            begin: Offset(0, -5),
-            end: Offset.zero,
-          );
-          break;
-        default:
-      }
-    }
-
-    // Initialze setted [_offsetTween] as [_slide] animation.
-    _slide = _offsetTween.animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: widget.slideCurve,
-      ),
-    );
-  }
-
-  // For avoid [setState() called after dispose()] issue
-  void _customSetState(void Function() fn) {
-    if (this.mounted) return setState(fn);
   }
 
   // Custom method for show suggestionBox.
@@ -643,11 +607,12 @@ class _FieldSuggestionState extends State<FieldSuggestion>
   void showBox() {
     if (_overlayEntry != null && _overlaysList.isNotEmpty) {
       _overlayEntry!.remove();
-      _customSetState(() => _overlayEntry = null);
+      _mountedSetState(() => _overlayEntry = null);
     }
     _createOverlay(context);
-    if (widget.wOpacityAnimation || widget.wSlideAnimation)
+    if (widget.wOpacityAnimation || widget.wSlideAnimation) {
       _animationController.forward();
+    }
   }
 
   // Custom method for close suggestionBox.
@@ -655,9 +620,10 @@ class _FieldSuggestionState extends State<FieldSuggestion>
   void closeBox() {
     if (_overlayEntry != null && _overlaysList.isNotEmpty) {
       _overlayEntry!.remove();
-      if (widget.wOpacityAnimation || widget.wSlideAnimation)
+      if (widget.wOpacityAnimation || widget.wSlideAnimation) {
         _animationController.reverse();
-      _customSetState(() => _overlayEntry = null);
+      }
+      _mountedSetState(() => _overlayEntry = null);
     }
   }
 
@@ -672,7 +638,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
       return;
     }
 
-    _customSetState(() {
+    _mountedSetState(() {
       widget.textController.text = isObjList(widget.suggestionList)
           ? selectedItem['${widget.itemTitleBy ?? widget.searchBy![0]}']
               .toString()
@@ -702,9 +668,10 @@ class _FieldSuggestionState extends State<FieldSuggestion>
   // Creates SuggestionsBox as overlay,
   // it's sticking to down of [fieldSuggestion] by using [_layerLink].
   void _createOverlay(BuildContext context) {
-    RenderBox renderBox = context.findRenderObject() as RenderBox;
-    OverlayState _overlayState = Overlay.of(context)!;
-    var size = renderBox.size;
+    // Takes size from context's renderbox
+    final Size size = (context.findRenderObject() as RenderBox).size;
+
+    final OverlayState _overlayState = Overlay.of(context)!;
 
     _overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
@@ -722,6 +689,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     if (widget.wOpacityAnimation || widget.wSlideAnimation) {
       _animationController.addListener(() => _overlayState.setState(() {}));
     }
+
     _overlayState.insert(_overlayEntry!);
     _overlaysList.clear();
 

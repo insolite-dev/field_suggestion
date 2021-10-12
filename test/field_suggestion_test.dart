@@ -120,7 +120,7 @@ void main() {
       disabledDefaultOnIconTap: true,
       disabledDefaultOnTap: true,
       wSlideAnimation: true,
-      slideAnimationStyle: SlideAnimationStyle.LTR,
+      slideStyle: SlideStyle.LTR,
     );
 
     thirdFieldSuggestion = FieldSuggestion(
@@ -129,7 +129,7 @@ void main() {
       suggestionList: numSuggestions,
       wSlideAnimation: true,
       fieldDecoration: InputDecoration(labelText: 'Type.'),
-      slideAnimationStyle: SlideAnimationStyle.BTU,
+      slideStyle: SlideStyle.BTU,
     );
 
     fourthFieldSuggestion = FieldSuggestion(
@@ -145,7 +145,7 @@ void main() {
       onIconTap: () {},
       onItemSelected: (val) {},
       wSlideAnimation: true,
-      slideAnimationStyle: SlideAnimationStyle.UTD,
+      slideStyle: SlideStyle.UTD,
     );
 
     fifthFieldSuggestion = FieldSuggestion(

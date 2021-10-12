@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                   wDivider: true,
                   divider: const SizedBox(height: 5),
                   wSlideAnimation: true,
-                  slideAnimationStyle: SlideAnimationStyle.LTR,
+                  slideStyle: SlideStyle.LTR,
                   slideCurve: Curves.linearToEaseOut,
                   animationDuration: const Duration(milliseconds: 300),
                   itemStyle: SuggestionItemStyle(

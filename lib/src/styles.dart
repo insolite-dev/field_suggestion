@@ -10,7 +10,38 @@ import 'package:flutter/material.dart';
 /// **[BTU] - Bottom to up.**
 ///
 /// **[UTD] - Up to down.**
-enum SlideAnimationStyle { RTL, LTR, BTU, UTD }
+enum SlideStyle { RTL, LTR, BTU, UTD }
+
+// Helper class that basically used for field animations.
+class FieldAnimationStyle {
+  // Returns Animation Offset for suggestion box.
+  static Animation<Offset>? chooseBoxAnimation({
+    required SlideStyle slideStyle,
+    required AnimationController animationController,
+    required Tween<Offset>? slideTweenOffset,
+    required Curve slideCurve,
+  }) {
+    // Tween offsets appropriate to [SlideAnimationStyle].
+    final slideAnimationValues = <SlideStyle, Tween<Offset>>{
+      SlideStyle.RTL: Tween<Offset>(begin: Offset(5, 0), end: Offset.zero),
+      SlideStyle.LTR: Tween<Offset>(begin: Offset(-5, 0), end: Offset.zero),
+      SlideStyle.BTU: Tween<Offset>(begin: Offset(0, 5), end: Offset.zero),
+      SlideStyle.UTD: Tween<Offset>(begin: Offset(0, -5), end: Offset.zero),
+    };
+
+    Tween<Offset> _offsetTween;
+
+    if (slideTweenOffset != null) {
+      _offsetTween = slideTweenOffset;
+    } else {
+      _offsetTween = slideAnimationValues[slideStyle]!;
+    }
+
+    return _offsetTween.animate(
+      CurvedAnimation(parent: animationController, curve: slideCurve),
+    );
+  }
+}
 
 /// Custom style class for [SuggestionBox].
 ///
