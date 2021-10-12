@@ -12,20 +12,18 @@ double maxSuggestionBoxHeight({
     return (sizeByItem == 1) ? size : size * sizeByItem.roundToDouble();
   }
 
+  final sizesByMatchersList = {
+    1: size,
+    2: size * 2.0,
+    3: size * 3.0,
+    4: size * 4.0,
+  };
+
   // Set size by listening [matchersList].
-  switch (matchersList.length) {
-    case 1:
-      return size;
-    case 2:
-      return size * 2.toDouble();
-    case 3:
-      return size * 3.toDouble();
-    default:
-      return size * 4.toDouble();
-  }
+  return sizesByMatchersList[matchersList.length] ?? sizesByMatchersList[4]!;
 }
 
-// It takes a list (which runtime type is List<DartClass>), user input, searchBy hints and customSearch function.
+// It takes a list (which runtime type is List<Object>), user input, searchBy hints and customSearch function.
 // Converts list's each item to json and creates matchers list.
 List<dynamic> renderObjList(
   List<dynamic> suggestions,
@@ -48,7 +46,6 @@ List<dynamic> renderObjList(
       if (res) matchedItems.add(res);
     } else {
       // Parse by default contains method.
-
       for (var searchEl in searchBy!) {
         final res = el['$searchEl'].toUpperCase().contains(input.toUpperCase());
         if (res) matchedItems.add(res);
@@ -63,19 +60,23 @@ List<dynamic> renderObjList(
 
 /// Basically used to detect if selected item matchs with any suggested value.
 /// The reason of making "isSelected" as model is we have to check values by "searchBy" properties.
-bool isSelected(
-    List<dynamic> suggestions, String input, List matchers, List searchBy) {
+bool isSelected([
+  List<dynamic>? suggestions,
+  String? input,
+  List? matchers,
+  List? searchBy,
+]) {
   int diff = 0;
-  if (matchers.isEmpty) return false;
+  if (matchers!.isEmpty) return false;
 
-  if (isObjList(suggestions)) {
-    for (var el in searchBy) {
-      if (matchers[0]['$el'].toString().toUpperCase() == input.toUpperCase()) {
+  if (!isObjList(suggestions!)) {
+    if (matchers[0].toString() == input) diff++;
+  } else {
+    for (var el in searchBy!) {
+      if (matchers[0]['$el'].toString().toUpperCase() == input!.toUpperCase()) {
         diff++;
       }
     }
-  } else {
-    if (matchers[0].toString() == input) diff++;
   }
 
   return diff > 0;

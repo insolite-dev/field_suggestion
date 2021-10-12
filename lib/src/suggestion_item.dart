@@ -20,7 +20,13 @@ class SuggestionItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 3),
       child: Container(
         margin: style.margin,
-        decoration: buildBoxDecoration(),
+        decoration: BoxDecoration(
+          color: style.backgroundColor,
+          border: style.border,
+          borderRadius: style.borderRadius,
+          boxShadow: style.boxShadow,
+          gradient: style.gradient,
+        ),
         child: ListTile(
           hoverColor: Colors.transparent,
           onTap: onTap as void Function()?,
@@ -28,16 +34,6 @@ class SuggestionItem extends StatelessWidget {
           leading: style.leading,
         ),
       ),
-    );
-  }
-
-  BoxDecoration buildBoxDecoration() {
-    return BoxDecoration(
-      color: style.backgroundColor,
-      border: style.border,
-      borderRadius: style.borderRadius,
-      boxShadow: style.boxShadow,
-      gradient: style.gradient,
     );
   }
 }

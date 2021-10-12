@@ -49,7 +49,7 @@ class FieldSuggestion extends StatefulWidget {
   /// }
   /// ```
   /// And my [suggestionList]'s runtimeType is List<UserModel>.
-  /// Then have to add `searchBy: ['email']` or `searchBy: ['password']` or maybe together: `searchBy: ['email', 'password']`
+  /// Then have to add `searchBy: ['email']` or `searchBy: ['password']` or together: `searchBy: ['email', 'password']`
   final List<String>? searchBy;
 
   /// As default, when you select any item from suggestions, it only fills text field with selected item's value.
@@ -606,7 +606,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
   }
 
   /// A card which returns suggestion item widget.
-  /// It used in ListView builder so it has ability to fill its data by given index/
+  /// Basically, used as "default" suggestion item.
   Widget suggestionListItem(int index) {
     // If suggestion list contains objects then it will return title from searchBy's first item.
     // Unless it will return directly a title from matchers list.
