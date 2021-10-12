@@ -67,7 +67,9 @@ class _HomePageState extends State<HomePage> {
               children: [
                 // Basic usage.
                 FieldSuggestion(
-                  hint: 'Email', // optional
+                  fieldDecoration: InputDecoration(
+                    hintText: 'Email', // optional
+                  ),
                   boxController: firstBoxController, // optional
                   textController: firstTextController,
                   suggestionList: stringSuggestions,
@@ -110,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                  disableItemTrailing: true,
+                  // disableItemTrailing: true,
                   boxStyle: SuggestionBoxStyle(
                     backgroundColor: Colors.white,
                     borderRadius: BorderRadius.circular(15),
@@ -129,7 +131,9 @@ class _HomePageState extends State<HomePage> {
 
                 // Usage with custom class suggestions.
                 FieldSuggestion(
-                  hint: 'Email',
+                  fieldDecoration: InputDecoration(
+                    hintText: 'Email', // optional
+                  ),
                   // If y're using list where are classes,
                   // Don't forget adding search by property.
                   // Or use [customSearch] property to implement custom searching functionality.
@@ -138,10 +142,10 @@ class _HomePageState extends State<HomePage> {
                   //   return item.email.toString().contains(input);
                   // },
                   searchBy: ['email', 'username'],
-                  itemTitleBy: 'username',
+                  // itemTitleBy: 'username',
                   // If you provide [itemSubtitleBy] then suggestion item's
                   // subtitle automaticallty will be enabled.
-                  itemSubtitleBy: 'email',
+                  // itemSubtitleBy: 'email',
                   boxController: thirdBoxController,
                   textController: thirdTextController,
                   suggestionList: userSuggestions,
@@ -157,7 +161,9 @@ class _HomePageState extends State<HomePage> {
 
                 // Usage of FieldSuggestion.builder
                 FieldSuggestion.builder(
-                  hint: 'Email',
+                  fieldDecoration: InputDecoration(
+                    hintText: 'Email', // optional
+                  ),
                   textController: textEditingController,
                   suggestionList: stringSuggestions,
                   boxController: firstBoxController,

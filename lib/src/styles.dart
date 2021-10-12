@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 /// **[UTD] - Up to down.**
 enum SlideStyle { RTL, LTR, BTU, UTD }
 
-// Helper class that basically used for field animations.
+// Helper class that basically used to choose/set/manage animations of `FieldSuggestion`.
 class FieldAnimationStyle {
   // Returns Animation Offset for suggestion box.
   static Animation<Offset>? chooseBoxAnimation({
@@ -73,7 +73,7 @@ class SuggestionBoxStyle {
   /// [boxShadow] of `SuggestionBox`
   final List<BoxShadow>? boxShadow;
 
-  /// [margin] of `SuggestionBox`
+  /// [padding] of `SuggestionBox`
   final EdgeInsetsGeometry? padding;
 
   /// [shape] of `SuggestionBox`.
@@ -136,14 +136,6 @@ class SuggestionItemStyle {
   /// [titleStyle] of `SuggestionItem`'s title.
   final TextStyle? titleStyle;
 
-  /// [subtitleStyle] of `SuggestionItem`'s title.
-  final TextStyle? subtitleStyle;
-
-  /// [icon] of `SuggestionItem` which .
-  final IconData icon;
-  final double? iconSize;
-  final Color iconColor;
-
   /// [border] of `SuggestionItem` card.
   final Border? border;
 
@@ -163,10 +155,6 @@ class SuggestionItemStyle {
     this.leading,
     this.backgroundColor = const Color(0xFFFFFFFF),
     this.titleStyle,
-    this.subtitleStyle,
-    this.icon = Icons.clear,
-    this.iconSize,
-    this.iconColor = Colors.red,
     this.border,
     this.borderRadius,
     this.gradient,
@@ -176,53 +164,9 @@ class SuggestionItemStyle {
 
   /// The default style, wich is setted automatically.
   /// Includes just basic white theme design
-  static const DefaultStyle = const SuggestionItemStyle(
+  static const DefaultStyle = SuggestionItemStyle(
     backgroundColor: Colors.white,
-    icon: Icons.clear,
-    iconColor: Colors.red,
-    iconSize: 20,
     titleStyle: TextStyle(color: Colors.black),
-    subtitleStyle: TextStyle(color: Colors.black45),
-    borderRadius: const BorderRadius.all(Radius.circular(5)),
-  );
-
-  /// The Custom White Neumorphism style of `SuggestionItemStyle`.
-  static const WhiteNeumorphismedStyle = const SuggestionItemStyle(
-    margin: const EdgeInsetsDirectional.only(start: 1, end: 1, top: 1),
-    backgroundColor: Colors.white,
-    icon: Icons.clear,
-    iconColor: Colors.red,
-    iconSize: 20,
-    titleStyle: TextStyle(color: Colors.black),
-    subtitleStyle: TextStyle(color: Colors.black45),
-    borderRadius: const BorderRadius.all(Radius.circular(5)),
-    boxShadow: [
-      BoxShadow(
-        blurRadius: 1,
-        spreadRadius: 1,
-        offset: Offset(0, 2),
-        color: Color(0xffD5D5D5),
-      ),
-    ],
-  );
-
-  /// The Custom Black Neumorphism style of `SuggestionItemStyle`.
-  static const BlackNeumorphismedStyle = const SuggestionItemStyle(
-    margin: const EdgeInsetsDirectional.only(start: 1, end: 1, top: 1),
-    backgroundColor: Color(0xFF0E0E0E),
-    icon: Icons.clear,
-    iconColor: Colors.red,
-    iconSize: 20,
-    titleStyle: TextStyle(color: Colors.white),
-    subtitleStyle: TextStyle(color: Colors.white60),
-    borderRadius: const BorderRadius.all(Radius.circular(5)),
-    boxShadow: [
-      BoxShadow(
-        blurRadius: 1,
-        spreadRadius: 1,
-        offset: Offset(0, 2),
-        color: Color(0xFF2E2E2E),
-      ),
-    ],
+    borderRadius: BorderRadius.all(Radius.circular(5)),
   );
 }

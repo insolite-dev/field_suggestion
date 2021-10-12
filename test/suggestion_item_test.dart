@@ -11,12 +11,9 @@ void main() {
   setUpAll(() {
     // Initilaze [SuggestionItem] widget with custom properties.
     suggestionItem = SuggestionItem(
-      disableItemTrailing: false,
       style: SuggestionItemStyle.DefaultStyle,
       onTap: () {},
-      onIconTap: () {},
       title: "Suggested Item",
-      subTitle: "Suggested Items's subtitle",
     );
 
     // initilaze [mainWidget].

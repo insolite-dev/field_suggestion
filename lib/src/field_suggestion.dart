@@ -6,88 +6,35 @@ import 'suggestion_item.dart';
 import 'utils.dart';
 import 'errors.dart';
 
-/// Widget that heps us to create highly customizable, simple, and controllable autocomplete fields.
+/// FieldSuggestion is a widget that creates highly customizable, simple, and controllable autocomplete fields.
 ///
 /// Require to take `textController` and `suggestionList`.
 ///
-/// `textController` listens changing on the field, and after listening it's create a custom matchers list.
-/// Which is would be come with `SuggestionBox`.
-/// #### Basic usage:
+/// `textController` listens changing on the field,
+/// and after listening it's create a custom matchers list, which is would come with `SuggestionBox`.
+///
+/// **Basic usage:**
 /// ```dart
 ///  FieldSuggestion(
-///   hint: "Email",
 ///   textController: _textEditingController,
 ///   suggestionList: suggestionList,
 /// ),
 /// ```
-/// And [FieldSuggestion] have other options like: `onTap`, `onIconTap`, `sizeByItem`, `suggestionBoxStyle`, `fieldDecoration`, etc.
-/// In here we use `fieldDecoration` property for change style of **field**.
-/// To change style and customize [SuggestionBox], we should use  `suggestionBoxStyle`.
-/// and the custom style class we have created is [SuggestionItemStyle].
-/// **we can use it like this:**
-/// ```dart
-///  FieldSuggestion(
-///   hint: "Email",
-///   suggestionItemStyle = SuggestionItemStyle.WhiteNeumorphismedStyle,
-///   ...
-/// ),
-/// ```
 ///
-/// ---
-///
-/// Or if you wanna make your suggestion items more specific/custom, you can use FieldSuggestion.builder(...)
-/// Require to take `suggestionList`, `textController`, and `itemBuilder`.
-///
-/// **Example:**
-/// ```dart
-/// FieldSuggestion.builder(
-///   textController: textEditingController,
-///   suggestionList: suggestionsList,
-///   customSearch: (item, input) => item.contains(input),
-///   itemBuilder: (BuildContext context, int index) {
-///      return GestureDetector(
-///         onTap: () => textEditingController.text = suggestionsList[index],
-///         onDoubleTap: () => suggestionsList.remove(suggestionsList[index]),
-///         child: Card(
-///           child: ListTile(
-///             title: Text(suggestionsList[index]),
-///           ),
-///         ),
-///       );
-///    },
-/// ),
-/// ```
-///
-/// ### For more information go to [official documentation](https://github.com/theiskaa/field_suggestion/blob/develop/README.md)
-///
+/// **Read the [official documentation](https://github.com/theiskaa/field_suggestion/wiki) to learn and understand [FieldSuggestion].**
 class FieldSuggestion extends StatefulWidget {
-  /// The text editing controller for listen field value changes.
+  /// The main text editing controller.
+  ///
+  /// Used to listen field's value changes.
   final TextEditingController textController;
 
   /// The main list which would be displayed into suggestion box.
-  /// Able to use as `List<String>`, `List<int>`, `List<double>` and Custom model class.
+  /// Able to use as `List<String>`, `List<int>`, `List<double>` and Custom model class. e.g: `List<UserModel>`
   ///
-  /// For Example: `List<UserModel>`.
-  /// If you wanna do this then `searchBy` property must be initilazed.
-  /// **And one important part is that your model class must to have [toJson] method.**
-  ///
-  /// ### Complete model example which can be used in [suggestionList]:
-  /// ```dart
-  /// class UserModel {
-  ///   final String? email;
-  ///   final String? password;
-  ///
-  ///   const UserModel({this.email, this.password});
-  ///
-  ///   Map<String, dynamic> toJson() => {
-  ///         'email': this.email,
-  ///         'password': this.password,
-  ///       };
-  /// }
-  /// ```
+  /// Article about FieldSuggestion's custom model classes: - https://github.com/theiskaa/field_suggestion/wiki/Class-suggestions
   final List<dynamic> suggestionList;
 
-  /// It must be initilazed when suggestionList isn't `List<String>`, `List<int>`, or `List<double>`.
+  /// It must be initilazed when `suggestionList` isn't `List<String>`, `List<int>`, or `List<double>`.
   ///
   /// Howeveer, when you give a suggestion list which includes custom classes,
   /// then you must to add the propert's name which you wanna search by.
@@ -105,73 +52,46 @@ class FieldSuggestion extends StatefulWidget {
   /// Then have to add `searchBy: ['email']` or `searchBy: ['password']` or maybe together: `searchBy: ['email', 'password']`
   final List<String>? searchBy;
 
-  /// To set custom `onTap` method.
-  /// e.g you need open a page, when item selected.
-  /// Then you should use [onTap] as Navigator..
-  final Function? onTap;
-
-  /// As default we use `onIconTap` for remove tapped item which are in [suggestionList] and [matchers] list.
-  /// This property make able to customize action.
-  final Function? onIconTap;
-
-  /// As default its null.
-  ///
-  /// Function which takes the selected item's data. and makes that convenient.
+  /// As default, when you select any item from suggestions, it only fills text field with selected item's value.
+  /// So, `onItemSelected` is a property that used to customize suggestion selection's act.
   ///
   /// Example:
   /// ```dart
   /// onItemSelected: (value) => print(value);
   /// ```
+  /// Or
+  /// ```dart
+  /// onItemSelected: (value) => Navigator.push(...)
+  /// ```
   final Function(dynamic)? onItemSelected;
 
-  /// Controller to use suggeestion box externally.
-  /// It makes able to "show" and "close" suggestion box, whenever/everywhere you want.
+  /// A controller for FieldSuggestion.
   ///
-  /// **Example:**
-  /// ```dart
-  /// class Example extends StatelessWidget {
-  ///   final _textController = TextEditingController();
-  ///   final _boxController = BoxController();
+  /// By using it you can open/close your suggestions box externally. (From anywere, where you have access to initilazed box controller)
+  /// And also can refresh state of your FieldSuggestion with it.
   ///
-  ///   @override
-  ///   Widget build(BuildContext context) {
-  ///     return GestureDetector(
-  ///       onTap: () => _boxController.close(),
-  ///       child: Scaffold(
-  ///         body: Center(
-  ///           child: FieldSuggestion(
-  ///             hint: 'test',
-  ///             suggestionList: [], // Your suggestions list here...
-  ///             boxController: _boxController,
-  ///             textController: _textController,
-  ///           ),
-  ///         ),
-  ///       ),
-  ///     );
-  ///   }
-  /// }
-  /// ```
-  /// Here we just wrapped our `Scaffold` with `GestureDetector` to handle gestures on the screen.
-  /// And now we can close box when we tap on the screen.
+  /// For more information refer to the article about External Control - https://github.com/theiskaa/field_suggestion/wiki/External-control
   final BoxController? boxController;
-
-  /// As default it will be your [searchBy]'s first value.
-  ///
-  /// If you wanna see other values as a title, just provide a property from [searchBy] list.
-  final String? itemTitleBy;
-
-  /// As default it's [null].
-  ///
-  /// If you wanna subtitle on suggestion item, just provide a property from [searchBy] list.
-  /// It automatically will be enabled.
-  final String? itemSubtitleBy;
 
   /// For calucalte size of suggestionBox by per item.
   /// So if `sizeByItem == 1` then size will be `60`.
-  /// The number increases in parallel so when `sizeByItem == 2` then size of suggestionBox will be `120`.
+  /// The number increases in parallel so when `sizeByItem == 2` then size of suggestionBox will be `120`. And so on ...
   final int? sizeByItem;
 
-  /// Custom style option of [SuggestionBox].
+  /// `wDivider` if it equeals `true`,
+  /// User would see a simple line, every suggestionItem's front.
+  final bool wDivider;
+
+  /// It appears only then, if `wDivider` setted to true.
+  ///
+  /// As default it is normal `Divider()`. So by using `divider` property you can customize it.
+  final Widget divider;
+
+  /// Sets size between field and suggestionsBox.
+  /// As default it is `5.0`. (Can be imagined as *height* between field and suggestionsBox).
+  final double spacer;
+
+  /// Style of suggestion box.
   ///
   /// It takes [SuggestionBoxStyle.DefaultStyle] as default.
   /// Able to set as Custom, like this:
@@ -181,15 +101,7 @@ class FieldSuggestion extends StatefulWidget {
   /// ```
   final SuggestionBoxStyle boxStyle;
 
-  /// `wDivider` if it equeals `true`,
-  /// User would see a simple line, every suggestionItem's front.
-  final bool wDivider;
-
-  /// As default FieldSuggestion has divider widget. To create your own divider widget,
-  /// you should use [divider] property.
-  final Widget divider;
-
-  /// Custom style option of `SuggestionItem`.
+  /// **Style of suggestion item.**
   ///
   /// It takes, [SuggestionItemStyle.DefaultStyle] as default.
   /// Able to set as Custom, like this:
@@ -197,7 +109,7 @@ class FieldSuggestion extends StatefulWidget {
   /// SuggestionItemStyle(...)
   /// // With following properties:  [backgroundColor], [titleStyle], [icon], [iconSize], [iconColor], [border], [borderRadius], [gradient], [boxShadow], [margin].
   /// ```
-  /// Also able to set by ready designs, e.g:
+  /// **Also able to set by ready designs, e.g:**
   /// ```
   /// SuggestionItemStyle.DefaultStyle
   /// ```
@@ -209,84 +121,73 @@ class FieldSuggestion extends StatefulWidget {
   /// ```
   final SuggestionItemStyle itemStyle;
 
-  /// Disables default trailing [X] icon.
-  /// As default it isn't disabled so `false`.
-  final bool disableItemTrailing;
-
-  /// Field hint property to set it without [fieldDecoration].
-  final String? hint;
-
-  /// To set custom InputDecoration for `FieldSuggestion`.
+  /// [InputDecoration] for field.
   final InputDecoration? fieldDecoration;
 
-  /// To set TextInputType of field.
+  /// The input type of field.
   final TextInputType? fieldType;
 
-  /// FocusNode for field.
+  /// [FocusNode] of field.
   final FocusNode? focusNode;
 
-  /// Custom onChanged method for [FieldSuggestion].
+  /// `onChanged` method of field.
   final Function(String)? onFieldChanged;
 
-  /// To controle size of `field`.
+  /// `maxLines` property of field
   final int? maxLines;
 
-  /// To dissable default `onTap` method of `SuggestionItem`.
+  /// As we know, field has it's default onTap function. Which, just fills text field with selected item's value.
+  ///
+  /// So, to disable that method. setting `disabledDefaultOnTap` to `true` is enough.
   final bool disabledDefaultOnTap;
 
-  /// To dissable default `onIconTap` method of `SuggestionItem`.
-  final bool disabledDefaultOnIconTap;
-
+  /// Boolean property to decide close or not suggestion box after selecting the item.
+  ///
+  /// As default it is `true`. So, we do close after selecting the item.
   final bool closeBoxAfterSelect;
 
-  /// The scroll controller for `suggestionList`.
+  /// The scroll controller fo `suggestionList`.
   final ScrollController? scrollController;
 
-  /// To set size between field and suggestionsBox.
-  /// As default `spacer` is `5.0`.
-  final double spacer;
-
-  /// To disable or enable opacity animation.
-  /// As default is [false]
+  /// Boolean property to disable/enable opacity animation.
+  ///
+  /// As default is disabled, so `false`.
   final bool wOpacityAnimation;
 
-  /// To customize duration of suggestonBox animation.
-  /// As default it's [Duration(milliseconds: 800)].
+  /// Duration of suggestion box animation.
+  ///
+  /// As default it is `Duration(milliseconds: 800)`
   final Duration animationDuration;
 
-  /// To enable or disable slide animtaion of [SuggestionBox]. As default it's [false].
+  /// Boolean to enable/disable slide animtaion of [SuggestionBox].
+  ///
+  ///  As default it is disabled, so `false`.
   final bool wSlideAnimation;
 
-  /// Custom enum for set tween offset of slide animation.
+  /// Custom enum to set tween offset of slide animation.
   ///
   /// **Rigth to left [RTL], Left to right [LTR], Bottom to up [BTU], Up to down [UTD].**
   final SlideStyle slideStyle;
 
-  /// Curve to initilaze custom transition curve.
+  /// Custom curve for box's slide animation.
+  ///
+  /// As default it is [Curves.decelerate].
   final Curve slideCurve;
 
-  /// Offset with Tween for Slide animation.
+  /// Tween for suggestion box's slide animation.
   ///
-  /// **Note:** when you use `slideTweenOffset`, otomaticly `slideAnimationStyle` would be disabled.
+  /// **Note:** when you use `slideTweenOffset`, automatically `slideAnimationStyle` would be disabled.
   final Tween<Offset>? slideTweenOffset;
 
-  /// Used to make custom suggestion items. So it designed for just development.
-  /// However maybe it could be used as customization property.
-  ///
-  /// **But suggested to use `FieldSuggestion.builder()`**
+  /// Should be used as `FieldSuggestion.builder(...)`.
   final Widget Function(BuildContext, int)? itemBuilder;
 
-  /// Makes able to implement custom search/sort function instead of default contains functionality.
+  /// Makes able to implement custom searching/sorting functionality, instead of default contains fun.
   ///
   /// Recivies item and current input of user. Then you have to return a non-nullable boolean value.
   /// You could do comparing with item and input. Or even return your own custom value.
   ///
-  /// Example:
-  /// ```dart
-  /// FieldSuggestion(
-  ///  customSearch: (item, input) => item.contains(input), // Default comparing.
-  /// )
-  /// ```
+  /// For more information refer to the [Tips and Tricks of FieldSuggestion](https://github.com/theiskaa/field_suggestion/wiki/Tips-and-Tricks).
   final bool Function(dynamic, String)? customSearch;
 
   const FieldSuggestion({
@@ -314,21 +215,14 @@ class FieldSuggestion extends StatefulWidget {
 
     // SuggestionItem properties.
     this.itemStyle = SuggestionItemStyle.DefaultStyle,
-    this.onTap,
-    this.onIconTap,
     this.onItemSelected,
-    this.itemTitleBy,
-    this.itemSubtitleBy,
     this.disabledDefaultOnTap = false,
-    this.disabledDefaultOnIconTap = false,
     this.scrollController,
-    this.disableItemTrailing = false,
 
     // FieldSuggestion properties.
-    this.hint,
     this.fieldDecoration,
     this.fieldType,
-    this.maxLines,
+    this.maxLines = 1,
     this.onFieldChanged,
     this.focusNode,
   }) : super(key: key);
@@ -336,49 +230,12 @@ class FieldSuggestion extends StatefulWidget {
   @override
   _FieldSuggestionState createState() => _FieldSuggestionState(boxController);
 
-  /// Makes able to make very custom suggestion items.
+  /// Builder factory of FieldSuggestion.
+  /// Makes able to create very custom suggestion items.
   ///
   /// Require to take `suggestionList`, `textController`, and `itemBuilder`.
   ///
-  /// **Example:**
-  /// ```dart
-  /// class BuilderExample extends StatelessWidget {
-  ///   final textEditingController = TextEditingController();
-  ///   List<String> suggestionsList = ['test@gmail.com', 'test1@gmail.com'];
-  ///
-  ///   @override
-  ///   Widget build(BuildContext context) {
-  ///     return Scaffold(
-  ///       body: FieldSuggestion.builder(
-  ///         hint: 'Email',
-  ///         textController: textEditingController,
-  ///         suggestionList: suggestionsList,
-  ///         itemBuilder: (BuildContext context, int index) {
-  ///           return GestureDetector(
-  ///             onTap: () => textEditingController.text = suggestionsList[index],
-  ///             child: Card(
-  ///               child: ListTile(
-  ///                 title: Text(suggestionsList[index]),
-  ///                 leading: Container(
-  ///                   height: 30,
-  ///                   width: 30,
-  ///                   decoration: BoxDecoration(
-  ///                     color: Colors.blueGrey,
-  ///                     shape: BoxShape.circle,
-  ///                   ),
-  ///                   child: Center(
-  ///                     child: Text(suggestionsList[index][0].toUpperCase()),
-  ///                   ),
-  ///                 ),
-  ///               ),
-  ///             ),
-  ///           );
-  ///         },
-  ///       ),
-  ///     );
-  ///   }
-  /// }
-  /// ```
+  /// For more information refer to the documentation of [Builder Factory](https://github.com/theiskaa/field_suggestion/wiki/Builder-factory)
   factory FieldSuggestion.builder({
     Key? key,
     required List<dynamic> suggestionList,
@@ -386,7 +243,6 @@ class FieldSuggestion extends StatefulWidget {
     required Widget Function(BuildContext, int) itemBuilder,
     BoxController? boxController,
     List<String>? searchBy,
-    String? hint,
     int? sizeByItem,
     SuggestionBoxStyle boxStyle = SuggestionBoxStyle.DefaultStyle,
     bool wDivider = false,
@@ -414,7 +270,6 @@ class FieldSuggestion extends StatefulWidget {
       suggestionList: suggestionList,
       boxController: boxController,
       searchBy: searchBy,
-      hint: hint,
       sizeByItem: sizeByItem,
       boxStyle: boxStyle,
       wDivider: wDivider,
@@ -440,14 +295,11 @@ class FieldSuggestion extends StatefulWidget {
 
 class _FieldSuggestionState extends State<FieldSuggestion>
     with TickerProviderStateMixin {
-  @override
-  Widget build(BuildContext context) => fieldSuggestion();
-
   // Initialize BoxController closures.
   _FieldSuggestionState(BoxController? _boxController) {
     if (_boxController != null) {
       _boxController.close = closeBox;
-      _boxController.show = showBox;
+      _boxController.open = openBox;
       _boxController.refresh = refresh;
     }
   }
@@ -456,11 +308,11 @@ class _FieldSuggestionState extends State<FieldSuggestion>
   OverlayEntry? _overlayEntry;
 
   // List which helps to manage overlays.
-  var _overlaysList = [];
+  final List<dynamic> _overlaysList = [];
 
-  // FieldSuggestion has two main parts:
-  // Field and SuggestionsBox. LayerLink help us to use them together.
-  LayerLink _layerLink = LayerLink();
+  // [FieldSuggestion] has two main parts:
+  // field and suggestions box. LayerLink help us to use them together.
+  final LayerLink _layerLink = LayerLink();
 
   late AnimationController _animationController;
   late Animation<double> _opacity;
@@ -492,7 +344,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     // Add listener to textController, for listen field and create matchers list.
     widget.textController.addListener(_textListener);
 
-    // Initilaze animations if any animaton was enabled.
+    // Initilaze animations, if any animaton tpye was enabled.
     if (widget.wOpacityAnimation || widget.wSlideAnimation) {
       _animationController = AnimationController(
         vsync: this,
@@ -589,22 +441,36 @@ class _FieldSuggestionState extends State<FieldSuggestion>
 
         // If custom search was enabled, checks matching from custom search function.
         if (widget.customSearch != null) {
-          return widget.customSearch!(
-            item.toUpperCase(),
-            input.toUpperCase(),
-          );
+          return widget.customSearch!(item.toUpperCase(), input.toUpperCase());
         }
 
         return item.toUpperCase().contains(input.toUpperCase());
       }).toList();
     }
 
-    return (matchers.isNotEmpty) ? showBox() : closeBox();
+    return (matchers.isNotEmpty) ? openBox() : closeBox();
   }
 
-  // Custom method for show suggestionBox.
+  @override
+  Widget build(BuildContext context) {
+    // Layer linking adds normal widget's behaviour to overlay widget.
+    // So, it follows [TextField] every time, and behaves as a normal non-hiddable widget.
+    return CompositedTransformTarget(
+      link: _layerLink,
+      child: TextField(
+        keyboardType: widget.fieldType,
+        focusNode: widget.focusNode,
+        onChanged: widget.onFieldChanged,
+        controller: widget.textController,
+        maxLines: widget.maxLines,
+        decoration: widget.fieldDecoration,
+      ),
+    );
+  }
+
+  // Function, that used to open suggestions box.
   // First it clears _overlayEntry and creates new one.
-  void showBox() {
+  void openBox() {
     if (_overlayEntry != null && _overlaysList.isNotEmpty) {
       _overlayEntry!.remove();
       _mountedSetState(() => _overlayEntry = null);
@@ -615,11 +481,12 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     }
   }
 
-  // Custom method for close suggestionBox.
-  // It just clears/removes overlay entry.
+  // Function, that used to close suggestions box.
+  // It just clears/removes overlay entry, and as a result box closes.
   void closeBox() {
     if (_overlayEntry != null && _overlaysList.isNotEmpty) {
       _overlayEntry!.remove();
+
       if (widget.wOpacityAnimation || widget.wSlideAnimation) {
         _animationController.reverse();
       }
@@ -627,46 +494,34 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     }
   }
 
-  // Default tap method of SuggestionItem.
-  // It fills value of field with title of selected item.
-  // And if `closeBoxAfterSelect` is enabled (as default it's enabled),
-  // It closes suggestions box after tapping the item.
-  onItemTap(dynamic selectedItem) {
+  // Default `onItemSelected` function.
+  // It fills field with value of selected item.
+  // And if `closeBoxAfterSelect` is enabled (as default it's enabled), it closes suggestions box after selecting the item.
+  onItemSelected(dynamic selectedItem) {
     if (widget.disabledDefaultOnTap) {
-      widget.onTap!();
       if (widget.onItemSelected != null) widget.onItemSelected!(selectedItem);
       return;
     }
 
     _mountedSetState(() {
-      widget.textController.text = isObjList(widget.suggestionList)
-          ? selectedItem['${widget.itemTitleBy ?? widget.searchBy![0]}']
-              .toString()
-          : selectedItem.toString();
+      if (!isObjList(widget.suggestionList)) {
+        widget.textController.text = selectedItem.toString();
+      } else {
+        widget.textController.text =
+            selectedItem['${widget.searchBy![0]}'].toString();
+      }
+
       widget.textController.selection = TextSelection.fromPosition(
         TextPosition(offset: widget.textController.text.length),
       );
     });
 
-    if (widget.onTap != null) widget.onTap!();
     if (widget.onItemSelected != null) widget.onItemSelected!(selectedItem);
     if (widget.closeBoxAfterSelect) closeBox();
   }
 
-  // Default tap method of SuggestionItem's tralling .
-  // It removes selected item from [widget.suggestionList] and [matchers].
-  onTrallingTap(dynamic selectedItem) {
-    if (widget.disabledDefaultOnIconTap) return widget.onIconTap!();
-
-    widget.suggestionList.remove(selectedItem);
-    matchers.remove(selectedItem);
-
-    if (widget.onIconTap != null) widget.onIconTap!();
-    (matchers.length != 0) ? showBox() : closeBox();
-  }
-
-  // Creates SuggestionsBox as overlay,
-  // it's sticking to down of [fieldSuggestion] by using [_layerLink].
+  // Creates suggestion box as overlay entry, and puts it to general `_overlayEntry`.
+  // We use `_overlaysList` to manage all overlays in this state.
   void _createOverlay(BuildContext context) {
     // Takes size from context's renderbox
     final Size size = (context.findRenderObject() as RenderBox).size;
@@ -697,8 +552,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     _overlaysList.add(_overlayEntry);
   }
 
-  // If the value present in the [textController], matches whatever value in the
-  // list you have defined, then the buildSuggestionBox will appear.
+  // Returns final suggestion box.
   Widget _buildSuggestionBox(BuildContext context) {
     Widget _suggestionBox = Opacity(
       opacity: (widget.wOpacityAnimation) ? _opacity.value : 1,
@@ -708,7 +562,6 @@ class _FieldSuggestionState extends State<FieldSuggestion>
         child: ConstrainedBox(
           constraints: BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width,
-            // Custom utility for manage the maxHeight of [_suggestionbox].
             maxHeight: maxSuggestionBoxHeight(
               matchersList: matchers,
               wDivider: widget.wDivider,
@@ -720,80 +573,62 @@ class _FieldSuggestionState extends State<FieldSuggestion>
             padding: EdgeInsets.zero,
             shrinkWrap: true,
             itemCount: matchers.length,
-            separatorBuilder: (_, __) =>
-                (widget.wDivider) ? widget.divider : const SizedBox.shrink(),
-            itemBuilder: (widget.itemBuilder == null)
-                ? (_, i) => suggestionListItem(i)
-                : (_, i) {
-                    // We need indexes to determine right index of concrete item to pass it to builder.
-                    var indexes = matchers.map((e) {
-                      // If suggestion list isn't Object list then just return index of current element.
-                      if (!isObjList(widget.suggestionList))
-                        return widget.suggestionList.indexOf(e);
+            separatorBuilder: (_, __) {
+              if (widget.wDivider) return widget.divider;
+              return const SizedBox.shrink();
+            },
+            itemBuilder: (_, i) {
+              // Return default list items, when item builder is null.
+              if (widget.itemBuilder == null) return suggestionListItem(i);
 
-                      return objectSuggestionsAsJson.indexOf(e.toString());
-                    }).toList();
+              // We need indexes to determine right index of concrete item to pass it to builder.
+              final List<int> indexes = matchers.map((e) {
+                // If suggestion list isn't Object list then just return index of current element.
+                if (!isObjList(widget.suggestionList)) {
+                  return widget.suggestionList.indexOf(e);
+                }
 
-                    return widget.itemBuilder!(context, indexes[i]);
-                  },
+                return objectSuggestionsAsJson.indexOf(e.toString());
+              }).toList();
+
+              return widget.itemBuilder!(context, indexes[i]);
+            },
           ),
         ),
       ),
     );
 
-    Widget box = !widget.wSlideAnimation
-        ? _suggestionBox
-        : SlideTransition(position: _slide!, child: _suggestionBox);
+    if (!widget.wSlideAnimation) return Material(child: _suggestionBox);
 
-    return Material(child: box);
+    return Material(
+      child: SlideTransition(position: _slide!, child: _suggestionBox),
+    );
   }
 
   /// A card which returns suggestion item widget.
   /// It used in ListView builder so it has ability to fill its data by given index/
   Widget suggestionListItem(int index) {
-    // If suggestion list contains objects then it will return title from itemTitleBy or searchBy's first item.
+    // If suggestion list contains objects then it will return title from searchBy's first item.
     // Unless it will return directly a title from matchers list.
     var title = isObjList(widget.suggestionList)
-        ? "${matchers[index][widget.itemTitleBy] ?? matchers[index][widget.searchBy![0]]}"
+        ? "${matchers[index][widget.searchBy![0]]}"
         : "${matchers[index]}";
 
-    var subTitle = (widget.itemSubtitleBy != null)
-        ? "${matchers[index][widget.itemSubtitleBy]}"
-        : null;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 3),
-      child: SuggestionItem(
-        key: const Key('suggested.item'),
-        disableItemTrailing: widget.disableItemTrailing,
-        title: title,
-        subTitle: subTitle,
-        style: widget.itemStyle,
-        onTap: () => onItemTap(matchers[index]),
-        onIconTap: () => onTrallingTap(matchers[index]),
-      ),
+    return SuggestionItem(
+      key: const Key('suggested.item'),
+      title: title,
+      style: widget.itemStyle,
+      onTap: () => onItemSelected(matchers[index]),
     );
   }
 
-  Widget fieldSuggestion() => CompositedTransformTarget(
-        link: _layerLink,
-        child: TextField(
-          keyboardType: widget.fieldType,
-          focusNode: widget.focusNode,
-          onChanged: widget.onFieldChanged,
-          controller: widget.textController,
-          maxLines: (widget.maxLines != null) ? widget.maxLines : 1,
-          decoration: (widget.fieldDecoration != null)
-              ? widget.fieldDecoration
-              : InputDecoration(hintText: widget.hint, labelText: widget.hint),
-        ),
-      );
-
   // Get [_suggestionBoxStyle] by listening custom style widget [widget.suggestionBoxStyle].
-  Decoration get _suggestionBoxStyle => BoxDecoration(
-        color: widget.boxStyle.backgroundColor,
-        borderRadius: widget.boxStyle.borderRadius,
-        boxShadow: widget.boxStyle.boxShadow,
-        border: widget.boxStyle.border,
-      );
+  Decoration get _suggestionBoxStyle {
+    return BoxDecoration(
+      color: widget.boxStyle.backgroundColor,
+      borderRadius: widget.boxStyle.borderRadius,
+      boxShadow: widget.boxStyle.boxShadow,
+      border: widget.boxStyle.border,
+    );
+  }
 }

@@ -1,4 +1,4 @@
-// Method to get right max height for Suggestion Box
+// Gets right max height for Suggestion Box
 // by listening [wDivider] and [sizeByItem] properties.
 double maxSuggestionBoxHeight({
   required bool wDivider,

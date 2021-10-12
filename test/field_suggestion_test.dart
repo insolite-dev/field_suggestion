@@ -117,7 +117,6 @@ void main() {
       customSearch: (_, __) => true,
       wDivider: true,
       divider: Divider(),
-      disabledDefaultOnIconTap: true,
       disabledDefaultOnTap: true,
       wSlideAnimation: true,
       slideStyle: SlideStyle.LTR,
@@ -137,12 +136,9 @@ void main() {
       textController: fourthTextEditingController,
       suggestionList: numSuggestions,
       disabledDefaultOnTap: true,
-      disabledDefaultOnIconTap: true,
       customSearch: (item, input) {
         return item.toString().contains(input.toString());
       },
-      onTap: () {},
-      onIconTap: () {},
       onItemSelected: (val) {},
       wSlideAnimation: true,
       slideStyle: SlideStyle.UTD,
@@ -153,7 +149,6 @@ void main() {
       boxController: boxController,
       textController: fifthTextEditingController,
       searchBy: ['title'],
-      itemSubtitleBy: 'title',
       suggestionList: testModelSuggestions,
       closeBoxAfterSelect: false,
       wSlideAnimation: true,
@@ -324,7 +319,7 @@ void main() {
       await tester.pumpAndSettle();
 
       boxController.close!();
-      boxController.show!();
+      boxController.open!();
 
       final suggestedItem = find.byType(SuggestionItem);
       final tralling = find.byIcon(Icons.clear);
