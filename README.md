@@ -1,5 +1,15 @@
+<!-- 
+LOGO: https://user-images.githubusercontent.com/59066341/137347177-c6800b7b-3725-4cdf-952d-e7f5bfdab0b1.png 
+TITLE LOGO: https://user-images.githubusercontent.com/59066341/137347491-41ff5c29-42f6-443c-a9e3-b4128cc61518.png
+-->
+
+
 <p align="center">
-  <img width="250" src="https://raw.githubusercontent.com/theiskaa/field_suggestion/develop/example/assets/logo.png" alt="Field Suggesion's Logo">
+  <img width="330" src="https://user-images.githubusercontent.com/59066341/137347177-c6800b7b-3725-4cdf-952d-e7f5bfdab0b1.png" alt="Field Suggesion's Logo">
+  <br>
+  <br>
+  <img width="380" src="https://user-images.githubusercontent.com/59066341/137347491-41ff5c29-42f6-443c-a9e3-b4128cc61518.png" alt="Field Suggesion's Title Logo">
+  <br>
 </p>
 
  <p align="center">
