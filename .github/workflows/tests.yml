@@ -23,7 +23,7 @@ jobs:
           channel: "stable" # "alpha", "beta", "dev", default to: "stable"
           #
           # # You can also specify exact version of Flutter.
-          flutter-version: "2.2.0"
+          flutter-version: "2.5.0"
 
       - name: Test the application
         run: flutter test

@@ -3,11 +3,17 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:field_suggestion/src/styles.dart';
 
+import 'src/utils.dart';
+
 main() {
+  late MockAnimationController animationControllerMock;
+
   late SuggestionBoxStyle customSuggestionBoxStyle;
   late SuggestionItemStyle customSuggestionItemStyle;
 
   setUpAll(() {
+    animationControllerMock = MockAnimationController();
+
     customSuggestionBoxStyle = SuggestionBoxStyle(
       backgroundColor: Colors.white,
       border: Border.all(),
@@ -21,9 +27,6 @@ main() {
     customSuggestionItemStyle = SuggestionItemStyle(
       backgroundColor: Colors.white,
       titleStyle: TextStyle(color: Colors.purple),
-      icon: Icons.remove,
-      iconSize: 18,
-      iconColor: Colors.red,
       border: Border.all(),
       borderRadius: const BorderRadius.all(Radius.circular(10)),
       gradient: LinearGradient(colors: [Colors.pink, Colors.purple]),
@@ -32,19 +35,48 @@ main() {
     );
   });
 
+  group('[FieldAnimationStyle]', () {
+    test('set box animation from slide should work properly', () {
+      final fromSlideStyle = FieldAnimationStyle.setBoxAnimation(
+        slideStyle: SlideStyle.RTL,
+        animationController: animationControllerMock,
+        slideTweenOffset: null,
+        slideCurve: Curves.bounceOut,
+      );
+
+      expect(fromSlideStyle is Animation<Offset>, true);
+    });
+
+    test('set box animation from custom tween offset should work properly', () {
+      final fromCustomTween = FieldAnimationStyle.setBoxAnimation(
+        slideStyle: SlideStyle.UTD, // Doesn't matter.
+        animationController: animationControllerMock,
+        slideTweenOffset: Tween<Offset>(
+          begin: Offset(0, 5),
+          end: Offset(-5, 0),
+        ),
+        slideCurve: Curves.bounceOut,
+      );
+
+      expect(fromCustomTween is Animation<Offset>, true);
+    });
+  });
+
   group('[SuggestionBoxStyle]', () {
-    test('customSuggestionBoxStyle', () {
+    test('customSuggestionBoxStyle should contain custom properties', () {
       expect(customSuggestionBoxStyle.backgroundColor, Colors.white);
       expect(customSuggestionBoxStyle.border, Border.all());
       expect(customSuggestionBoxStyle.borderRadius, BorderRadius.circular(10));
-      expect(customSuggestionBoxStyle.gradient,
-          LinearGradient(colors: [Colors.white, Colors.grey]));
+      expect(
+        customSuggestionBoxStyle.gradient,
+        LinearGradient(colors: [Colors.white, Colors.grey]),
+      );
       expect(customSuggestionBoxStyle.boxShadow, [BoxShadow(spreadRadius: 15)]);
       expect(customSuggestionBoxStyle.padding, EdgeInsets.all(10));
       expect(customSuggestionBoxStyle.shape, BoxShape.circle);
     });
 
-    test('DefaultStyle', () {
+    test('DefaultStyle should contain initial properties', () {
       SuggestionBoxStyle defaultStyle = SuggestionBoxStyle.DefaultStyle;
 
       expect(defaultStyle.backgroundColor, Colors.white);
@@ -52,7 +84,7 @@ main() {
       expect(defaultStyle.borderRadius, BorderRadius.all(Radius.circular(5)));
       expect(defaultStyle.gradient, null);
       expect(defaultStyle.boxShadow, [
-        BoxShadow(
+        const BoxShadow(
           spreadRadius: 10,
           offset: Offset(0, 5),
           color: Color(0xFFA3A3A3),
@@ -65,91 +97,41 @@ main() {
   });
 
   group('[SuggestionItemStyle]', () {
-    test('customSuggestionItemStyle', () {
+    test('customSuggestionItemStyle should contain custom properties', () {
       expect(customSuggestionItemStyle.backgroundColor, Colors.white);
       expect(
         customSuggestionItemStyle.titleStyle,
         TextStyle(color: Colors.purple),
       );
-      expect(customSuggestionItemStyle.icon, Icons.remove);
-      expect(customSuggestionItemStyle.iconSize, 18);
-      expect(customSuggestionItemStyle.iconColor, Colors.red);
       expect(customSuggestionItemStyle.border, Border.all());
-      expect(customSuggestionItemStyle.borderRadius,
-          const BorderRadius.all(Radius.circular(10)));
-      expect(customSuggestionItemStyle.gradient,
-          LinearGradient(colors: [Colors.pink, Colors.purple]));
       expect(
-          customSuggestionItemStyle.boxShadow, [BoxShadow(spreadRadius: 15)]);
+        customSuggestionItemStyle.borderRadius,
+        const BorderRadius.all(Radius.circular(10)),
+      );
+      expect(
+        customSuggestionItemStyle.gradient,
+        LinearGradient(colors: [Colors.pink, Colors.purple]),
+      );
+      expect(
+        customSuggestionItemStyle.boxShadow,
+        [BoxShadow(spreadRadius: 15)],
+      );
       expect(customSuggestionItemStyle.margin, EdgeInsets.all(5));
     });
 
-    test('DefaultStyle', () {
+    test('DefaultStyle should contain initial properties', () {
       SuggestionItemStyle defaultStyle = SuggestionItemStyle.DefaultStyle;
 
       expect(defaultStyle.backgroundColor, Colors.white);
       expect(defaultStyle.titleStyle, TextStyle(color: Colors.black));
-      expect(defaultStyle.icon, Icons.clear);
-      expect(defaultStyle.iconSize, 20);
-      expect(defaultStyle.iconColor, Colors.red);
       expect(defaultStyle.border, null);
-      expect(defaultStyle.borderRadius,
-          const BorderRadius.all(Radius.circular(5)));
+      expect(
+        defaultStyle.borderRadius,
+        const BorderRadius.all(Radius.circular(5)),
+      );
       expect(defaultStyle.gradient, null);
       expect(defaultStyle.boxShadow, null);
       expect(defaultStyle.margin, null);
-    });
-
-    test('WhiteNeumorphismedStyle', () {
-      SuggestionItemStyle whiteNeumorphismedStyle =
-          SuggestionItemStyle.WhiteNeumorphismedStyle;
-
-      expect(whiteNeumorphismedStyle.backgroundColor, Colors.white);
-      expect(
-          whiteNeumorphismedStyle.titleStyle, TextStyle(color: Colors.black));
-      expect(whiteNeumorphismedStyle.icon, Icons.clear);
-      expect(whiteNeumorphismedStyle.iconSize, 20);
-      expect(whiteNeumorphismedStyle.iconColor, Colors.red);
-      expect(whiteNeumorphismedStyle.border, null);
-      expect(whiteNeumorphismedStyle.borderRadius,
-          const BorderRadius.all(Radius.circular(5)));
-      expect(whiteNeumorphismedStyle.gradient, null);
-      expect(whiteNeumorphismedStyle.boxShadow, [
-        BoxShadow(
-          blurRadius: 1,
-          spreadRadius: 1,
-          offset: Offset(0, 2),
-          color: Color(0xffD5D5D5),
-        ),
-      ]);
-      expect(whiteNeumorphismedStyle.margin,
-          EdgeInsetsDirectional.only(start: 1, end: 1, top: 1));
-    });
-
-    test('BlackNeumorphismedStyle', () {
-      SuggestionItemStyle blackNeumorphismedStyle =
-          SuggestionItemStyle.BlackNeumorphismedStyle;
-
-      expect(blackNeumorphismedStyle.backgroundColor, Color(0xFF0E0E0E));
-      expect(
-          blackNeumorphismedStyle.titleStyle, TextStyle(color: Colors.white));
-      expect(blackNeumorphismedStyle.icon, Icons.clear);
-      expect(blackNeumorphismedStyle.iconSize, 20);
-      expect(blackNeumorphismedStyle.iconColor, Colors.red);
-      expect(blackNeumorphismedStyle.border, null);
-      expect(blackNeumorphismedStyle.borderRadius,
-          const BorderRadius.all(Radius.circular(5)));
-      expect(blackNeumorphismedStyle.gradient, null);
-      expect(blackNeumorphismedStyle.boxShadow, [
-        BoxShadow(
-          blurRadius: 1,
-          spreadRadius: 1,
-          offset: Offset(0, 2),
-          color: Color(0xFF2E2E2E),
-        ),
-      ]);
-      expect(blackNeumorphismedStyle.margin,
-          EdgeInsetsDirectional.only(start: 1, end: 1, top: 1));
     });
   });
 }

@@ -5,7 +5,7 @@ import 'src/test_model.dart';
 
 void main() {
   group('[Utils]', () {
-    test("`maxSuggestionBoxHeight` test", () {
+    test("maxSuggestionBoxHeight", () {
       // `matchersList` takes one item.
       // So it would be [60].
       double defaultSize1 = maxSuggestionBoxHeight(
@@ -54,18 +54,6 @@ void main() {
       expect(sizeByItemSetted, 120);
     });
 
-    test('isClassList', () {
-      List<String> stringList = ['one', 'two', 'three'];
-      List<int> intList = [1, 2, 3];
-      List<double> doubleList = [1.0, 2.0, 3.0];
-      List<TestModel> modelList = [TestModel(title: 'Some test')];
-
-      expect(isObjList(stringList), false);
-      expect(isObjList(intList), false);
-      expect(isObjList(doubleList), false);
-      expect(isObjList(modelList), true);
-    });
-
     test('renderObjList', () {
       List<TestModel> modelList = [TestModel(title: 'Some test')];
 
@@ -95,6 +83,41 @@ void main() {
         true,
       );
       expect(renderedMatchersListCustomSearch, mockRenderedMatchersList);
+    });
+
+    test('isSelected', () {
+      // Should return false if matchers list is empty
+      expect(isSelected(null, null, []), false);
+
+      // Test with non-object suggestions list.
+      const List<String> mockSuggestions = ['123', '345', '567', '789'];
+      expect(
+        true,
+        isSelected(mockSuggestions, mockSuggestions[0], [mockSuggestions[0]]),
+      );
+
+      const List<TestModel> mockObjSuggestions = [TestModel(title: '123')];
+      expect(
+        true,
+        isSelected(
+          mockObjSuggestions,
+          mockObjSuggestions[0].title,
+          [mockObjSuggestions[0].toJson()],
+          ['title'],
+        ),
+      );
+    });
+
+    test('isObjList', () {
+      const List<String> stringList = ['one', 'two', 'three'];
+      const List<int> intList = [1, 2, 3];
+      const List<double> doubleList = [1.0, 2.0, 3.0];
+      const List<TestModel> modelList = [TestModel(title: 'Some test')];
+
+      expect(isObjList(stringList), false);
+      expect(isObjList(intList), false);
+      expect(isObjList(doubleList), false);
+      expect(isObjList(modelList), true);
     });
   });
 }

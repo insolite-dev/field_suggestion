@@ -11,12 +11,9 @@ void main() {
   setUpAll(() {
     // Initilaze [SuggestionItem] widget with custom properties.
     suggestionItem = SuggestionItem(
-      disableItemTrailing: false,
       style: SuggestionItemStyle.DefaultStyle,
       onTap: () {},
-      onIconTap: () {},
       title: "Suggested Item",
-      subTitle: "Suggested Items's subtitle",
     );
 
     // initilaze [mainWidget].
@@ -32,14 +29,12 @@ void main() {
     // mainWidget tests.
     expect(find.byType(MaterialApp), findsOneWidget);
     expect(find.byType(Scaffold), findsOneWidget);
-    expect(find.byType(Center), findsNWidgets(2));
+    expect(find.byType(Center), findsOneWidget);
 
     // Suggestion Item tests
     expect(find.byType(SuggestionItem), findsOneWidget);
     expect(find.byType(Container), findsOneWidget);
     expect(find.byType(ListTile), findsOneWidget);
     expect(find.text('Suggested Item'), findsOneWidget);
-    expect(find.byType(IconButton), findsOneWidget);
-    expect(find.byIcon(Icons.clear), findsOneWidget);
   });
 }
