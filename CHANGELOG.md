@@ -1,6 +1,17 @@
+# [v0.2.2] - 14/10/2021
+### News:
+- Resolved: [General Improvments #36](https://github.com/theiskaa/field_suggestion/issues/36)
+- Re-designed logo: 
+
+ <img width="150" src="https://user-images.githubusercontent.com/59066341/137347177-c6800b7b-3725-4cdf-952d-e7f5bfdab0b1.png" alt="Field Suggesion's Logo">
+
+Clear code & faster field suggestion.
+
+---
+
 # [v0.2.1] - 04/10/2021
 ### News:
-- Resolved: [#34](https://github.com/theiskaa/field_suggestion/issues/31)
+- Resolved: [#34](https://github.com/theiskaa/field_suggestion/issues/34)
 - Improved documentation - [Official Documentation](https://github.com/theiskaa/field_suggestion/wiki)
 
 **Overview:**
