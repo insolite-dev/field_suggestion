@@ -10,7 +10,7 @@ double maxSuggestionBoxHeight({
   // Set size by listening [sizeByItem].
   if (sizeByItem != null) {
     return (sizeByItem == 1) ? size : size * sizeByItem.roundToDouble();
-  }
+  }  
 
   final sizesByMatchers = {
     1: size,
