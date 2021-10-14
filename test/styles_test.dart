@@ -84,7 +84,7 @@ main() {
       expect(defaultStyle.borderRadius, BorderRadius.all(Radius.circular(5)));
       expect(defaultStyle.gradient, null);
       expect(defaultStyle.boxShadow, [
-       const BoxShadow(
+        const BoxShadow(
           spreadRadius: 10,
           offset: Offset(0, 5),
           color: Color(0xFFA3A3A3),
