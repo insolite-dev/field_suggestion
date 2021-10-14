@@ -12,7 +12,7 @@ double maxSuggestionBoxHeight({
     return (sizeByItem == 1) ? size : size * sizeByItem.roundToDouble();
   }
 
-  final sizesByMatchersList = {
+  final sizesByMatchers = {
     1: size,
     2: size * 2.0,
     3: size * 3.0,
@@ -20,7 +20,7 @@ double maxSuggestionBoxHeight({
   };
 
   // Set size by listening [matchersList].
-  return sizesByMatchersList[matchersList.length] ?? sizesByMatchersList[4]!;
+  return sizesByMatchers[matchersList.length] ?? sizesByMatchers[4]!;
 }
 
 // It takes a list (which runtime type is List<Object>), user input, searchBy hints and customSearch function.

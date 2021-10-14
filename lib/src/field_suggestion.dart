@@ -11,7 +11,7 @@ import 'errors.dart';
 /// Require to take `textController` and `suggestionList`.
 ///
 /// `textController` listens changing on the field,
-/// and after listening it's create a custom matchers list, which is would come with `SuggestionBox`.
+/// and after listening it's create a custom matchers list, that'd come with `SuggestionBox`.
 ///
 /// **Basic usage:**
 /// ```dart
@@ -34,10 +34,20 @@ class FieldSuggestion extends StatefulWidget {
   /// Article about FieldSuggestion's custom model classes: - https://github.com/theiskaa/field_suggestion/wiki/Class-suggestions
   final List<dynamic> suggestionList;
 
+  /// A controller for FieldSuggestion.
+  ///
+  /// By using it you can open/close your suggestions box externally. (From anywere, where you have access to initilazed box controller)
+  /// And also can refresh state of your FieldSuggestion with it.
+  ///
+  /// For more information refer to the article about External Control - https://github.com/theiskaa/field_suggestion/wiki/External-control
+  final BoxController? boxController;
+
   /// It must be initilazed when `suggestionList` isn't `List<String>`, `List<int>`, or `List<double>`.
   ///
-  /// Howeveer, when you give a suggestion list which includes custom classes,
-  /// then you must to add the propert's name which you wanna search by.
+  /// However, when you give a suggestion list which includes custom classes,
+  /// then you must to add the property's name which you wanna search by.
+  /// Or create your custom searching functionality - See [Tips and Tricks of FieldSuggestion](https://github.com/theiskaa/field_suggestion/wiki/Tips-and-Tricks).
+  ///
   /// ---
   /// **For example:**
   ///
@@ -48,12 +58,14 @@ class FieldSuggestion extends StatefulWidget {
   ///  final String? password;
   /// }
   /// ```
-  /// And my [suggestionList]'s runtimeType is List<UserModel>.
-  /// Then have to add `searchBy: ['email']` or `searchBy: ['password']` or together: `searchBy: ['email', 'password']`
+  /// And my [suggestionList]'s runtimeType is `List<UserModel>`.
+  /// Then I have to add `searchBy: ['email']` or `searchBy: ['password']` or together: `searchBy: ['email', 'password']`
   final List<String>? searchBy;
 
   /// As default, when you select any item from suggestions, it only fills text field with selected item's value.
   /// So, `onItemSelected` is a property that used to customize suggestion selection's act.
+  ///
+  /// To disable default item selecting action you can set `disabledDefaultOnTap` to `true`
   ///
   /// Example:
   /// ```dart
@@ -64,14 +76,6 @@ class FieldSuggestion extends StatefulWidget {
   /// onItemSelected: (value) => Navigator.push(...)
   /// ```
   final Function(dynamic)? onItemSelected;
-
-  /// A controller for FieldSuggestion.
-  ///
-  /// By using it you can open/close your suggestions box externally. (From anywere, where you have access to initilazed box controller)
-  /// And also can refresh state of your FieldSuggestion with it.
-  ///
-  /// For more information refer to the article about External Control - https://github.com/theiskaa/field_suggestion/wiki/External-control
-  final BoxController? boxController;
 
   /// For calucalte size of suggestionBox by per item.
   /// So if `sizeByItem == 1` then size will be `60`.
@@ -197,8 +201,6 @@ class FieldSuggestion extends StatefulWidget {
     this.searchBy,
     this.itemBuilder,
     this.customSearch,
-
-    // SuggestionBox properties.
     this.boxController,
     this.spacer = 5.0,
     this.boxStyle = SuggestionBoxStyle.DefaultStyle,
@@ -212,14 +214,10 @@ class FieldSuggestion extends StatefulWidget {
     this.slideCurve = Curves.decelerate,
     this.slideTweenOffset,
     this.slideStyle = SlideStyle.RTL,
-
-    // SuggestionItem properties.
     this.itemStyle = SuggestionItemStyle.DefaultStyle,
     this.onItemSelected,
     this.disabledDefaultOnTap = false,
     this.scrollController,
-
-    // FieldSuggestion properties.
     this.fieldDecoration,
     this.fieldType,
     this.maxLines = 1,
@@ -304,7 +302,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     }
   }
 
-  // The main overlay entry. Used to display suggestions box.
+  // The main overlay entry. Used to display suggestions' box.
   OverlayEntry? _overlayEntry;
 
   // List which helps to manage overlays.
@@ -323,8 +321,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
   List<dynamic> matchers = <dynamic>[];
 
   // Used to find right index of concrete item when it's object.
-  // We return it on ln 702-704.
-  List<dynamic> objectSuggestionsAsJson = <dynamic>[];
+  List<dynamic> objSuggestionsAsJson = <dynamic>[];
 
   @override
   void dispose() {
@@ -337,7 +334,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     super.initState();
 
     if (isObjList(widget.suggestionList)) {
-      objectSuggestionsAsJson =
+      objSuggestionsAsJson =
           widget.suggestionList.map((e) => e.toJson().toString()).toList();
     }
 
@@ -360,7 +357,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
 
       // Set slide animations if it was enalbed.
       if (widget.wSlideAnimation) {
-        _slide = FieldAnimationStyle.chooseBoxAnimation(
+        _slide = FieldAnimationStyle.setBoxAnimation(
           slideStyle: widget.slideStyle,
           animationController: _animationController,
           slideTweenOffset: widget.slideTweenOffset,
@@ -383,6 +380,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     _textListener();
   }
 
+  // Listens user inputs, and fills matchers by appropriate values.
   void _textListener() {
     final input = widget.textController.text;
 
@@ -404,9 +402,9 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     }
 
     if (isObjList(widget.suggestionList)) {
-      // Refresh objectSuggestionsAsJson if something was changed in widget.suggestionList.
-      if (widget.suggestionList.length != objectSuggestionsAsJson.length) {
-        objectSuggestionsAsJson =
+      // Refresh objSuggestionsAsJson if something was changed in widget.suggestionList.
+      if (widget.suggestionList.length != objSuggestionsAsJson.length) {
+        objSuggestionsAsJson =
             widget.suggestionList.map((e) => e.toJson().toString()).toList();
       }
 
@@ -588,7 +586,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
                   return widget.suggestionList.indexOf(e);
                 }
 
-                return objectSuggestionsAsJson.indexOf(e.toString());
+                return objSuggestionsAsJson.indexOf(e.toString());
               }).toList();
 
               return widget.itemBuilder!(context, indexes[i]);
@@ -605,30 +603,32 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     );
   }
 
+  // Get [_suggestionBoxStyle] by listening custom style widget [widget.suggestionBoxStyle].
+  Decoration get _suggestionBoxStyle => BoxDecoration(
+        color: widget.boxStyle.backgroundColor,
+        borderRadius: widget.boxStyle.borderRadius,
+        boxShadow: widget.boxStyle.boxShadow,
+        border: widget.boxStyle.border,
+      );
+
   /// A card which returns suggestion item widget.
   /// Basically, used as "default" suggestion item.
   Widget suggestionListItem(int index) {
     // If suggestion list contains objects then it will return title from searchBy's first item.
     // Unless it will return directly a title from matchers list.
-    var title = isObjList(widget.suggestionList)
-        ? "${matchers[index][widget.searchBy![0]]}"
-        : "${matchers[index]}";
+    String title;
+
+    if (isObjList(widget.suggestionList)) {
+      title = '${matchers[index][widget.searchBy![0]]}';
+    } else {
+      title = '${matchers[index]}';
+    }
 
     return SuggestionItem(
       key: const Key('suggested.item'),
       title: title,
       style: widget.itemStyle,
       onTap: () => onItemSelected(matchers[index]),
-    );
-  }
-
-  // Get [_suggestionBoxStyle] by listening custom style widget [widget.suggestionBoxStyle].
-  Decoration get _suggestionBoxStyle {
-    return BoxDecoration(
-      color: widget.boxStyle.backgroundColor,
-      borderRadius: widget.boxStyle.borderRadius,
-      boxShadow: widget.boxStyle.boxShadow,
-      border: widget.boxStyle.border,
     );
   }
 }

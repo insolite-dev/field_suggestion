@@ -15,7 +15,7 @@ enum SlideStyle { RTL, LTR, BTU, UTD }
 // Helper class that basically used to choose/set/manage animations of `FieldSuggestion`.
 class FieldAnimationStyle {
   // Returns Animation Offset for suggestion box.
-  static Animation<Offset>? chooseBoxAnimation({
+  static Animation<Offset>? setBoxAnimation({
     required SlideStyle slideStyle,
     required AnimationController animationController,
     required Tween<Offset>? slideTweenOffset,

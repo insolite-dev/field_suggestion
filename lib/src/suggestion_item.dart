@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:field_suggestion/src/styles.dart';
 
-// Custom private class, for build [SuggestionItem].
+// Very basic, default suggestion item widget.
 class SuggestionItem extends StatelessWidget {
   final SuggestionItemStyle style;
   final Function onTap;
