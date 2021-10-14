@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage> {
                     return item.toString().contains(input);
                   },
                   onItemSelected: (value) {
-                    // Do Something...
+                    // Do Something ...
                   },
                   fieldDecoration: InputDecoration(
                     hintText: "Phone Number",
@@ -112,7 +112,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                  // disableItemTrailing: true,
                   boxStyle: SuggestionBoxStyle(
                     backgroundColor: Colors.white,
                     borderRadius: BorderRadius.circular(15),
@@ -142,10 +141,8 @@ class _HomePageState extends State<HomePage> {
                   //   return item.email.toString().contains(input);
                   // },
                   searchBy: ['email', 'username'],
-                  // itemTitleBy: 'username',
-                  // If you provide [itemSubtitleBy] then suggestion item's
-                  // subtitle automaticallty will be enabled.
-                  // itemSubtitleBy: 'email',
+                  // If you're using default suggestion item widgets
+                  // then title will be searchBy property's first value.
                   boxController: thirdBoxController,
                   textController: thirdTextController,
                   suggestionList: userSuggestions,
@@ -176,8 +173,9 @@ class _HomePageState extends State<HomePage> {
                           title: Text(stringSuggestions[index]),
                           trailing: IconButton(
                             onPressed: () {
-                              stringSuggestions
-                                  .remove(stringSuggestions[index]);
+                              stringSuggestions.remove(
+                                stringSuggestions[index],
+                              );
                               firstBoxController.refresh!();
                             },
                             icon: Icon(Icons.clear),
@@ -186,7 +184,9 @@ class _HomePageState extends State<HomePage> {
                             height: 30,
                             width: 30,
                             decoration: BoxDecoration(
-                                color: Colors.blueGrey, shape: BoxShape.circle),
+                              color: Colors.blueGrey,
+                              shape: BoxShape.circle,
+                            ),
                             child: Center(
                               child: Text(
                                 stringSuggestions[index][0].toUpperCase(),
