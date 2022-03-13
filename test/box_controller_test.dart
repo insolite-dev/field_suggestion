@@ -23,10 +23,12 @@ void main() {
       boxController.close!();
       expect(state, 'close');
     });
+
     test('test [open]', () {
       boxController.open!();
       expect(state, 'open');
     });
+
     test('test [refresh]', () {
       boxController.refresh!();
       expect(state, 'refresh');
