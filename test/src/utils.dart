@@ -3,7 +3,7 @@ import 'package:mockito/mockito.dart';
 
 // Mock of AnimationController.
 class MockAnimationController extends Mock implements AnimationController {
-  // Can be changed
+  // Could be changed
   AnimationStatus animationStatus = AnimationStatus.completed;
 
   @override

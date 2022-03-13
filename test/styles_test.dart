@@ -9,7 +9,6 @@ main() {
   late MockAnimationController animationControllerMock;
 
   late SuggestionBoxStyle customSuggestionBoxStyle;
-  late SuggestionItemStyle customSuggestionItemStyle;
 
   setUpAll(() {
     animationControllerMock = MockAnimationController();
@@ -22,16 +21,6 @@ main() {
       boxShadow: [BoxShadow(spreadRadius: 15)],
       padding: EdgeInsets.all(10),
       shape: BoxShape.circle,
-    );
-
-    customSuggestionItemStyle = SuggestionItemStyle(
-      backgroundColor: Colors.white,
-      titleStyle: TextStyle(color: Colors.purple),
-      border: Border.all(),
-      borderRadius: const BorderRadius.all(Radius.circular(10)),
-      gradient: LinearGradient(colors: [Colors.pink, Colors.purple]),
-      boxShadow: [BoxShadow(spreadRadius: 15)],
-      margin: EdgeInsets.all(5),
     );
   });
 
@@ -93,45 +82,6 @@ main() {
       ]);
       expect(defaultStyle.padding, null);
       expect(defaultStyle.shape, BoxShape.rectangle);
-    });
-  });
-
-  group('[SuggestionItemStyle]', () {
-    test('customSuggestionItemStyle should contain custom properties', () {
-      expect(customSuggestionItemStyle.backgroundColor, Colors.white);
-      expect(
-        customSuggestionItemStyle.titleStyle,
-        TextStyle(color: Colors.purple),
-      );
-      expect(customSuggestionItemStyle.border, Border.all());
-      expect(
-        customSuggestionItemStyle.borderRadius,
-        const BorderRadius.all(Radius.circular(10)),
-      );
-      expect(
-        customSuggestionItemStyle.gradient,
-        LinearGradient(colors: [Colors.pink, Colors.purple]),
-      );
-      expect(
-        customSuggestionItemStyle.boxShadow,
-        [BoxShadow(spreadRadius: 15)],
-      );
-      expect(customSuggestionItemStyle.margin, EdgeInsets.all(5));
-    });
-
-    test('DefaultStyle should contain initial properties', () {
-      SuggestionItemStyle defaultStyle = SuggestionItemStyle.DefaultStyle;
-
-      expect(defaultStyle.backgroundColor, Colors.white);
-      expect(defaultStyle.titleStyle, TextStyle(color: Colors.black));
-      expect(defaultStyle.border, null);
-      expect(
-        defaultStyle.borderRadius,
-        const BorderRadius.all(Radius.circular(5)),
-      );
-      expect(defaultStyle.gradient, null);
-      expect(defaultStyle.boxShadow, null);
-      expect(defaultStyle.margin, null);
     });
   });
 }

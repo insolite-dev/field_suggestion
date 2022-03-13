@@ -1,8 +1,6 @@
-// A early made model to test [isClassList], [renderClassList] and others...
+// Basic model, mode for using in tests.
 class TestModel {
-  const TestModel({this.title});
-
   final String? title;
-
-  Map<String, dynamic> toJson() => {'title': this.title};
+  const TestModel({this.title});
 }
+

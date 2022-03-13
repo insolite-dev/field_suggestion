@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 /// Slide animation types for SuggestionBox.
-/// It's just able to use when [wSlideAnimation] is [true].
 ///
 /// **[RTL] - Right to left.**
 ///
@@ -12,7 +11,6 @@ import 'package:flutter/material.dart';
 /// **[UTD] - Up to down.**
 enum SlideStyle { RTL, LTR, BTU, UTD }
 
-// Helper class that basically used to choose/set/manage animations of `FieldSuggestion`.
 class FieldAnimationStyle {
   // Returns Animation Offset for suggestion box.
   static Animation<Offset>? setBoxAnimation({
@@ -29,32 +27,34 @@ class FieldAnimationStyle {
       SlideStyle.UTD: Tween<Offset>(begin: Offset(0, -5), end: Offset.zero),
     };
 
-    Tween<Offset> _offsetTween;
-
+    late Tween<Offset> _offsetTween;
     if (slideTweenOffset != null) {
       _offsetTween = slideTweenOffset;
     } else {
       _offsetTween = slideAnimationValues[slideStyle]!;
     }
 
-    return _offsetTween.animate(
-      CurvedAnimation(parent: animationController, curve: slideCurve),
-    );
+    return _offsetTween.animate(CurvedAnimation(
+      parent: animationController,
+      curve: slideCurve,
+    ));
   }
 }
 
-/// Custom style class for [SuggestionBox].
+/// Custom style object for [SuggestionBox].
 ///
 /// **Use cases:**
 /// ```dart
 /// SuggestionBoxStyle.DefaultStyle
 /// ```
-/// **Or set as custom:**
+///
+/// **Or configure as the way you want:**
 /// ```dart
 /// SuggestionBoxStyle(
 ///  backgroundColor: Colors.white,
 ///  border: Border.all(color: Colors.red)
 ///  borderRadius: const BorderRadius.all(Radius.circular(10)),
+///  ...
 /// );
 /// ```
 class SuggestionBoxStyle {
@@ -89,8 +89,8 @@ class SuggestionBoxStyle {
     this.shape = BoxShape.rectangle,
   });
 
-  /// The default style, wich is setted automatically.
-  /// Includes just basic white theme design.
+  // TODO: should listen current theme values.
+  // and automatically generate style appropriate to theme.
   static const DefaultStyle = const SuggestionBoxStyle(
     backgroundColor: Colors.white,
     borderRadius: const BorderRadius.all(Radius.circular(5)),
@@ -106,67 +106,3 @@ class SuggestionBoxStyle {
   );
 }
 
-/// Custom style class for [SuggestionListItem].
-/// **Use cases:**
-/// ```dart
-/// SuggestionItemStyle.DefaultStyle
-/// SuggestionItemStyle.WhiteNeumorphismedStyle
-/// SuggestionItemStyle.BlackNeumorphismedStyle
-/// ```
-/// **Or set as custom:**
-/// ```dart
-/// SuggestionItemStyle(
-///  leading: const Icon(Icons.person)
-///  backgroundColor: Colors.white,
-///  icon: Icons.clear,
-///  iconColor: Colors.red[700],
-///  iconSize: 18,
-///  titleStyle: TextStyle(color: Colors.purple),
-///  borderRadius: const BorderRadius.all(Radius.circular(10)),
-/// );
-/// ```
-class SuggestionItemStyle {
-  /// [leading] widget for suggestion item.
-  /// (Can be imagine as ListTile's leading.)
-  final Widget? leading;
-
-  /// [backgroundColor] of `SuggestionItem` card.
-  final Color? backgroundColor;
-
-  /// [titleStyle] of `SuggestionItem`'s title.
-  final TextStyle? titleStyle;
-
-  /// [border] of `SuggestionItem` card.
-  final Border? border;
-
-  /// [borderRadius] of `SuggestionItem` card.
-  final BorderRadius? borderRadius;
-
-  /// [gradient] of `SuggestionItem` card.
-  final Gradient? gradient;
-
-  /// [boxShadow] of `SuggestionItem` card.
-  final List<BoxShadow>? boxShadow;
-
-  /// [margin] of `SuggestionItem` card.
-  final EdgeInsetsGeometry? margin;
-
-  const SuggestionItemStyle({
-    this.leading,
-    this.backgroundColor = const Color(0xFFFFFFFF),
-    this.titleStyle,
-    this.border,
-    this.borderRadius,
-    this.gradient,
-    this.boxShadow,
-    this.margin,
-  });
-
-  /// The default style, wich is setted automatically.
-  /// Includes just basic white theme design
-  static const DefaultStyle = SuggestionItemStyle(
-    backgroundColor: Colors.white,
-    titleStyle: TextStyle(color: Colors.black),
-    borderRadius: BorderRadius.all(Radius.circular(5)),
-  );
-}
