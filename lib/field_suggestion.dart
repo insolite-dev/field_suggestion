@@ -126,7 +126,7 @@ class FieldSuggestion extends StatefulWidget {
   final BoxController? boxController;
 
   /// Suggestion's box style.
-  /// 
+  ///
   /// As default it's ─▶ [BoxStyle.defaultStyle].
   final BoxStyle? boxStyle;
 
@@ -243,7 +243,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
   // It's bridge between suggestion box and input field.
   final LayerLink _layerLink = LayerLink();
 
-  // Suggestion box's active style. 
+  // Suggestion box's active style.
   // As default it'd be setted to ─▶ [BoxStyle.defaultStyle].
   BoxStyle? boxStyle;
 
@@ -368,7 +368,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
       _animationController.addListener(() => _state.setState(() {}));
     }
 
-    // Insert generated overlay entry to overlay stateç
+    // Insert generated overlay entry to overlay state.
     _state.insert(_overlayEntry!);
 
     // Add the overlay entry to cleared list.
@@ -381,7 +381,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     boxStyle = widget.boxStyle ?? BoxStyle.defaultStyle(context);
 
     // Layer linking adds normal widget's behaviour to overlay widget.
-    // It follows [TextField] every time, and behaves as a normal non-hiddable widget.
+    // It follows [TextField] every time, and behaves as a normal non-hidable widget.
     return CompositedTransformTarget(
       link: _layerLink,
       child: TextField(
@@ -423,12 +423,9 @@ class _FieldSuggestionState extends State<FieldSuggestion>
             separatorBuilder:
                 widget.separatorBuilder ?? (_, __) => const SizedBox.shrink(),
             itemBuilder: (context, index) {
-              // Generate right indexes of matchers.
-              final List<int> indexes = matchers.map((e) {
-                return widget.suggestions.indexOf(e);
-              }).toList();
-
-              return widget.itemBuilder(context, indexes[index]);
+              // Get the index of matcher[i] in suggestions list.
+              final matcherIndex = widget.suggestions.indexOf(matchers[index]);
+              return widget.itemBuilder(context, matcherIndex);
             },
           ),
         ),

@@ -39,9 +39,11 @@ class _HomePageState extends State<HomePage> {
   */
 
   List<String> suggestions = List.generate(
-    50,
+    1500,
     (index) => index.toString(),
   );
+
+  // List suggestions = ['Ahmet', 'Mehmet', 'Musa', 'Ayse'];
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +68,10 @@ class _HomePageState extends State<HomePage> {
                     suggestions: suggestions,
                     boxController: boxController,
                     search: (item, input) {
-                      return item.toString().contains(input);
+                      return item
+                          .toUpperCase()
+                          .toString()
+                          .contains(input.toUpperCase());
                     },
                     separatorBuilder: (context, index) {
                       return const Divider();
