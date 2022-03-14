@@ -10,6 +10,5 @@ class MockAnimationController extends Mock implements AnimationController {
   AnimationStatus get status => animationStatus;
 }
 
-
 // Mock of BuildContext.
 class MockBuildContext extends Mock implements BuildContext {}

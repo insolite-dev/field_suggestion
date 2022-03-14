@@ -170,7 +170,7 @@ class FieldSuggestion extends StatefulWidget {
   final ScrollController? scrollController;
 
   /// Spacer is the value of size between field and box.
-  /// 
+  ///
   /// If unset, defaults to the ─▶ [5.0].
   final double spacer;
 
