@@ -349,7 +349,7 @@ class _FieldSuggestionState extends State<FieldSuggestion>
   // Method of opening suggestion box.
   // Could be used externally.
   void openBox() {
-    // Clear current overly.
+    // Clear current overlay.
     if (_overlayEntry != null && _overlaysList.isNotEmpty) {
       _overlayEntry!.remove();
       _mountedSetState(() => _overlayEntry = null);

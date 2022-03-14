@@ -3,12 +3,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:field_suggestion/field_suggestion.dart';
 
-import 'src/test_model.dart';
-
 void main() {
   late Widget mainWidget;
-
   late FieldSuggestion fieldSuggestion;
+
   late BoxController boxController;
   late TextEditingController textEditingController;
 
@@ -72,12 +70,19 @@ void main() {
       expect(find.text('item.3'), findsOneWidget);
       expect(find.text('item.4'), findsOneWidget);
 
+      // Re-execute text entering to test overlay list management functionality.
+      await tester.enterText(fFieldSuggestion, 'te');
+      await tester.pumpAndSettle();
+
+      boxController.refresh!.call();
+      await tester.pumpAndSettle();
+
       // Test closing suggestion box, by giving unmatched value.
       await tester.enterText(fFieldSuggestion, 'x');
       await tester.pumpAndSettle();
 
       // Test show suggestion box, by giving half matched value.
-      await tester.enterText(fFieldSuggestion, 'te');
+      await tester.enterText(fFieldSuggestion, 'test');
       await tester.pumpAndSettle();
 
       // Test closing suggestion box, by giving empty input.
