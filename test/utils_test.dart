@@ -7,7 +7,6 @@ void main() {
       // `matchersList` takes one item.
       // So it would be [60].
       double defaultSize1 = Utils.maxBoxHeight(
-        wDivider: false,
         sizeByItem: 1,
         matchersList: ['1'],
       );
@@ -15,7 +14,6 @@ void main() {
       // `matchersList` takes two item.
       // So it would be [120].
       double defaultSize2 = Utils.maxBoxHeight(
-        wDivider: false,
         sizeByItem: null,
         matchersList: ['1', '2'],
       );
@@ -23,7 +21,6 @@ void main() {
       // `matchersList` takes two item.
       // So it would be [120].
       double defaultSize3 = Utils.maxBoxHeight(
-        wDivider: false,
         sizeByItem: null,
         matchersList: ['1', '2', '3'],
       );
@@ -32,7 +29,6 @@ void main() {
       // And `wDivider` is [true].
       // So it would be [260].
       double defaultSize = Utils.maxBoxHeight(
-        wDivider: true,
         sizeByItem: null,
         matchersList: ['1', '2', '3', '4'],
       );
@@ -40,7 +36,6 @@ void main() {
       // `matchersList` takes more than 4 item,
       // but `sizeByItem` is 2, so than the size would be 120.
       double sizeByItemSetted = Utils.maxBoxHeight(
-        wDivider: false,
         sizeByItem: 2,
         matchersList: ['1', '2', '3', '4'],
       );
@@ -48,7 +43,7 @@ void main() {
       expect(defaultSize1, 60);
       expect(defaultSize2, 120);
       expect(defaultSize3, 180);
-      expect(defaultSize, 260);
+      expect(defaultSize, 240);
       expect(sizeByItemSetted, 120);
     });
   });

@@ -6,12 +6,10 @@ class Utils {
   }) {
     final size = 60.0;
 
-    // Set size by [sizeByItem].
-    if (sizeByItem != null) {
-      return (sizeByItem == 1) ? size : size * sizeByItem.roundToDouble();
-    }
-
     // Set size by [matchersList].
-    return size * matchersList.length;
+    if (sizeByItem == null) return size * matchersList.length;
+
+    // Set size by [sizeByItem].
+    return (sizeByItem == 1) ? size : size * sizeByItem.roundToDouble();
   }
 }

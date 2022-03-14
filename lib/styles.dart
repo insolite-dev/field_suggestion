@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Slide animation types for SuggestionBox.
+/// Slide animation types of SuggestionBox.
 ///
 /// **[RTL] - Right to left.**
 ///

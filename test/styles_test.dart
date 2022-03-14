@@ -8,18 +8,17 @@ import 'src/utils.dart';
 main() {
   late MockAnimationController animationControllerMock;
 
-  late SuggestionBoxStyle customSuggestionBoxStyle;
+  late BoxStyle boxStyle;
 
   setUpAll(() {
     animationControllerMock = MockAnimationController();
 
-    customSuggestionBoxStyle = SuggestionBoxStyle(
+    boxStyle = BoxStyle(
       backgroundColor: Colors.white,
       border: Border.all(),
       borderRadius: BorderRadius.circular(10),
       gradient: LinearGradient(colors: [Colors.white, Colors.grey]),
       boxShadow: [BoxShadow(spreadRadius: 15)],
-      padding: EdgeInsets.all(10),
       shape: BoxShape.circle,
     );
   });
@@ -52,21 +51,20 @@ main() {
   });
 
   group('[SuggestionBoxStyle]', () {
-    test('customSuggestionBoxStyle should contain custom properties', () {
-      expect(customSuggestionBoxStyle.backgroundColor, Colors.white);
-      expect(customSuggestionBoxStyle.border, Border.all());
-      expect(customSuggestionBoxStyle.borderRadius, BorderRadius.circular(10));
+    test('hand made box style should contain custom properties', () {
+      expect(boxStyle.backgroundColor, Colors.white);
+      expect(boxStyle.border, Border.all());
+      expect(boxStyle.borderRadius, BorderRadius.circular(10));
       expect(
-        customSuggestionBoxStyle.gradient,
+        boxStyle.gradient,
         LinearGradient(colors: [Colors.white, Colors.grey]),
       );
-      expect(customSuggestionBoxStyle.boxShadow, [BoxShadow(spreadRadius: 15)]);
-      expect(customSuggestionBoxStyle.padding, EdgeInsets.all(10));
-      expect(customSuggestionBoxStyle.shape, BoxShape.circle);
+      expect(boxStyle.boxShadow, [BoxShadow(spreadRadius: 15)]);
+      expect(boxStyle.shape, BoxShape.circle);
     });
 
-    test('DefaultStyle should contain initial properties', () {
-      SuggestionBoxStyle defaultStyle = SuggestionBoxStyle.DefaultStyle;
+    test('defaultStyle should contain initial properties', () {
+      final BoxStyle defaultStyle = BoxStyle.defaultStyle;
 
       expect(defaultStyle.backgroundColor, Colors.white);
       expect(defaultStyle.border, null);
@@ -80,7 +78,6 @@ main() {
           blurRadius: 10,
         )
       ]);
-      expect(defaultStyle.padding, null);
       expect(defaultStyle.shape, BoxShape.rectangle);
     });
   });
