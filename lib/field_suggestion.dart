@@ -127,7 +127,7 @@ class FieldSuggestion extends StatefulWidget {
 
   /// Suggestion's box style.
   ///
-  /// As default it's ─▶ [BoxStyle.defaultStyle].
+  /// If unset, defaults to the ─▶ [BoxStyle.defaultStyle].
   final BoxStyle? boxStyle;
 
   /// Text input decoration of input field.
@@ -142,11 +142,36 @@ class FieldSuggestion extends StatefulWidget {
   /// Max lines of the input field.
   final int? maxLines;
 
+  /// Text style of input field.
+  final TextStyle? inputStyle;
+
+  /// Field's input validator.
+  final FormFieldValidator<String>? validator;
+
+  /// The width(thickness) of field's cursor.
+  final double cursorWidth;
+
+  /// The height(length) of field's cursor.
+  final double? cursorHeight;
+
+  /// The border radius of field's cursor.
+  final Radius? cursorRadius;
+
+  /// The color of field's cursor.
+  final Color? cursorColor;
+
+  /// The appearance of the keyboard.
+  /// Honored only IOS devices, 'cause Apple is awesome.
+  ///
+  /// If unset, defaults to the brightness of [ThemeData.primaryColorBrightness].
+  final Brightness? keyboardAppearance;
+
   /// Scroll controller for the suggestions list.
   final ScrollController? scrollController;
 
   /// Spacer is the value of size between field and box.
-  /// As default its ─▶ [5.0].
+  /// 
+  /// If unset, defaults to the ─▶ [5.0].
   final double spacer;
 
   /// Sets suggestion box's height by item count.
@@ -161,17 +186,17 @@ class FieldSuggestion extends StatefulWidget {
 
   /// Boolean to disable/enable opacity animation of [SuggestionBox].
   ///
-  /// As default it's disabled ─▶ [false].
+  /// If unset, defaults to the ─▶ [false].
   final bool wOpacityAnimation;
 
   /// Boolean to enable/disable slide animation of [SuggestionBox].
   ///
-  /// As default it's disabled ─▶ [false].
+  /// If unset, defaults to the ─▶ [false].
   final bool wSlideAnimation;
 
   /// Duration of suggestion box animation.
   ///
-  /// As default it's [400 milliseconds].
+  /// If unset, defaults to the ─▶ [400 milliseconds].
   final Duration animationDuration;
 
   /// Rotation slide to determine tween offset of slide animation.
@@ -186,7 +211,7 @@ class FieldSuggestion extends StatefulWidget {
 
   /// Curve for box slide animation.
   ///
-  /// As default it's [Curves.decelerate].
+  /// If unset, defaults to the ─▶ [Curves.decelerate].
   final Curve slideCurve;
 
   const FieldSuggestion({
@@ -202,6 +227,13 @@ class FieldSuggestion extends StatefulWidget {
     this.inputType,
     this.focusNode,
     this.maxLines,
+    this.inputStyle,
+    this.validator,
+    this.cursorWidth = 2,
+    this.cursorHeight,
+    this.cursorRadius,
+    this.cursorColor,
+    this.keyboardAppearance,
     this.scrollController,
     this.spacer = 5.0,
     this.sizeByItem,
@@ -384,12 +416,19 @@ class _FieldSuggestionState extends State<FieldSuggestion>
     // It follows [TextField] every time, and behaves as a normal non-hidable widget.
     return CompositedTransformTarget(
       link: _layerLink,
-      child: TextField(
+      child: TextFormField(
         keyboardType: widget.inputType,
         focusNode: widget.focusNode,
         controller: widget.textController,
         maxLines: widget.maxLines,
         decoration: widget.inputDecoration,
+        style: widget.inputStyle,
+        validator: widget.validator,
+        cursorWidth: widget.cursorWidth,
+        cursorHeight: widget.cursorHeight,
+        cursorRadius: widget.cursorRadius,
+        cursorColor: widget.cursorColor,
+        keyboardAppearance: widget.keyboardAppearance,
       ),
     );
   }
