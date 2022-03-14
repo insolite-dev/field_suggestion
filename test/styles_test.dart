@@ -1,37 +1,26 @@
+import 'utils.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:field_suggestion/src/styles.dart';
-
-import 'src/utils.dart';
+import 'package:field_suggestion/styles.dart';
 
 main() {
+  late BoxStyle boxStyle;
+
+  late MockBuildContext buildContextMock;
   late MockAnimationController animationControllerMock;
 
-  late SuggestionBoxStyle customSuggestionBoxStyle;
-  late SuggestionItemStyle customSuggestionItemStyle;
-
   setUpAll(() {
+    buildContextMock = MockBuildContext();
     animationControllerMock = MockAnimationController();
 
-    customSuggestionBoxStyle = SuggestionBoxStyle(
+    boxStyle = BoxStyle(
       backgroundColor: Colors.white,
       border: Border.all(),
       borderRadius: BorderRadius.circular(10),
       gradient: LinearGradient(colors: [Colors.white, Colors.grey]),
       boxShadow: [BoxShadow(spreadRadius: 15)],
-      padding: EdgeInsets.all(10),
       shape: BoxShape.circle,
-    );
-
-    customSuggestionItemStyle = SuggestionItemStyle(
-      backgroundColor: Colors.white,
-      titleStyle: TextStyle(color: Colors.purple),
-      border: Border.all(),
-      borderRadius: const BorderRadius.all(Radius.circular(10)),
-      gradient: LinearGradient(colors: [Colors.pink, Colors.purple]),
-      boxShadow: [BoxShadow(spreadRadius: 15)],
-      margin: EdgeInsets.all(5),
     );
   });
 
@@ -63,21 +52,20 @@ main() {
   });
 
   group('[SuggestionBoxStyle]', () {
-    test('customSuggestionBoxStyle should contain custom properties', () {
-      expect(customSuggestionBoxStyle.backgroundColor, Colors.white);
-      expect(customSuggestionBoxStyle.border, Border.all());
-      expect(customSuggestionBoxStyle.borderRadius, BorderRadius.circular(10));
+    test('hand made box style should contain custom properties', () {
+      expect(boxStyle.backgroundColor, Colors.white);
+      expect(boxStyle.border, Border.all());
+      expect(boxStyle.borderRadius, BorderRadius.circular(10));
       expect(
-        customSuggestionBoxStyle.gradient,
+        boxStyle.gradient,
         LinearGradient(colors: [Colors.white, Colors.grey]),
       );
-      expect(customSuggestionBoxStyle.boxShadow, [BoxShadow(spreadRadius: 15)]);
-      expect(customSuggestionBoxStyle.padding, EdgeInsets.all(10));
-      expect(customSuggestionBoxStyle.shape, BoxShape.circle);
+      expect(boxStyle.boxShadow, [BoxShadow(spreadRadius: 15)]);
+      expect(boxStyle.shape, BoxShape.circle);
     });
 
-    test('DefaultStyle should contain initial properties', () {
-      SuggestionBoxStyle defaultStyle = SuggestionBoxStyle.DefaultStyle;
+    test('defaultStyle should contain initial properties', () {
+      final BoxStyle defaultStyle = BoxStyle.defaultStyle(buildContextMock);
 
       expect(defaultStyle.backgroundColor, Colors.white);
       expect(defaultStyle.border, null);
@@ -85,53 +73,13 @@ main() {
       expect(defaultStyle.gradient, null);
       expect(defaultStyle.boxShadow, [
         const BoxShadow(
-          spreadRadius: 10,
+          spreadRadius: 12.5,
           offset: Offset(0, 5),
-          color: Color(0xFFA3A3A3),
-          blurRadius: 10,
+          color: Color(0xff000000),
+          blurRadius: 12.5,
         )
       ]);
-      expect(defaultStyle.padding, null);
       expect(defaultStyle.shape, BoxShape.rectangle);
-    });
-  });
-
-  group('[SuggestionItemStyle]', () {
-    test('customSuggestionItemStyle should contain custom properties', () {
-      expect(customSuggestionItemStyle.backgroundColor, Colors.white);
-      expect(
-        customSuggestionItemStyle.titleStyle,
-        TextStyle(color: Colors.purple),
-      );
-      expect(customSuggestionItemStyle.border, Border.all());
-      expect(
-        customSuggestionItemStyle.borderRadius,
-        const BorderRadius.all(Radius.circular(10)),
-      );
-      expect(
-        customSuggestionItemStyle.gradient,
-        LinearGradient(colors: [Colors.pink, Colors.purple]),
-      );
-      expect(
-        customSuggestionItemStyle.boxShadow,
-        [BoxShadow(spreadRadius: 15)],
-      );
-      expect(customSuggestionItemStyle.margin, EdgeInsets.all(5));
-    });
-
-    test('DefaultStyle should contain initial properties', () {
-      SuggestionItemStyle defaultStyle = SuggestionItemStyle.DefaultStyle;
-
-      expect(defaultStyle.backgroundColor, Colors.white);
-      expect(defaultStyle.titleStyle, TextStyle(color: Colors.black));
-      expect(defaultStyle.border, null);
-      expect(
-        defaultStyle.borderRadius,
-        const BorderRadius.all(Radius.circular(5)),
-      );
-      expect(defaultStyle.gradient, null);
-      expect(defaultStyle.boxShadow, null);
-      expect(defaultStyle.margin, null);
     });
   });
 }
