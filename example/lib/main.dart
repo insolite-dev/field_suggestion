@@ -27,6 +27,7 @@ class _HomePageState extends State<HomePage> {
 
   final textController = TextEditingController();
 
+  /*
   List<UserModel> suggestions = [
     UserModel(
       email: 'john-doe@gmail.com',
@@ -44,6 +45,12 @@ class _HomePageState extends State<HomePage> {
       password: 'test123',
     )
   ];
+  */
+
+  List<String> suggestions = List.generate(
+    500,
+    (index) => index.toString(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -65,14 +72,21 @@ class _HomePageState extends State<HomePage> {
                   suggestions: suggestions,
                   boxController: boxController,
                   search: (item, input) {
-                    return item.username.toString().contains(input);
+                    return item.toString().contains(input);
                   },
-                  divider: Divider(),
+                  separatorBuilder: (context, index) {
+                    return const Divider();
+                  },
+                  boxStyle: BoxStyle(
+                     backgroundColor: Colors.purple.shade400,
+                     border: Border.all(),
+                     borderRadius: BorderRadius.circular(30),
+                  ),
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       onTap: () {
                         setState(() {
-                          textController.text = suggestions[index].username!;
+                          textController.text = suggestions[index];
                         });
                         textController.selection = TextSelection.fromPosition(
                           TextPosition(offset: textController.text.length),
@@ -80,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                       },
                       child: Card(
                         child: ListTile(
-                          title: Text(suggestions[index].username!),
+                          title: Text(suggestions[index]),
                           trailing: IconButton(
                             icon: Icon(Icons.clear),
                             onPressed: () {
@@ -97,7 +111,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             child: Center(
                               child: Text(
-                                suggestions[index].username![0].toUpperCase(),
+                                'n'.toUpperCase(),
                                 textAlign: TextAlign.center,
                               ),
                             ),

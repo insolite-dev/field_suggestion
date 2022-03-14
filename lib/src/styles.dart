@@ -45,19 +45,19 @@ class FieldAnimationStyle {
 ///
 /// **Use cases:**
 /// ```dart
-/// SuggestionBoxStyle.DefaultStyle
+/// BoxStyle.DefaultStyle
 /// ```
 ///
 /// **Or configure as the way you want:**
 /// ```dart
-/// SuggestionBoxStyle(
+/// BoxStyle(
 ///  backgroundColor: Colors.white,
 ///  border: Border.all(color: Colors.red)
 ///  borderRadius: const BorderRadius.all(Radius.circular(10)),
 ///  ...
 /// );
 /// ```
-class SuggestionBoxStyle {
+class BoxStyle {
   /// [backgroundColor] of `SuggestionBox`
   final Color backgroundColor;
 
@@ -73,25 +73,21 @@ class SuggestionBoxStyle {
   /// [boxShadow] of `SuggestionBox`
   final List<BoxShadow>? boxShadow;
 
-  /// [padding] of `SuggestionBox`
-  final EdgeInsetsGeometry? padding;
-
   /// [shape] of `SuggestionBox`.
   final BoxShape shape;
 
-  const SuggestionBoxStyle({
+  const BoxStyle({
     this.backgroundColor = Colors.transparent,
     this.border,
     this.borderRadius,
     this.gradient,
     this.boxShadow,
-    this.padding,
     this.shape = BoxShape.rectangle,
   });
 
   // TODO: should listen current theme values.
   // and automatically generate style appropriate to theme.
-  static const DefaultStyle = const SuggestionBoxStyle(
+  static const defaultStyle = const BoxStyle(
     backgroundColor: Colors.white,
     borderRadius: const BorderRadius.all(Radius.circular(5)),
     shape: BoxShape.rectangle,

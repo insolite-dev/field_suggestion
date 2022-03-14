@@ -1,11 +1,10 @@
 class Utils {
   // Generates acceptable max height for Suggestion Box.
   static double maxBoxHeight({
-    required bool wDivider,
     required int? sizeByItem,
     required List matchersList,
   }) {
-    final double size = (wDivider) ? 65 : 60;
+    final size = 60.0;
 
     // Set size by [sizeByItem].
     if (sizeByItem != null) {
