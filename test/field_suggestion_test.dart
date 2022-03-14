@@ -2,166 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:field_suggestion/field_suggestion.dart';
-import 'package:field_suggestion/src/suggestion_item.dart';
 
 import 'src/test_model.dart';
 
 void main() {
   late Widget mainWidget;
-  late Widget secondMainWidget;
-  late Widget thirdMainWidget;
-  late Widget fourthMainWidget;
-  late Widget fifthMainWidget;
-  late Widget sixthMainWidget;
-  late Widget seventhMainWidget;
 
   late FieldSuggestion fieldSuggestion;
-  late FieldSuggestion secondFieldSuggestion;
-  late FieldSuggestion thirdFieldSuggestion;
-  late FieldSuggestion fourthFieldSuggestion;
-  late FieldSuggestion fifthFieldSuggestion;
-  late FieldSuggestion sixthFieldSuggestion;
-  late FieldSuggestion seventhFieldSuggestion;
-
-  late TextEditingController textEditingController;
-  late TextEditingController secondTextEditingController;
-  late TextEditingController thirdTextEditingController;
-  late TextEditingController fourthTextEditingController;
-  late TextEditingController fifthTextEditingController;
-  late TextEditingController sixthTextEditingController;
-  late TextEditingController seventhTextEditingController;
-
   late BoxController boxController;
+  late TextEditingController textEditingController;
 
-  const suggestions = ['test@gmail.com'];
-  var numSuggestions = [13187829696, 99873124124];
-  var testModelSuggestions = [TestModel(title: 'Some test')];
+  final fFieldSuggestion = find.byKey(Key('suggestion.field'));
 
-  final findFieldSuggestion = find.byKey(Key('suggestion.field'));
-  final findSecondFieldSuggestion = find.byKey(Key('seccond.suggestion.field'));
-  final findThirdFieldSuggestion = find.byKey(Key('third.suggestion.field'));
-  final findFourthFieldSuggestion = find.byKey(Key('fourth.suggestion.field'));
-  final findFifthFieldSuggestion = find.byKey(Key('fifth.suggestion.field'));
-  final findSixthFieldSuggestion = find.byKey(Key('sixth.suggestion.field'));
-  final findSeventhFieldSuggestion = find.byKey(
-    Key('seventh.suggestion.field'),
-  );
+  final suggestions = List.generate(5, (i) => 'test$i@gmail.com');
 
   setUpAll(() {
-    textEditingController = TextEditingController();
-    secondTextEditingController = TextEditingController();
-    thirdTextEditingController = TextEditingController();
-    fourthTextEditingController = TextEditingController();
-    fifthTextEditingController = TextEditingController();
-    sixthTextEditingController = TextEditingController();
-    seventhTextEditingController = TextEditingController();
-
     boxController = BoxController();
+    textEditingController = TextEditingController();
 
     fieldSuggestion = FieldSuggestion(
       key: Key('suggestion.field'),
+      boxController: boxController,
       textController: textEditingController,
-      suggestionList: suggestions,
-      wDivider: true,
+      search: (item, input) {
+        return item.toString().toUpperCase().contains(input.toUpperCase());
+      },
+      suggestions: suggestions,
       wSlideAnimation: true,
       wOpacityAnimation: true,
-      onItemSelected: (val) {},
-    );
-
-    secondFieldSuggestion = FieldSuggestion(
-      key: Key('seccond.suggestion.field'),
-      textController: secondTextEditingController,
-      suggestionList: suggestions,
-      customSearch: (_, __) => true,
-      wDivider: true,
-      divider: Divider(),
-      disabledDefaultOnTap: true,
-      wSlideAnimation: true,
-      slideStyle: SlideStyle.LTR,
-    );
-
-    thirdFieldSuggestion = FieldSuggestion(
-      key: Key('third.suggestion.field'),
-      textController: thirdTextEditingController,
-      suggestionList: numSuggestions,
-      wSlideAnimation: true,
-      fieldDecoration: InputDecoration(labelText: 'Type.'),
-      slideStyle: SlideStyle.BTU,
-    );
-
-    fourthFieldSuggestion = FieldSuggestion(
-      key: Key('fourth.suggestion.field'),
-      textController: fourthTextEditingController,
-      suggestionList: numSuggestions,
-      disabledDefaultOnTap: true,
-      customSearch: (item, input) {
-        return item.toString().contains(input.toString());
+      itemBuilder: (context, index) {
+        return Card(child: Text('item.$index'));
       },
-      onItemSelected: (val) {},
-      wSlideAnimation: true,
-      slideStyle: SlideStyle.UTD,
-    );
-
-    fifthFieldSuggestion = FieldSuggestion(
-      key: Key('fifth.suggestion.field'),
-      boxController: boxController,
-      textController: fifthTextEditingController,
-      searchBy: ['title'],
-      suggestionList: testModelSuggestions,
-      closeBoxAfterSelect: false,
-      wSlideAnimation: true,
-      slideTweenOffset: Tween<Offset>(begin: Offset(-8, 0), end: Offset.zero),
-    );
-
-    sixthFieldSuggestion = FieldSuggestion.builder(
-      boxController: boxController,
-      key: Key('sixth.suggestion.field'),
-      searchBy: ['title'],
-      suggestionList: testModelSuggestions,
-      itemBuilder: (context, index) => SizedBox(height: 10, key: Key('item')),
-      textController: sixthTextEditingController,
-    );
-
-    seventhFieldSuggestion = FieldSuggestion.builder(
-      key: Key('seventh.suggestion.field'),
-      suggestionList: numSuggestions,
-      itemBuilder: (context, index) => SizedBox(),
-      textController: seventhTextEditingController,
     );
 
     mainWidget = MaterialApp(
-      title: "Suggestion Field",
       home: Scaffold(body: Center(child: fieldSuggestion)),
-    );
-
-    secondMainWidget = MaterialApp(
-      title: "Second Suggestion Field",
-      home: Scaffold(body: Center(child: secondFieldSuggestion)),
-    );
-
-    thirdMainWidget = MaterialApp(
-      title: "Third Suggestion Field",
-      home: Scaffold(body: Center(child: thirdFieldSuggestion)),
-    );
-
-    fourthMainWidget = MaterialApp(
-      title: "Fourth Suggestion Field",
-      home: Scaffold(body: Center(child: fourthFieldSuggestion)),
-    );
-
-    fifthMainWidget = MaterialApp(
-      title: "Fifth Suggestion Field",
-      home: Scaffold(body: Center(child: fifthFieldSuggestion)),
-    );
-
-    sixthMainWidget = MaterialApp(
-      title: "Sixth Suggestion Field",
-      home: Scaffold(body: Center(child: sixthFieldSuggestion)),
-    );
-
-    seventhMainWidget = MaterialApp(
-      title: "Seventh Suggestion Field",
-      home: Scaffold(body: Center(child: seventhFieldSuggestion)),
     );
   });
 
@@ -173,180 +48,41 @@ void main() {
       expect(find.byType(MaterialApp), findsOneWidget);
       expect(find.byType(Scaffold), findsOneWidget);
       expect(find.byType(Center), findsOneWidget);
-      expect(findFieldSuggestion, findsOneWidget);
+      expect(fFieldSuggestion, findsOneWidget);
 
       // Enter text to fieldSuggestion and reload page.
-      await tester.enterText(findFieldSuggestion, 'test');
+      await tester.enterText(fFieldSuggestion, 'test');
       await tester.pumpAndSettle();
 
-      // FieldSuggestion Widget founding tests. with 3 matchers.
-      expect(find.byType(Material), findsNWidgets(2));
+      expect(find.byType(Material), findsNWidgets(7));
       expect(find.byType(Overlay), findsOneWidget);
       expect(find.byType(SlideTransition), findsNWidgets(2));
-      expect(find.byType(SizedBox), findsOneWidget);
-      expect(find.byType(Container), findsNWidgets(3));
+      expect(find.byType(SizedBox), findsNWidgets(6));
+      expect(find.byType(Container), findsNWidgets(7));
       expect(find.byType(CompositedTransformTarget), findsNWidgets(2));
       expect(find.byType(ConstrainedBox), findsNWidgets(3));
       expect(find.byType(Opacity), findsOneWidget);
       expect(find.byType(ListView), findsOneWidget);
-      expect(find.byType(SlideTransition), findsNWidgets(2));
-      expect(find.byType(Padding), findsNWidgets(4));
-      expect(find.byType(SuggestionItem), findsOneWidget);
-      expect(find.byType(TextField), findsOneWidget);
+      expect(find.byType(TextFormField), findsOneWidget);
+
+      expect(find.byType(Card), findsNWidgets(5));
+      expect(find.text('item.0'), findsOneWidget);
+      expect(find.text('item.1'), findsOneWidget);
+      expect(find.text('item.2'), findsOneWidget);
+      expect(find.text('item.3'), findsOneWidget);
+      expect(find.text('item.4'), findsOneWidget);
 
       // Test closing suggestion box, by giving unmatched value.
-      await tester.enterText(findFieldSuggestion, 'x');
+      await tester.enterText(fFieldSuggestion, 'x');
       await tester.pumpAndSettle();
 
       // Test show suggestion box, by giving half matched value.
-      await tester.enterText(findFieldSuggestion, 'te');
+      await tester.enterText(fFieldSuggestion, 'te');
       await tester.pumpAndSettle();
 
-      // Test closing suggestion box, by giving fully matched value.
-      await tester.enterText(findFieldSuggestion, suggestions[0]);
+      // Test closing suggestion box, by giving empty input.
+      await tester.enterText(fFieldSuggestion, '');
       await tester.pumpAndSettle();
     });
-
-    testWidgets(
-      'test [slideAnimationStyle: SlideAnimationStyle.LTR]',
-      (WidgetTester tester) async {
-        await tester.pumpWidget(secondMainWidget);
-
-        // secondMainWidget tests.
-        expect(find.byType(MaterialApp), findsOneWidget);
-        expect(find.byType(Scaffold), findsOneWidget);
-        expect(find.byType(Center), findsOneWidget);
-        expect(findSecondFieldSuggestion, findsOneWidget);
-
-        // Enter text to secondFieldSuggestion and reload page.
-        await tester.enterText(findSecondFieldSuggestion, 'test');
-        await tester.pumpAndSettle();
-      },
-    );
-
-    testWidgets(
-      'test [slideAnimationStyle: SlideAnimationStyle.BTU]',
-      (WidgetTester tester) async {
-        await tester.pumpWidget(thirdMainWidget);
-
-        // thirdMainWidget tests.
-        expect(find.byType(MaterialApp), findsOneWidget);
-        expect(find.byType(Scaffold), findsOneWidget);
-        expect(find.byType(Center), findsOneWidget);
-        expect(findThirdFieldSuggestion, findsOneWidget);
-
-        // Enter text to thirdFieldSuggestion and reload page.
-        await tester.enterText(findThirdFieldSuggestion, '1');
-        await tester.pumpAndSettle();
-
-        await tester.tap(find.text(numSuggestions[0].toString()));
-        await tester.pumpAndSettle();
-      },
-    );
-
-    testWidgets(
-      'test [slideAnimationStyle: SlideAnimationStyle.UTD] + custom gestures',
-      (WidgetTester tester) async {
-        await tester.pumpWidget(fourthMainWidget);
-
-        // fourthMainWidget tests.
-        expect(find.byType(MaterialApp), findsOneWidget);
-        expect(find.byType(Scaffold), findsOneWidget);
-        expect(find.byType(Center), findsOneWidget);
-        expect(findFourthFieldSuggestion, findsOneWidget);
-
-        // Enter text to fourthFieldSuggestion and reload page.
-        await tester.enterText(findFourthFieldSuggestion, '13187829696');
-        await tester.pumpAndSettle();
-
-        final suggestedItem = find.byType(SuggestionItem);
-
-        await tester.tap(suggestedItem);
-      },
-    );
-
-    testWidgets(
-      'test [slideTweenOffset] as custom property + default gestures',
-      (WidgetTester tester) async {
-        await tester.pumpWidget(fifthMainWidget);
-
-        // fifthMainWidget tests.
-        expect(find.byType(MaterialApp), findsOneWidget);
-        expect(find.byType(Scaffold), findsOneWidget);
-        expect(find.byType(Center), findsOneWidget);
-        expect(findFifthFieldSuggestion, findsOneWidget);
-
-        // Enter text to fifthFieldSuggestion and reload page.
-        await tester.enterText(findFifthFieldSuggestion, 'test');
-        await tester.pumpAndSettle();
-
-        boxController.close!();
-        boxController.open!();
-
-        final suggestedItem = find.byType(SuggestionItem);
-
-        await tester.tap(suggestedItem);
-        await tester.pumpAndSettle();
-
-        // Clear field and re-enter value
-        await tester.enterText(findFifthFieldSuggestion, '');
-        await tester.pumpAndSettle();
-
-        // First we enter just 'te' to make able appearing of box.
-        await tester.enterText(findFifthFieldSuggestion, 'te');
-        await tester.pumpAndSettle();
-
-        // Then just complate it.
-        await tester.enterText(findFifthFieldSuggestion, 'test');
-        await tester.pumpAndSettle();
-
-        await tester.pumpAndSettle();
-      },
-    );
-
-    testWidgets(
-      'test FieldSuggestion.builder(...) with Object (model) list',
-      (WidgetTester tester) async {
-        await tester.pumpWidget(sixthMainWidget);
-
-        // sixthMainWidget tests.
-        expect(find.byType(MaterialApp), findsOneWidget);
-        expect(find.byType(Scaffold), findsOneWidget);
-        expect(find.byType(Center), findsOneWidget);
-        expect(findSixthFieldSuggestion, findsOneWidget);
-
-        // Enter text to sixthFieldSuggestion and reload page.
-        await tester.enterText(findSixthFieldSuggestion, 'test');
-        await tester.pumpAndSettle();
-
-        final suggestedItem = find.byKey(Key('item'));
-
-        expect(suggestedItem, findsNWidgets(1));
-        testModelSuggestions.removeAt(0);
-        boxController.refresh!();
-        await tester.pumpAndSettle();
-      },
-    );
-
-    testWidgets(
-      'test FieldSuggestion.builder(...) with Non Object (model) list',
-      (WidgetTester tester) async {
-        await tester.pumpWidget(seventhMainWidget);
-
-        // seventhMainWidget tests.
-        expect(find.byType(MaterialApp), findsOneWidget);
-        expect(find.byType(Scaffold), findsOneWidget);
-        expect(find.byType(Center), findsOneWidget);
-        expect(findSeventhFieldSuggestion, findsOneWidget);
-
-        // Enter text to seventhFieldSuggestion and reload page.
-        await tester.enterText(findSeventhFieldSuggestion, '1');
-        await tester.pumpAndSettle();
-
-        final suggestedItem = find.byType(SizedBox);
-
-        expect(suggestedItem, findsNWidgets(1));
-      },
-    );
   });
 }
