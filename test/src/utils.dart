@@ -9,3 +9,7 @@ class MockAnimationController extends Mock implements AnimationController {
   @override
   AnimationStatus get status => animationStatus;
 }
+
+
+// Mock of BuildContext.
+class MockBuildContext extends Mock implements BuildContext {}

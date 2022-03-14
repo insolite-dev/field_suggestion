@@ -6,6 +6,7 @@ import 'box_controller.dart';
 import 'package:flutter/material.dart';
 
 export 'package:field_suggestion/styles.dart';
+export 'package:field_suggestion/box_controller.dart';
 export 'package:highlightable/highlightable.dart';
 
 /// Create highly customizable, simple, and controllable autocomplete fields.
@@ -124,9 +125,10 @@ class FieldSuggestion extends StatefulWidget {
   /// ```
   final BoxController? boxController;
 
-  /// Suggestion box style object.
+  /// Suggestion's box style.
+  /// 
   /// As default it's ─▶ [BoxStyle.defaultStyle].
-  final BoxStyle boxStyle;
+  final BoxStyle? boxStyle;
 
   /// Text input decoration of input field.
   final InputDecoration? inputDecoration;
@@ -195,7 +197,7 @@ class FieldSuggestion extends StatefulWidget {
     required this.suggestions,
     required this.search,
     this.boxController,
-    this.boxStyle = BoxStyle.defaultStyle,
+    this.boxStyle,
     this.inputDecoration,
     this.inputType,
     this.focusNode,
@@ -240,6 +242,10 @@ class _FieldSuggestionState extends State<FieldSuggestion>
   // the whole widget uses layer link to connect that two parts.
   // It's bridge between suggestion box and input field.
   final LayerLink _layerLink = LayerLink();
+
+  // Suggestion box's active style. 
+  // As default it'd be setted to ─▶ [BoxStyle.defaultStyle].
+  BoxStyle? boxStyle;
 
   late Animation<double> _opacity;
   late Animation<Offset>? _slide;
@@ -372,6 +378,8 @@ class _FieldSuggestionState extends State<FieldSuggestion>
 
   @override
   Widget build(BuildContext context) {
+    boxStyle = widget.boxStyle ?? BoxStyle.defaultStyle(context);
+
     // Layer linking adds normal widget's behaviour to overlay widget.
     // It follows [TextField] every time, and behaves as a normal non-hiddable widget.
     return CompositedTransformTarget(
@@ -394,16 +402,16 @@ class _FieldSuggestionState extends State<FieldSuggestion>
       child: Container(
         padding: widget.padding,
         decoration: BoxDecoration(
-          color: widget.boxStyle.backgroundColor,
-          borderRadius: widget.boxStyle.borderRadius,
-          boxShadow: widget.boxStyle.boxShadow,
-          border: widget.boxStyle.border,
+          color: boxStyle?.backgroundColor,
+          borderRadius: boxStyle?.borderRadius,
+          boxShadow: widget.boxStyle?.boxShadow,
+          border: widget.boxStyle?.border,
         ),
         child: ConstrainedBox(
           constraints: BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width,
             maxHeight: Utils.maxBoxHeight(
-              matchersList: matchers,
+              matchers: matchers.length,
               sizeByItem: widget.sizeByItem,
             ),
           ),
@@ -433,8 +441,8 @@ class _FieldSuggestionState extends State<FieldSuggestion>
         : SlideTransition(position: _slide!, child: _box);
 
     return Material(
-      color: widget.boxStyle.backgroundColor,
-      borderRadius: widget.boxStyle.borderRadius,
+      color: boxStyle?.backgroundColor,
+      borderRadius: boxStyle?.borderRadius,
       elevation: 0,
       child: boxWidget,
     );

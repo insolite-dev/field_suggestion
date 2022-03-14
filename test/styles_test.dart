@@ -1,16 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-
-import 'package:field_suggestion/src/styles.dart';
-
 import 'src/utils.dart';
 
-main() {
-  late MockAnimationController animationControllerMock;
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:field_suggestion/styles.dart';
 
+main() {
   late BoxStyle boxStyle;
 
+  late MockBuildContext buildContextMock;
+  late MockAnimationController animationControllerMock;
+
   setUpAll(() {
+    buildContextMock = MockBuildContext();
     animationControllerMock = MockAnimationController();
 
     boxStyle = BoxStyle(
@@ -64,7 +65,7 @@ main() {
     });
 
     test('defaultStyle should contain initial properties', () {
-      final BoxStyle defaultStyle = BoxStyle.defaultStyle;
+      final BoxStyle defaultStyle = BoxStyle.defaultStyle(buildContextMock);
 
       expect(defaultStyle.backgroundColor, Colors.white);
       expect(defaultStyle.border, null);
@@ -72,10 +73,10 @@ main() {
       expect(defaultStyle.gradient, null);
       expect(defaultStyle.boxShadow, [
         const BoxShadow(
-          spreadRadius: 10,
+          spreadRadius: 12.5,
           offset: Offset(0, 5),
-          color: Color(0xFFA3A3A3),
-          blurRadius: 10,
+          color: Color(0xff000000),
+          blurRadius: 12.5,
         )
       ]);
       expect(defaultStyle.shape, BoxShape.rectangle);

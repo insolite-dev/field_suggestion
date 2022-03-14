@@ -41,24 +41,25 @@ class FieldAnimationStyle {
   }
 }
 
-/// Custom style object for [SuggestionBox].
+/// Custom style class for [SuggestionBox].
 ///
-/// **Use cases:**
-/// ```dart
-/// BoxStyle.DefaultStyle
-/// ```
+/// Uses ─▶ [BoxStyle.default(context)] as default.
+/// Which listens to theme context, and fills values by it.
 ///
-/// **Or configure as the way you want:**
+/// Or use custom one
+/// to configure as the way you want:
 /// ```dart
 /// BoxStyle(
 ///  backgroundColor: Colors.white,
 ///  border: Border.all(color: Colors.red)
 ///  borderRadius: const BorderRadius.all(Radius.circular(10)),
 ///  ...
-/// );
+/// )
 /// ```
 class BoxStyle {
   /// [backgroundColor] of `SuggestionBox`
+  ///
+  /// As default its ─▶ [Colors.transparent].
   final Color backgroundColor;
 
   /// [border] of `SuggestionBox`
@@ -74,6 +75,8 @@ class BoxStyle {
   final List<BoxShadow>? boxShadow;
 
   /// [shape] of `SuggestionBox`.
+  ///
+  /// As default its ─▶ [BoxShape.rectangle].
   final BoxShape shape;
 
   const BoxStyle({
@@ -85,20 +88,22 @@ class BoxStyle {
     this.shape = BoxShape.rectangle,
   });
 
-  // TODO: should listen current theme values.
-  // and automatically generate style appropriate to theme.
-  static const defaultStyle = const BoxStyle(
-    backgroundColor: Colors.white,
-    borderRadius: const BorderRadius.all(Radius.circular(5)),
-    shape: BoxShape.rectangle,
-    boxShadow: [
-      BoxShadow(
-        spreadRadius: 10,
-        offset: Offset(0, 5),
-        color: Color(0xFFA3A3A3),
-        blurRadius: 10,
-      )
-    ],
-  );
-}
+  /// Generate a minimalist box style theme,
+  /// appropriate to context's theme.
+  static BoxStyle defaultStyle(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
 
+    return BoxStyle(
+      backgroundColor: theme.cardColor,
+      borderRadius: const BorderRadius.all(Radius.circular(5)),
+      boxShadow: [
+        BoxShadow(
+          spreadRadius: 12.5,
+          offset: Offset(0, 5),
+          color: theme.shadowColor,
+          blurRadius: 12.5,
+        )
+      ],
+    );
+  }
+}

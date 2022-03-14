@@ -3,17 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'user_model.dart';
 
-void main() => runApp(App());
-
-class App extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'FieldSuggestion Example',
-      home: HomePage(),
-    );
-  }
-}
+void main() => runApp(HomePage());
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -24,8 +14,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final boxController = BoxController();
-
   final textController = TextEditingController();
+
+  var theme = ThemeData.light();
 
   /*
   List<UserModel> suggestions = [
@@ -48,81 +39,92 @@ class _HomePageState extends State<HomePage> {
   */
 
   List<String> suggestions = List.generate(
-    500,
+    50,
     (index) => index.toString(),
   );
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => boxController.close?.call(),
-      child: Scaffold(
-        appBar: AppBar(title: const Text("FieldSuggestion Example")),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(15),
-          child: Center(
-            child: Column(
-              children: [
-                FieldSuggestion(
-                  inputDecoration: InputDecoration(
-                    hintText: 'Email', // optional
-                  ),
-                  inputType: TextInputType.emailAddress,
-                  textController: textController,
-                  suggestions: suggestions,
-                  boxController: boxController,
-                  search: (item, input) {
-                    return item.toString().contains(input);
-                  },
-                  separatorBuilder: (context, index) {
-                    return const Divider();
-                  },
-                  boxStyle: BoxStyle(
-                     backgroundColor: Colors.purple.shade400,
-                     border: Border.all(),
-                     borderRadius: BorderRadius.circular(30),
-                  ),
-                  itemBuilder: (BuildContext context, int index) {
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          textController.text = suggestions[index];
-                        });
-                        textController.selection = TextSelection.fromPosition(
-                          TextPosition(offset: textController.text.length),
-                        );
-                      },
-                      child: Card(
-                        child: ListTile(
-                          title: Text(suggestions[index]),
-                          trailing: IconButton(
-                            icon: Icon(Icons.clear),
-                            onPressed: () {
-                              suggestions.removeAt(index);
-                              boxController.refresh?.call();
-                            },
-                          ),
-                          leading: Container(
-                            height: 30,
-                            width: 30,
-                            decoration: BoxDecoration(
-                              color: Colors.blueGrey,
-                              shape: BoxShape.circle,
+    return MaterialApp(
+      theme: theme,
+      title: 'FieldSuggestion Example',
+      home: GestureDetector(
+        onTap: () => boxController.close?.call(),
+        child: Scaffold(
+          appBar: AppBar(title: const Text("FieldSuggestion Example")),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(15),
+            child: Center(
+              child: Column(
+                children: [
+                  FieldSuggestion(
+                    inputDecoration: InputDecoration(
+                      hintText: 'Email', // optional
+                    ),
+                    inputType: TextInputType.emailAddress,
+                    textController: textController,
+                    suggestions: suggestions,
+                    boxController: boxController,
+                    search: (item, input) {
+                      return item.toString().contains(input);
+                    },
+                    separatorBuilder: (context, index) {
+                      return const Divider();
+                    },
+                    itemBuilder: (BuildContext context, int index) {
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            textController.text = suggestions[index];
+                          });
+                          textController.selection = TextSelection.fromPosition(
+                            TextPosition(offset: textController.text.length),
+                          );
+                        },
+                        child: Card(
+                          child: ListTile(
+                            title: Text(suggestions[index]),
+                            trailing: IconButton(
+                              icon: Icon(Icons.clear),
+                              onPressed: () {
+                                suggestions.removeAt(index);
+                                boxController.refresh?.call();
+                              },
                             ),
-                            child: Center(
-                              child: Text(
-                                'n'.toUpperCase(),
-                                textAlign: TextAlign.center,
+                            leading: Container(
+                              height: 30,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                color: Colors.blueGrey,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'n'.toUpperCase(),
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                ),
-                const SizedBox(height: 100),
-              ],
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 100),
+                  ElevatedButton(
+                    child: Text('CHANGE THEME'),
+                    onPressed: () {
+                      if (theme.brightness == Brightness.dark) {
+                        theme = ThemeData.light();
+                      } else {
+                        theme = ThemeData.dark();
+                      }
+
+                      setState(() {});
+                    },
+                  )
+                ],
+              ),
             ),
           ),
         ),
