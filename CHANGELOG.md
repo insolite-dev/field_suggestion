@@ -1,12 +1,12 @@
 # [v0.2.3] - 14/03/2022
 
 ### Updates:
-- Resolved: [#33](https://github.com/theiskaa/field_suggestion/issues/33) and [#44](https://github.com/theiskaa/field_suggestion/issues/44) 
- • Refactored and Redesigned whole widget structure, 
+Resolved: [#33](https://github.com/theiskaa/field_suggestion/issues/33) and [#44](https://github.com/theiskaa/field_suggestion/issues/44) 
+ - Refactored and Redesigned whole widget structure, 
    by that rendering speed was improved by almost 5x.
- • Made require the [search] field, to provide a high customization and algorithm-agnostic usage.
+ - Made require the [search] field, to provide a high customization and algorithm-agnostic usage.
    As default search could be normal -> `item.toString().contains(input)`
- • Rewritten the whole documentation of field suggestion.
+ - Rewritten the whole documentation of field suggestion.
 
 The new widget structure:
 ```
