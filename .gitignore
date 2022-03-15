@@ -35,7 +35,6 @@ example/android/
 example/macos/
 example/README.md
 example/pubspec.lock
-example/pubspec.yaml
 example/analysis_options.yaml
 
 # Android related
