@@ -28,14 +28,11 @@ TITLE LOGO: https://user-images.githubusercontent.com/59066341/137352996-0d132ee
   </a>
 </div><br>
 
-## Installing
-See the official installing guidline from [field_suggestion/install](https://github.com/theiskaa/field_suggestion/wiki/Installing)
+### Installing
+- See the official installing guidline from [field_suggestion/install](https://github.com/theiskaa/field_suggestion/wiki/Installing)
 
-## Official Documentation (Wiki)
-Read the official documentation from [field_suggestion/wiki](https://github.com/theiskaa/field_suggestion/wiki)
+### Official Documentation (Wiki)
+- Read the official documentation from [field_suggestion/wiki](https://github.com/theiskaa/field_suggestion/wiki)
 
-## Additional sources
-Medium Article about FieldSuggestion - [Autocomplete fields in Flutter](https://theiskaa.medium.com/autocomplete-fields-in-flutter-ec4eb6ec5ad7)
-
-## Contributing
-For information regarding contributions, please refer to [CONTRIBUTING.md](https://github.com/theiskaa/field_suggestion/blob/develop/CONTRIBUTING.md) file.
+### Contributing
+- For information regarding contributions, please refer to [CONTRIBUTING.md](https://github.com/theiskaa/field_suggestion/blob/develop/CONTRIBUTING.md) file.
