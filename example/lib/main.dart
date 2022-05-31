@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
           child: Center(
             child: Column(
               children: [
-                FieldSuggestion(
+                FieldSuggestion<UserModel>(
                   inputDecoration: InputDecoration(
                     hintText: 'Email', // optional
                   ),
