@@ -34,6 +34,31 @@ class _HomePageState extends State<HomePage> {
       password: '1234567',
     ),
     UserModel(
+      email: 'john-doe@gmail.com',
+      username: 'Johnny',
+      password: '1234567',
+    ),
+    UserModel(
+      email: 'john-doe@gmail.com',
+      username: 'Johnny',
+      password: '1234567',
+    ),
+    UserModel(
+      email: 'john-doe@gmail.com',
+      username: 'Johnny',
+      password: '1234567',
+    ),
+    UserModel(
+      email: 'john-doe@gmail.com',
+      username: 'Johnny',
+      password: '1234567',
+    ),
+    UserModel(
+      email: 'john-doe@gmail.com',
+      username: 'Johnny',
+      password: '1234567',
+    ),
+    UserModel(
       email: 'charlie@icloud.com',
       username: 'Charlie',
       password: 'test123',

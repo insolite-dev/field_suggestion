@@ -10,6 +10,9 @@ export 'package:field_suggestion/box_controller.dart';
 export 'package:highlightable/highlightable.dart';
 
 typedef SearchCallback<T> = bool Function(T item, String input);
+
+enum OverlayPosition { top, bottom }
+
 /// Create highly customizable, simple, and controllable autocomplete fields.
 ///
 /// Widget Structure:
@@ -215,6 +218,8 @@ class FieldSuggestion<T> extends StatefulWidget {
   /// If unset, defaults to the ─▶ [Curves.decelerate].
   final Curve slideCurve;
 
+  final OverlayPosition overlayPosition;
+
   const FieldSuggestion({
     Key? key,
     required this.itemBuilder,
@@ -245,10 +250,12 @@ class FieldSuggestion<T> extends StatefulWidget {
     this.slideStyle = SlideStyle.RTL,
     this.slideOffset,
     this.slideCurve = Curves.decelerate,
+    this.overlayPosition = OverlayPosition.bottom,
   }) : super(key: key);
 
   @override
-  _FieldSuggestionState createState() => _FieldSuggestionState<T>(boxController);
+  _FieldSuggestionState createState() =>
+      _FieldSuggestionState<T>(boxController);
 }
 
 class _FieldSuggestionState<T> extends State<FieldSuggestion<T>>
@@ -329,7 +336,7 @@ class _FieldSuggestionState<T> extends State<FieldSuggestion<T>>
     if (input.isEmpty) return closeBox();
 
     matchers = widget.suggestions.where((i) {
-      return widget.search(i as T, input.toString());
+      return widget.search(i, input.toString());
     }).toList();
 
     return (matchers.isEmpty) ? closeBox() : openBox();
@@ -389,7 +396,9 @@ class _FieldSuggestionState<T> extends State<FieldSuggestion<T>>
         child: CompositedTransformFollower(
           link: _layerLink,
           showWhenUnlinked: false,
-          offset: Offset(0.0, _size.height + widget.spacer),
+          offset: this.widget.overlayPosition == OverlayPosition.bottom
+              ? Offset(0.0, _size.height + widget.spacer)
+              : Offset(0.0, 0 - _size.height),
           child: _buildSuggestionBox(context),
         ),
       ),
