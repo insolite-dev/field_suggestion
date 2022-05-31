@@ -398,7 +398,7 @@ class _FieldSuggestionState<T> extends State<FieldSuggestion<T>>
           showWhenUnlinked: false,
           offset: this.widget.overlayPosition == OverlayPosition.bottom
               ? Offset(0.0, _size.height + widget.spacer)
-              : Offset(0.0, 0 - _size.height),
+              : Offset(0.0, 0 - _size.height - widget.spacer),
           child: _buildSuggestionBox(context),
         ),
       ),
