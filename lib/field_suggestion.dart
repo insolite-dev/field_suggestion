@@ -9,6 +9,7 @@ export 'package:field_suggestion/styles.dart';
 export 'package:field_suggestion/box_controller.dart';
 export 'package:highlightable/highlightable.dart';
 
+typedef SearchCallback<T> = bool Function(T item, String input);
 /// Create highly customizable, simple, and controllable autocomplete fields.
 ///
 /// Widget Structure:
@@ -97,7 +98,7 @@ class FieldSuggestion<T> extends StatefulWidget {
   /// ```dart
   /// search: (item, input) => item.field.toString().contains(input)
   /// ```
-  final bool Function(T item, String input) search;
+  final SearchCallback<T> search;
 
   /// Controller object of suggestions box.
   ///
@@ -250,7 +251,7 @@ class FieldSuggestion<T> extends StatefulWidget {
   _FieldSuggestionState createState() => _FieldSuggestionState<T>(boxController);
 }
 
-class _FieldSuggestionState<T> extends State<FieldSuggestion>
+class _FieldSuggestionState<T> extends State<FieldSuggestion<T>>
     with TickerProviderStateMixin {
   // Initialize BoxController closures.
   _FieldSuggestionState(BoxController? _boxController) {
