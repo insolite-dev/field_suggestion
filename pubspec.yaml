@@ -1,6 +1,6 @@
 name: field_suggestion
 description: Create highly customizable, simple, and controllable autocomplete fields.
-version: 0.2.3
+version: 0.2.4
 homepage: https://github.com/theiskaa/field_suggestion
 issue_tracker: https://github.com/theiskaa/field_suggestion/issues
 documentation: https://github.com/theiskaa/field_suggestion/wiki
