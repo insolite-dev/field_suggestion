@@ -1,3 +1,10 @@
+# [v0.2.4] - 16/06/2022
+
+### Updates:
+Resolved: [#49](https://github.com/theiskaa/field_suggestion/issues/49)
+ - Added generic typing support to `FieldSuggestion` widget.
+ - Updated [highlightable](https://pub.dev/packages/highlightable) to version -> v1.0.5
+
 # [v0.2.3] - 14/03/2022
 
 ### Updates:

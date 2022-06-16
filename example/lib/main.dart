@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
     ),
     UserModel(
       email: 'batu@yandex.com',
-      username: 'Batuu',
+      username: 'Batu',
       password: 'test123',
     )
   ];
@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
           child: Center(
             child: Column(
               children: [
-                FieldSuggestion(
+                FieldSuggestion<UserModel>(
                   inputDecoration: InputDecoration(
                     hintText: 'Email', // optional
                   ),
@@ -80,6 +80,7 @@ class _HomePageState extends State<HomePage> {
                         setState(() {
                           textController.text = suggestions[index].email!;
                         });
+
                         textController.selection = TextSelection.fromPosition(
                           TextPosition(offset: textController.text.length),
                         );
