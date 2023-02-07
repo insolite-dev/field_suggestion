@@ -1,4 +1,14 @@
+//
+// Copyright 2021-2022 present Insolite. All rights reserved.
+// Use of this source code is governed by Apache 2.0 license
+// that can be found in the LICENSE file.
+//
+
 library field_suggestion;
+
+import 'dart:async';
+
+import 'package:field_suggestion/search_state_manager.dart';
 
 import 'utils.dart';
 import 'styles.dart';
@@ -9,6 +19,7 @@ export 'package:field_suggestion/styles.dart';
 export 'package:field_suggestion/box_controller.dart';
 export 'package:highlightable/highlightable.dart';
 
+/// TODO: update documentation.
 /// Create highly customizable, simple, and controllable autocomplete fields.
 ///
 /// Widget Structure:
@@ -51,7 +62,136 @@ export 'package:highlightable/highlightable.dart';
 /// For mode details about usage refer to:
 ///  > https://github.com/theiskaa/field_suggestion/wiki
 class FieldSuggestion<T> extends StatefulWidget {
-  /// Suggestion widget builder.
+  const FieldSuggestion({
+    Key? key,
+    required this.itemBuilder,
+    required this.textController,
+    required this.suggestions,
+    required this.search,
+    this.separatorBuilder,
+    this.boxController,
+    this.boxStyle,
+    this.maxBoxHeight,
+    this.inputDecoration,
+    this.inputType,
+    this.focusNode,
+    this.maxLines,
+    this.inputStyle,
+    this.validator,
+    this.cursorWidth = 2,
+    this.cursorHeight,
+    this.cursorRadius,
+    this.cursorColor,
+    this.keyboardAppearance,
+    this.scrollController,
+    this.spacer = 5.0,
+    this.sizeByItem,
+    this.padding = const EdgeInsets.all(12),
+    this.wOpacityAnimation = false,
+    this.wSlideAnimation = false,
+    this.animationDuration = const Duration(milliseconds: 400),
+    this.slideStyle = SlideStyle.RTL,
+    this.slideOffset,
+    this.slideCurve = Curves.decelerate,
+  })  : future = null,
+        builder = null,
+        futureRebuildDuration = null,
+        initialData = null,
+        onData = null,
+        onError = null,
+        onLoad = null,
+        onEmptyData = null,
+        assert(
+          itemBuilder != null,
+          '[itemBuilder] property cannot be null, in case of "local" usage',
+        ),
+        assert(
+          suggestions != null,
+          '[suggestions] property cannot be null, in case of "local" usage',
+        ),
+        assert(
+          search != null,
+          '[search] propery cannot be null, in case of "local" usage',
+        ),
+        super(key: key);
+
+  const FieldSuggestion.network({
+    Key? key,
+    required this.textController,
+    required this.future,
+    required this.builder,
+    this.initialData,
+    this.futureRebuildDuration,
+    this.onData,
+    this.onError,
+    this.onLoad,
+    this.onEmptyData,
+    this.boxController,
+    this.boxStyle,
+    this.maxBoxHeight,
+    this.inputDecoration,
+    this.inputType,
+    this.focusNode,
+    this.maxLines,
+    this.inputStyle,
+    this.validator,
+    this.cursorWidth = 2,
+    this.cursorHeight,
+    this.cursorRadius,
+    this.cursorColor,
+    this.keyboardAppearance,
+    this.scrollController,
+    this.spacer = 5.0,
+    this.sizeByItem,
+    this.padding = const EdgeInsets.all(12),
+    this.wOpacityAnimation = false,
+    this.wSlideAnimation = false,
+    this.animationDuration = const Duration(milliseconds: 400),
+    this.slideStyle = SlideStyle.RTL,
+    this.slideOffset,
+    this.slideCurve = Curves.decelerate,
+  })  : itemBuilder = null,
+        separatorBuilder = null,
+        search = null,
+        suggestions = null,
+        assert(
+          future != null,
+          '[future] propery cannot be null, in case of "network" usage',
+        ),
+        assert(
+          builder != null,
+          '[builder] propery cannot be null, in case of "network" usage',
+        ),
+        super(key: key);
+
+  /// Main text editing controller.
+  ///
+  /// Widget listens controller and calls appropriate functionalities
+  /// to execute search algorithm and fill matchers.
+  final TextEditingController textController;
+
+  /// TODO: add documentation.
+  /// Suggestions list of widget.
+  final List<T>? suggestions;
+
+  /// TODO: add documentation.
+  /// Search algorithm of widget. Basic example: (check if item contains input) ```dart
+  /// search: (item, input) => item.toString().contains(input)
+  /// ```
+  ///
+  /// Object suggestions example:
+  /// ```dart
+  /// search: (item, input) => item.field.toString().contains(input)
+  /// ```
+  final bool Function(T item, String input)? search;
+
+  /// TODO: add documentation.
+  /// A future builder for search.
+  ///
+  /// ...
+  final Future<List<T>> Function(String input)? future;
+
+  /// Suggestion element widget builder.
   ///
   /// Example:
   /// ```dart
@@ -63,7 +203,7 @@ class FieldSuggestion<T> extends StatefulWidget {
   ///   }
   /// )
   /// ```
-  final Widget Function(BuildContext, int) itemBuilder;
+  final Widget Function(BuildContext, int)? itemBuilder;
 
   /// Separator builder for suggestions list.
   ///
@@ -78,26 +218,41 @@ class FieldSuggestion<T> extends StatefulWidget {
   /// ```
   final Widget Function(BuildContext, int)? separatorBuilder;
 
-  /// Main text editing controller.
+  /// TODO: add documentation.
+  /// Future builder for suggestions list.
   ///
-  /// Widget listens controller and calls appropriate functionalities
-  /// to execute search algorithm and fill matchers.
-  final TextEditingController textController;
-
-  /// Suggestions list of widget.
-  ///
-  /// Don't forget writing search algorithm appropriate to suggestions type.
-  final List<T> suggestions;
-
-  /// Search algorithm of widget. Basic example: (check if item contains input) ```dart
-  /// search: (item, input) => item.toString().contains(input)
-  /// ```
-  ///
-  /// Object suggestions example:
+  /// Example:
   /// ```dart
-  /// search: (item, input) => item.field.toString().contains(input)
+  /// FieldSuggestion(
+  ///   separatorBuilder: (context, index) {
+  ///    return const Divider();
+  ///   }
+  ///   ...
+  /// )
   /// ```
-  final bool Function(T item, String input) search;
+  final Widget Function(BuildContext, AsyncSnapshot<List<T>>)? builder;
+
+  /// TODO: add documentation.
+  /// Rebuild duration of [future].
+  ///
+  /// If unset, delay will be set to instant. i.e [future] will
+  /// be recalled with latest change on [textController].
+  final Duration? futureRebuildDuration;
+
+  /// TODO: add documentation.
+  final List<T>? initialData;
+
+  /// TODO: add documentation.
+  final void Function(AsyncSnapshot<List<T>>)? onData;
+
+  /// TODO: add documentation.
+  final void Function(AsyncSnapshot<List<T>>)? onError;
+
+  /// TODO: add documentation.
+  final void Function(AsyncSnapshot<List<T>>)? onLoad;
+
+  /// TODO: add documentation.
+  final void Function(AsyncSnapshot<List<T>>)? onEmptyData;
 
   /// Controller object of suggestions box.
   ///
@@ -129,6 +284,11 @@ class FieldSuggestion<T> extends StatefulWidget {
   ///
   /// If unset, defaults to the ─▶ [BoxStyle.defaultStyle].
   final BoxStyle? boxStyle;
+
+  /// TODO: add documentation.
+  ///
+  /// If unset, defaults to 60.
+  final double? maxBoxHeight;
 
   /// Text input decoration of input field.
   final InputDecoration? inputDecoration;
@@ -214,38 +374,6 @@ class FieldSuggestion<T> extends StatefulWidget {
   /// If unset, defaults to the ─▶ [Curves.decelerate].
   final Curve slideCurve;
 
-  const FieldSuggestion({
-    Key? key,
-    required this.itemBuilder,
-    this.separatorBuilder,
-    required this.textController,
-    required this.suggestions,
-    required this.search,
-    this.boxController,
-    this.boxStyle,
-    this.inputDecoration,
-    this.inputType,
-    this.focusNode,
-    this.maxLines,
-    this.inputStyle,
-    this.validator,
-    this.cursorWidth = 2,
-    this.cursorHeight,
-    this.cursorRadius,
-    this.cursorColor,
-    this.keyboardAppearance,
-    this.scrollController,
-    this.spacer = 5.0,
-    this.sizeByItem,
-    this.padding = const EdgeInsets.all(12),
-    this.wOpacityAnimation = false,
-    this.wSlideAnimation = false,
-    this.animationDuration = const Duration(milliseconds: 400),
-    this.slideStyle = SlideStyle.RTL,
-    this.slideOffset,
-    this.slideCurve = Curves.decelerate,
-  }) : super(key: key);
-
   @override
   _FieldSuggestionState createState() =>
       _FieldSuggestionState<T>(boxController);
@@ -261,6 +389,9 @@ class _FieldSuggestionState<T> extends State<FieldSuggestion<T>>
     _boxController.open = openBox;
     _boxController.refresh = refresh;
   }
+
+  // TODO: add documentation.
+  late SearchStateManager<T> searchManager;
 
   // "CURRENT" matchers collection ─▶ generated by [_textListener] method.
   List<T> matchers = [];
@@ -293,6 +424,20 @@ class _FieldSuggestionState<T> extends State<FieldSuggestion<T>>
   @override
   void initState() {
     super.initState();
+    searchManager = SearchStateManager<T>(
+      onData: widget.onData ?? (_) => openBox(),
+      onError: widget.onError ?? (_) => closeBox(),
+      onLoad: widget.onLoad ?? (_) => openBox(),
+      onEmptyData: widget.onEmptyData ?? (_) => closeBox(),
+      future: widget.future,
+      initialState: widget.initialData == null
+          ? AsyncSnapshot<List<T>>.nothing()
+          : AsyncSnapshot<List<T>>.withData(
+              ConnectionState.none,
+              widget.initialData as List<T>,
+            ),
+    );
+
     widget.textController.addListener(_textListener);
 
     // Initialize animations, if one of the animation was enabled.
@@ -322,14 +467,23 @@ class _FieldSuggestionState<T> extends State<FieldSuggestion<T>>
   }
 
   // Searches [input] in [suggestions] by [search] method.
-  void _textListener() {
+  Future<void> _textListener() async {
     final input = widget.textController.text;
+
+    // TODO: add documentation.
+    if (widget.future != null) {
+      if (widget.futureRebuildDuration != null) {
+        await Future.delayed(widget.futureRebuildDuration!);
+      }
+
+      return searchManager.search(input);
+    }
 
     // Should close box if input is empty.
     if (input.isEmpty) return closeBox();
 
-    matchers = widget.suggestions.where((i) {
-      return widget.search(i, input.toString());
+    matchers = widget.suggestions!.where((i) {
+      return widget.search?.call(i, input.toString()) ?? false;
     }).toList();
 
     return (matchers.isEmpty) ? closeBox() : openBox();
@@ -379,7 +533,7 @@ class _FieldSuggestionState<T> extends State<FieldSuggestion<T>>
   // Creates the suggestion box (overlay entry).
   // Appends it to the overlay state and state overlay management list.
   void _generateOverlay(BuildContext context) {
-    final _state = Overlay.of(context)!;
+    final _state = Overlay.of(context);
     final _size = (context.findRenderObject() as RenderBox).size;
 
     // Re-append overlay entry.
@@ -447,41 +601,55 @@ class _FieldSuggestionState<T> extends State<FieldSuggestion<T>>
           boxShadow: widget.boxStyle?.boxShadow,
           border: widget.boxStyle?.border,
         ),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: Utils.maxBoxHeight(
-              matchers: matchers.length,
-              sizeByItem: widget.sizeByItem,
-            ),
-          ),
-          child: ListView.separated(
-            controller: widget.scrollController,
-            padding: EdgeInsets.zero,
-            shrinkWrap: true,
-            itemCount: matchers.length,
-            separatorBuilder:
-                widget.separatorBuilder ?? (_, __) => const SizedBox.shrink(),
-            itemBuilder: (context, index) {
-              // Get the index of matcher[i] in suggestions list.
-              final matcherIndex = widget.suggestions.indexOf(matchers[index]);
-              return widget.itemBuilder(context, matcherIndex);
-            },
-          ),
-        ),
+        child: ValueListenableBuilder(
+            valueListenable: searchManager,
+            builder: (context, SearchState<T> value, _) {
+              final len = value.snapshot.data?.length ?? 1;
+              final match =
+                  widget.future != null ? (len > 1 ? len : 1) : matchers.length;
+
+              return BoxSizer(
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width,
+                  maxHeight: Utils.maxBoxHeight(
+                    sizeByItem: widget.sizeByItem,
+                    maxBoxHeight: widget.maxBoxHeight,
+                    matchers: match,
+                  ),
+                ),
+                child: Builder(builder: (context) {
+                  if (widget.future != null) {
+                    return widget.builder!(context, value.snapshot);
+                  }
+
+                  return ListView.separated(
+                    controller: widget.scrollController,
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    itemCount: matchers.length,
+                    separatorBuilder: widget.separatorBuilder ??
+                        (_, __) => const SizedBox.shrink(),
+                    itemBuilder: (context, index) {
+                      // Get the index of matcher[i] in suggestions list.
+                      final mindex =
+                          widget.suggestions!.indexOf(matchers[index]);
+                      return widget.itemBuilder!(context, mindex);
+                    },
+                  );
+                }),
+              );
+            }),
       ),
     );
 
     // Determine box widget appropriate to slide animation.
-    final boxWidget = !widget.wSlideAnimation
-        ? _box
-        : SlideTransition(position: _slide!, child: _box);
-
     return Material(
       color: boxStyle?.backgroundColor,
       borderRadius: boxStyle?.borderRadius,
       elevation: 0,
-      child: boxWidget,
+      child: !widget.wSlideAnimation
+          ? _box
+          : SlideTransition(position: _slide!, child: _box),
     );
   }
 }
