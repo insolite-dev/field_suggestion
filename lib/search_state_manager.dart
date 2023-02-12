@@ -10,6 +10,11 @@ class SearchState<T> {
   /// A async snapshot value of [List] of [T], used as main matchers holder of the state.
   AsyncSnapshot<List<T>> snapshot;
 
+  /// A async snapshot vlaue of [List] of [T] that is the previous state of [snapshot].
+  ///
+  /// Which is used to keep storing the previous state.
+  AsyncSnapshot<List<T>>? previousSnapshot;
+
   /// An object that identifies the currently active callbacks. Used to avoid
   /// calling setState from stale callbacks, e.g. after disposal of this state,
   /// or after widget reconfiguration to a new Future.
@@ -24,6 +29,7 @@ class SearchState<T> {
 
   SearchState({
     required this.snapshot,
+    this.previousSnapshot,
     this.activeCallbackIdentity,
     this.lastInput = '',
   });
@@ -55,7 +61,7 @@ class SearchStateManager<T> extends ValueNotifier<SearchState<T>> {
   ///
   /// Before calling the [future], [value.snapshot]'s state will be updated
   /// with [ConnectionState.waiting].
-  search(String input) {
+  Future<void> search(String input) async {
     input = input.trim();
     if (future == null) return;
 
@@ -63,10 +69,12 @@ class SearchStateManager<T> extends ValueNotifier<SearchState<T>> {
     value.lastInput = input;
     if (input.isEmpty) return onEmptyData?.call(value.snapshot);
 
-    value.snapshot = value.snapshot.inState(ConnectionState.waiting);
-    notifyListeners();
-
-    onLoad?.call(value.snapshot);
+    final prev = value.previousSnapshot;
+    if (prev == null || prev.connectionState != value.snapshot.connectionState) {
+      value.snapshot = value.snapshot.inState(ConnectionState.waiting);
+      notifyListeners();
+      onLoad?.call(value.snapshot);
+    }
 
     final Object callbackIdentity = Object();
     value.activeCallbackIdentity = callbackIdentity;
@@ -76,10 +84,11 @@ class SearchStateManager<T> extends ValueNotifier<SearchState<T>> {
         ConnectionState.done,
         data,
       );
+
+      // TODO: find a way to compare [value.previousSnapshot] and [value.snapshot] 's data.
       notifyListeners();
 
       if (data.isEmpty) return onEmptyData?.call(value.snapshot);
-
       onData?.call(value.snapshot);
     }, onError: (Object error, StackTrace stackTrace) {
       value.snapshot = AsyncSnapshot<List<T>>.withError(
@@ -98,5 +107,8 @@ class SearchStateManager<T> extends ValueNotifier<SearchState<T>> {
         return true;
       }());
     });
+
+    // Update the previous value.
+    value.previousSnapshot = value.snapshot;
   }
 }

@@ -470,14 +470,12 @@ class _FieldSuggestionState<T> extends State<FieldSuggestion<T>>
   Future<void> _textListener() async {
     final input = widget.textController.text;
 
-    // TODO: add documentation.
-    if (widget.future != null) {
-      if (widget.futureRebuildDuration != null) {
-        await Future.delayed(widget.futureRebuildDuration!);
-      }
-
-      return searchManager.search(input);
-    }
+    // TODO: find actually required time to call it.
+    /// ? we shouldn't continue calling, if we already called before.
+    /// ? we should add a listener that listens to text-controller
+    /// and calls search whenever the editing completes.
+    /// ? also dont' forget: [widget.futureRebuildDuration].
+    if (widget.future != null) return searchManager.search(input);
 
     // Should close box if input is empty.
     if (input.isEmpty) return closeBox();
