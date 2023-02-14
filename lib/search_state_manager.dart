@@ -85,7 +85,6 @@ class SearchStateManager<T> extends ValueNotifier<SearchState<T>> {
         data,
       );
 
-      // TODO: find a way to compare [value.previousSnapshot] and [value.snapshot] 's data.
       notifyListeners();
 
       if (data.isEmpty) return onEmptyData?.call(value.snapshot);
@@ -108,7 +107,7 @@ class SearchStateManager<T> extends ValueNotifier<SearchState<T>> {
       }());
     });
 
-    // Update the previous value.
+    // Keep updating the previous value.
     value.previousSnapshot = value.snapshot;
   }
 }

@@ -19,10 +19,25 @@ export 'package:field_suggestion/styles.dart';
 export 'package:field_suggestion/box_controller.dart';
 export 'package:highlightable/highlightable.dart';
 
-/// TODO: update documentation.
 /// Create highly customizable, simple, and controllable autocomplete fields.
 ///
-/// Widget Structure:
+///
+/// Basic usage example:
+/// ```dart
+/// FieldSuggestion(
+///    textController: _textController,
+///    suggestions: suggestions,
+///    search: (item, input) {
+///       return item.toString().contains(input);
+///    },
+///    itemBuilder: (context, index) {
+///       return Card(...);
+///    },
+///    ...
+/// )
+/// ```
+///
+/// ### Widget Structure of [FieldSuggestion].
 ///  ╭───────╮      ╭─────────────╮
 ///  │ Input │╮    ╭│ Suggestions │
 ///  ╰───────╯│    │╰─────────────╯
@@ -40,24 +55,16 @@ export 'package:highlightable/highlightable.dart';
 ///      fill be filled appropriate
 ///      to algorithm
 ///
-/// ──────────────────────────────────
+/// ---------------------
 ///
-/// Basic usage example:
-/// ```dart
-/// FieldSuggestion(
-///    textController: _textController,
-///    suggestions: suggestions,
-///    search: (item, input) {
-///       return item.toString().contains(input);
-///    },
-///    itemBuilder: (context, index) {
-///       return Card(...);
-///    },
-///    ...
-/// )
-/// ```
-///
-/// ──────────────────────────────────
+/// ### Widget Structure of [FieldSuggestion.network].
+///  ╭───────╮ 
+///  │ Input │╮           
+///  ╰───────╯│          ╭──────────╮
+///           ▼      ╭──▶│ snapshot │─╮
+///       ╭────────╮ │   ╰──────────╯ │  ╭─────────╮
+///       │ future │─╯                ╰─▶│ builder │
+///       ╰────────╯                     ╰─────────╯
 ///
 /// For mode details about usage refer to:
 ///  > https://github.com/theiskaa/field_suggestion/wiki
@@ -170,94 +177,156 @@ class FieldSuggestion<T> extends StatefulWidget {
   /// to execute search algorithm and fill matchers.
   final TextEditingController textController;
 
-  /// TODO: add documentation.
-  /// Suggestions list of widget.
+  /// A list of suggested items to be displayed by the widget.
+  ///
+  /// This is a list of items that have been passed in early, and is required for
+  /// local usage of the suggestions field. As shown in the simple structure diagram,
+  /// the widget will search for input in the passed list of suggestions.
   final List<T>? suggestions;
 
-  /// TODO: add documentation.
-  /// Search algorithm of widget. Basic example: (check if item contains input) ```dart
-  /// search: (item, input) => item.toString().contains(input)
-  /// ```
+  /// The search algorithm used by the widget.
   ///
-  /// Object suggestions example:
+  /// This function is used for local usage of the Field Suggestion widget and is called
+  /// for each item in the `suggestions` list with the current input as arguments.
+  ///
+  /// The function should return a boolean indicating whether the given item matches
+  /// the current input. For example:
+  ///
   /// ```dart
-  /// search: (item, input) => item.field.toString().contains(input)
+  /// // Example search function that checks if an item contains the input string.
+  /// search: (item, input) => item.toString().contains(input)
   /// ```
   final bool Function(T item, String input)? search;
 
-  /// TODO: add documentation.
-  /// A future builder for search.
+  /// The asynchronous computation that this builder is currently connected to, which may be null.
   ///
-  /// ...
+  /// If no future has completed yet, including in the case where [future] is null,
+  /// the [builder] function will use [initialData] to provide initial data.
+  ///
+  /// This property can be thought of as the asynchronous version of [suggestions].
   final Future<List<T>> Function(String input)? future;
 
-  /// Suggestion element widget builder.
+  /// The builder function that creates suggestion widgets for the FieldSuggestion widget.
   ///
-  /// Example:
+  /// This function takes in a [BuildContext] and an index and returns a widget
+  /// that will be displayed as a suggestion. The index corresponds to the position
+  /// of the suggestion in the `suggestions` list.
+  ///
+  /// Example usage:
+  ///
   /// ```dart
   /// FieldSuggestion(
   ///   itemBuilder: (context, index) {
-  ///    return Card( // Fill the widget the way you want.
-  ///       ...
-  ///    );
+  ///     return Card(
+  ///       // Customize the suggestion widget as needed.
+  ///     );
   ///   }
+  ///   ...
   /// )
   /// ```
   final Widget Function(BuildContext, int)? itemBuilder;
 
-  /// Separator builder for suggestions list.
+  /// The builder function that creates separators for the suggestion list.
   ///
-  /// Example:
+  /// This function takes a [BuildContext] and an index as arguments, and returns a
+  /// separator widget that will be displayed between each suggestion widget. The index
+  /// corresponds to the position of the suggestion in the `suggestions` list.
+  ///
+  /// This property is similar to the `ListView.seperated` but as property.
+  ///
+  /// Example usage:
+  ///
   /// ```dart
   /// FieldSuggestion(
   ///   separatorBuilder: (context, index) {
-  ///    return const Divider();
-  ///   }
+  ///     return const Divider();
+  ///   },
   ///   ...
   /// )
   /// ```
   final Widget Function(BuildContext, int)? separatorBuilder;
 
-  /// TODO: add documentation.
-  /// Future builder for suggestions list.
+  /// The build strategy currently used by this builder.
   ///
-  /// Example:
-  /// ```dart
-  /// FieldSuggestion(
-  ///   separatorBuilder: (context, index) {
-  ///    return const Divider();
-  ///   }
-  ///   ...
-  /// )
-  /// ```
+  /// The builder is provided with an [AsyncSnapshot] object whose
+  /// [AsyncSnapshot.connectionState] property will be one of the following
+  /// values:
+  ///
+  ///  * [ConnectionState.none]: [future] is null. The [AsyncSnapshot.data] will
+  ///    be set to [initialData], unless a future has previously completed, in
+  ///    which case the previous result persists.
+  ///
+  ///  * [ConnectionState.waiting]: [future] is not null, but has not yet
+  ///    completed. The [AsyncSnapshot.data] will be set to [initialData],
+  ///    unless a future has previously completed, in which case the previous
+  ///    result persists.
+  ///
+  ///  * [ConnectionState.done]: [future] is not null, and has completed. If the
+  ///    future completed successfully, the [AsyncSnapshot.data] will be set to
+  ///    the value to which the future completed. If it completed with an error,
+  ///    [AsyncSnapshot.hasError] will be true and [AsyncSnapshot.error] will be
+  ///    set to the error object.
+  ///
+  /// This builder must only return a widget and should not have any side
+  /// effects as it may be called multiple times.
+  ///
+  /// For more: check [FutureBuilder]'s [builder] property.
   final Widget Function(BuildContext, AsyncSnapshot<List<T>>)? builder;
 
-  /// TODO: add documentation.
-  /// Rebuild duration of [future].
+  /// The rebuild delay for the [future] computation.
   ///
-  /// If unset, delay will be set to instant. i.e [future] will
-  /// be recalled with latest change on [textController].
+  /// If unset, the delay will be instant, meaning that [future] will be
+  /// re-run immediately upon any change to the [textController].
+  ///
+  /// You can set a rebuild delay to avoid excessive calls to [future] while
+  /// the user is typing. For example, if you set a delay of 500 milliseconds,
+  /// [future] will only be re-run 500 milliseconds after the user stops typing.
   final Duration? futureRebuildDuration;
 
-  /// TODO: add documentation.
+  /// The data that will be used to create the snapshots provided until a
+  /// non-null [future] has completed.
+  ///
+  /// If the future completes with an error, the data in the [AsyncSnapshot]
+  /// provided to the [builder] will become null, regardless of [initialData].
+  /// (The error itself will be available in [AsyncSnapshot.error], and
+  /// [AsyncSnapshot.hasError] will be true.)
+  ///
+  /// Fore more: check [FutureBuilder]'s [initialData] property.
   final List<T>? initialData;
 
-  /// TODO: add documentation.
+  /// A callback that will be called when the [future] completes successfully
+  /// with a non-empty result.
+  ///
+  /// This callback is triggered when the [AsyncSnapshot.connectionState] is
+  /// [ConnectionState.done] and [AsyncSnapshot.data] is not null.
   final void Function(AsyncSnapshot<List<T>>)? onData;
 
-  /// TODO: add documentation.
+  /// A callback that will be called when the [future] completes with an error.
+  ///
+  /// This callback is triggered when the [AsyncSnapshot.connectionState] is
+  /// [ConnectionState.done] and [AsyncSnapshot.hasError] is true.
   final void Function(AsyncSnapshot<List<T>>)? onError;
 
-  /// TODO: add documentation.
+  /// A callback that will be called when the [future] starts running.
+  ///
+  /// This callback is triggered when the [AsyncSnapshot.connectionState] is
+  /// [ConnectionState.waiting].
   final void Function(AsyncSnapshot<List<T>>)? onLoad;
 
-  /// TODO: add documentation.
+  /// A callback that will be called when the [future] completes successfully
+  /// with an empty result.
+  ///
+  /// This callback is triggered when the [AsyncSnapshot.connectionState] is
+  /// [ConnectionState.done] and [AsyncSnapshot.hasData] is false.
   final void Function(AsyncSnapshot<List<T>>)? onEmptyData;
 
-  /// Controller object of suggestions box.
+  /// The controller object for the suggestion box. Can be used to control the
+  /// suggestion box by opening, closing, and refreshing the content.
   ///
-  /// Can bu used to [open], [close] and even [refresh] content of suggestion box.
+  /// Use this property to manage the suggestion box externally. For example, to
+  /// close the suggestion box when the user taps outside the box.
   ///
+  /// For example:
   /// ```dart
   /// class ExternalControlExample extends StatelessWidget {
   ///   final _boxController = BoxController();
@@ -280,14 +349,15 @@ class FieldSuggestion<T> extends StatefulWidget {
   /// ```
   final BoxController? boxController;
 
-  /// Suggestion's box style.
+  /// The style configuration for the suggestion box.
   ///
-  /// If unset, defaults to the ─▶ [BoxStyle.defaultStyle].
+  /// If not specified, the default style defined by [BoxStyle.defaultStyle]
+  /// will be used.
   final BoxStyle? boxStyle;
 
-  /// TODO: add documentation.
+  /// The maximum height for the suggestion box.
   ///
-  /// If unset, defaults to 60.
+  /// If not specified, the default value of 60 will be used.
   final double? maxBoxHeight;
 
   /// Text input decoration of input field.
@@ -390,10 +460,11 @@ class _FieldSuggestionState<T> extends State<FieldSuggestion<T>>
     _boxController.refresh = refresh;
   }
 
-  // TODO: add documentation.
+  // Manages the search state of `network` constructor via its `search` method.
   late SearchStateManager<T> searchManager;
 
-  // "CURRENT" matchers collection ─▶ generated by [_textListener] method.
+  // Matchers that generated by [search]ing `input` in [suggestions].
+  // and [itemBuilder] will be called according to this array.
   List<T> matchers = [];
 
   // "CURRENT" active overlay ─▶ represents suggestion box.
@@ -440,7 +511,6 @@ class _FieldSuggestionState<T> extends State<FieldSuggestion<T>>
 
     widget.textController.addListener(_textListener);
 
-    // Initialize animations, if one of the animation was enabled.
     if (widget.wOpacityAnimation || widget.wSlideAnimation) {
       _animationController = AnimationController(
         vsync: this,
@@ -466,15 +536,13 @@ class _FieldSuggestionState<T> extends State<FieldSuggestion<T>>
     }
   }
 
-  // Searches [input] in [suggestions] by [search] method.
+  // A `Future` function that listens to changes in the text input.
+  // The function searches for `input` in `suggestions` using `searchManager` if `future` is not `null`.
+  // If `input` is empty, the function closes the box.
+  // If `matchers` is empty after searching, the function closes the box, otherwise it opens the box.
   Future<void> _textListener() async {
     final input = widget.textController.text;
 
-    // TODO: find actually required time to call it.
-    /// ? we shouldn't continue calling, if we already called before.
-    /// ? we should add a listener that listens to text-controller
-    /// and calls search whenever the editing completes.
-    /// ? also dont' forget: [widget.futureRebuildDuration].
     if (widget.future != null) return searchManager.search(input);
 
     // Should close box if input is empty.
@@ -603,8 +671,7 @@ class _FieldSuggestionState<T> extends State<FieldSuggestion<T>>
             valueListenable: searchManager,
             builder: (context, SearchState<T> value, _) {
               final len = value.snapshot.data?.length ?? 1;
-              final match =
-                  widget.future != null ? (len > 1 ? len : 1) : matchers.length;
+              final match = widget.future != null ? (len > 1 ? len : 1) : matchers.length;
 
               return BoxSizer(
                 constraints: BoxConstraints(
@@ -640,7 +707,6 @@ class _FieldSuggestionState<T> extends State<FieldSuggestion<T>>
       ),
     );
 
-    // Determine box widget appropriate to slide animation.
     return Material(
       color: boxStyle?.backgroundColor,
       borderRadius: boxStyle?.borderRadius,
