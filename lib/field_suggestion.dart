@@ -21,7 +21,6 @@ export 'package:highlightable/highlightable.dart';
 
 /// Create highly customizable, simple, and controllable autocomplete fields.
 ///
-///
 /// Basic usage example:
 /// ```dart
 /// FieldSuggestion(
@@ -36,6 +35,36 @@ export 'package:highlightable/highlightable.dart';
 ///    ...
 /// )
 /// ```
+///
+/// ---
+///
+/// Network usage example:
+/// ```dart
+/// FieldSuggestion<String>.network(
+///   future: future,
+///   textController: textController,
+///   builder: (context, snapshot) {
+///     if (snapshot.connectionState != ConnectionState.done) {
+///       return Center(child: CircularProgressIndicator());
+///     }
+///
+///     final result = snapshot.data ?? [];
+///     return ListView.builder(
+///       itemCount: result.length,
+///       itemBuilder: (context, index) {
+///         return GestureDetector(
+///           onTap: () {
+///             // ... Do something ...
+///           },
+///           child: ListTile(title: Text(result[index])),
+///         );
+///       },
+///     );
+///   },
+/// )
+/// ```
+///
+/// ---
 ///
 /// ### Widget Structure of [FieldSuggestion].
 ///  ╭───────╮      ╭─────────────╮
@@ -55,7 +84,7 @@ export 'package:highlightable/highlightable.dart';
 ///      fill be filled appropriate
 ///      to algorithm
 ///
-/// ---------------------
+/// ---
 ///
 /// ### Widget Structure of [FieldSuggestion.network].
 ///  ╭───────╮ 
