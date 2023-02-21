@@ -20,10 +20,8 @@ jobs:
       # Setup the Flutter environment.
       - uses: subosito/flutter-action@v1
         with:
-          channel: "stable" # "alpha", "beta", "dev", default to: "stable"
-          #
-          # # You can also specify exact version of Flutter.
-          flutter-version: "2.5.0"
+          channel: "stable"
+          flutter-version: "3.7.3"
 
       - name: Print Flutter SDK version
         run: flutter --version
