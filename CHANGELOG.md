@@ -1,3 +1,12 @@
+# [v0.2.5] - 22/02/2023
+
+### Updates:
+Resolved: [#52](https://github.com/theiskaa/field_suggestion/issues/52)
+ - Added network constructor type for `FieldSuggestion` widget, it's now able to use like
+   [FutureBuilder]. -> `FieldSuggestion.network`.
+
+---
+
 # [v0.2.4] - 16/06/2022
 
 ### Updates:
