@@ -1,5 +1,5 @@
-import 'package:field_suggestion/field_suggestion.dart';
 import 'package:flutter/material.dart';
+import 'package:field_suggestion/field_suggestion.dart';
 
 import 'user_model.dart';
 
@@ -24,9 +24,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // A box controller for default and local usable FieldSuggestion.
   final boxController = BoxController();
+
+  // A box controller for network usable FieldSuggestion.
+  final boxControllerNetwork = BoxController();
+
+  // A text editing controller for default and local usable FieldSuggestion.
   final textController = TextEditingController();
 
+  // A text editing controller for network usable FieldSuggestion.
+  final textControllerNetwork = TextEditingController();
+
+  // A ready data, that's used as suggestions for default widget and network future.
   List<UserModel> suggestions = [
     UserModel(
       email: 'john-doe@gmail.com',
@@ -45,10 +55,22 @@ class _HomePageState extends State<HomePage> {
     )
   ];
 
+  // A fake future builder that waits for 1 second to complete search.
+  final strSuggestions = ['Rasul', 'Andro', 'Onur', 'Ismael', 'Davit'];
+  Future<List<String>> future(String input) => Future<List<String>>.delayed(
+        const Duration(seconds: 1),
+        () => strSuggestions
+            .where((s) => s.toLowerCase().contains(input.toLowerCase()))
+            .toList(),
+      );
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => boxController.close?.call(),
+      onTap: () {
+        boxController.close?.call();
+        boxControllerNetwork.close?.call();
+      },
       child: Scaffold(
         appBar: AppBar(title: const Text("FieldSuggestion Example")),
         body: SingleChildScrollView(
@@ -56,6 +78,8 @@ class _HomePageState extends State<HomePage> {
           child: Center(
             child: Column(
               children: [
+                /// The default local usage, which requires already built suggestions list.
+                /// See line [135] for .network() variant implementation.
                 FieldSuggestion<UserModel>(
                   inputDecoration: InputDecoration(
                     hintText: 'Email', // optional
@@ -101,7 +125,50 @@ class _HomePageState extends State<HomePage> {
                     );
                   },
                 ),
-                const SizedBox(height: 100),
+
+                SizedBox(height: 50),
+                const Divider(),
+                SizedBox(height: 50),
+
+                /// A network usage of [FieldSuggestion].
+                FieldSuggestion<String>.network(
+                  future: (input) => future.call(input),
+                  boxController: boxControllerNetwork,
+                  textController: textControllerNetwork,
+                  inputDecoration: InputDecoration(
+                    hintText: 'Username', // optional
+                  ),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState != ConnectionState.done) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+
+                    final result = snapshot.data ?? [];
+                    return ListView.builder(
+                      itemCount: result.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            setState(
+                              () => textControllerNetwork.text = result[index],
+                            );
+
+                            textControllerNetwork.selection =
+                                TextSelection.fromPosition(
+                              TextPosition(
+                                  offset: textControllerNetwork.text.length),
+                            );
+
+                            boxControllerNetwork.close?.call();
+                          },
+                          child: Card(
+                            child: ListTile(title: Text(result[index])),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
               ],
             ),
           ),
