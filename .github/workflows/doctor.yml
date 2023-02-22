@@ -31,7 +31,7 @@ jobs:
 
       # Consider passing '--output=none' to 'format' for no standard output.
       - name: Verify formatting
-        run: flutter format --set-exit-if-changed .
+        run: dart format --set-exit-if-changed .
 
       # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Statically analyze the Dart code for any errors
