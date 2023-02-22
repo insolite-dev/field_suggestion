@@ -9,6 +9,7 @@ void main() {
       double defaultSize1 = Utils.maxBoxHeight(
         sizeByItem: 1,
         matchers: ['1'].length,
+        maxBoxHeight: null,
       );
 
       // `matchersList` takes two item.
@@ -16,6 +17,7 @@ void main() {
       double defaultSize2 = Utils.maxBoxHeight(
         sizeByItem: null,
         matchers: ['1', '2'].length,
+        maxBoxHeight: null,
       );
 
       // `matchersList` takes two item.
@@ -23,6 +25,7 @@ void main() {
       double defaultSize3 = Utils.maxBoxHeight(
         sizeByItem: null,
         matchers: ['1', '2', '3'].length,
+        maxBoxHeight: null,
       );
 
       // `matchersList` takes more than 3 item.
@@ -30,6 +33,7 @@ void main() {
       double defaultSize = Utils.maxBoxHeight(
         sizeByItem: null,
         matchers: ['1', '2', '3', '4'].length,
+        maxBoxHeight: null,
       );
 
       // `matchersList` takes more than 4 item,
@@ -37,13 +41,21 @@ void main() {
       double sizeByItemSetted = Utils.maxBoxHeight(
         sizeByItem: 2,
         matchers: ['1', '2', '3', '4'].length,
+        maxBoxHeight: null,
       );
 
+      // `maxBoxHeight` provided, so all other data will be ignored.
+      double maxBoxHeightProvided = Utils.maxBoxHeight(
+        sizeByItem: 2,
+        matchers: ['1', '2', '3', '4'].length,
+        maxBoxHeight: 80,
+      );
       expect(defaultSize1, 60);
       expect(defaultSize2, 120);
       expect(defaultSize3, 180);
       expect(defaultSize, 240);
       expect(sizeByItemSetted, 120);
+      expect(maxBoxHeightProvided, 80);
     });
   });
 }
