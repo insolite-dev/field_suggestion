@@ -7,7 +7,7 @@ class Utils {
     required int matchers,
     required double? maxBoxHeight,
   }) {
-    if(maxBoxHeight != null) return maxBoxHeight;
+    if (maxBoxHeight != null) return maxBoxHeight;
     if (sizeByItem != null) return 60.0 * sizeByItem;
     return 60.0 * ((matchers > 3) ? 4 : matchers);
   }

@@ -19,7 +19,7 @@ void main() {
 
   final suggestions = List.generate(5, (i) => 'test$i@gmail.com');
   Future<List<String>> suggestionsFuture(String input) => Future.delayed(
-        const Duration(seconds: mockNetworkRequestDuration ),
+        const Duration(seconds: mockNetworkRequestDuration),
         () => suggestions.where((e) => e.contains(input)).toList(),
       );
 
@@ -54,12 +54,15 @@ void main() {
         }
 
         final result = snapshot.data ?? [];
-        return ListView(children: [for (final element in result) Text(element)]);
+        return ListView(
+            children: [for (final element in result) Text(element)]);
       },
     );
 
-    mainWidget = MaterialApp(home: Scaffold(body: Center(child: fieldSuggestion)));
-    mainWidgetNetwork = MaterialApp(home: Scaffold(body: Center(child: fieldSuggestionNetwork)));
+    mainWidget =
+        MaterialApp(home: Scaffold(body: Center(child: fieldSuggestion)));
+    mainWidgetNetwork = MaterialApp(
+        home: Scaffold(body: Center(child: fieldSuggestionNetwork)));
   });
 
   group('[FieldSuggestion]', () {

@@ -87,8 +87,8 @@ export 'package:highlightable/highlightable.dart';
 /// ---
 ///
 /// ### Widget Structure of [FieldSuggestion.network].
-///  ╭───────╮ 
-///  │ Input │╮           
+///  ╭───────╮
+///  │ Input │╮
 ///  ╰───────╯│          ╭──────────╮
 ///           ▼      ╭──▶│ snapshot │─╮
 ///       ╭────────╮ │   ╰──────────╯ │  ╭─────────╮
@@ -700,7 +700,8 @@ class _FieldSuggestionState<T> extends State<FieldSuggestion<T>>
             valueListenable: searchManager,
             builder: (context, SearchState<T> value, _) {
               final len = value.snapshot.data?.length ?? 1;
-              final match = widget.future != null ? (len > 1 ? len : 1) : matchers.length;
+              final match =
+                  widget.future != null ? (len > 1 ? len : 1) : matchers.length;
 
               return BoxSizer(
                 constraints: BoxConstraints(

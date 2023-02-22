@@ -70,7 +70,8 @@ class SearchStateManager<T> extends ValueNotifier<SearchState<T>> {
     if (input.isEmpty) return onEmptyData?.call(value.snapshot);
 
     final prev = value.previousSnapshot;
-    if (prev == null || prev.connectionState != value.snapshot.connectionState) {
+    if (prev == null ||
+        prev.connectionState != value.snapshot.connectionState) {
       value.snapshot = value.snapshot.inState(ConnectionState.waiting);
       notifyListeners();
       onLoad?.call(value.snapshot);
