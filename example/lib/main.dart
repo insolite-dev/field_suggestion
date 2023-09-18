@@ -30,11 +30,20 @@ class _HomePageState extends State<HomePage> {
   // A box controller for network usable FieldSuggestion.
   final boxControllerNetwork = BoxController();
 
+  // A box controller for network target widget usable FieldSuggestion.
+  final boxControllerNetworkTw = BoxController();
+
   // A text editing controller for default and local usable FieldSuggestion.
   final textController = TextEditingController();
 
   // A text editing controller for network usable FieldSuggestion.
   final textControllerNetwork = TextEditingController();
+
+  // A text editing controller for network with target widget usable FieldSuggestion.
+  final textControllerNetworkTw = TextEditingController();
+
+  // A focus node manage textFormField in target widget demo.
+  final FocusNode twFocusNode = FocusNode();
 
   // A ready data, that's used as suggestions for default widget and network future.
   List<UserModel> suggestions = [
@@ -70,6 +79,7 @@ class _HomePageState extends State<HomePage> {
       onTap: () {
         boxController.close?.call();
         boxControllerNetwork.close?.call();
+        FocusScope.of(context).requestFocus(FocusNode());
       },
       child: Scaffold(
         appBar: AppBar(title: const Text("FieldSuggestion Example")),
@@ -126,9 +136,8 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
 
-                SizedBox(height: 50),
                 const Divider(),
-                SizedBox(height: 50),
+                SizedBox(height: 16),
 
                 /// A network usage of [FieldSuggestion].
                 FieldSuggestion<String>.network(
@@ -146,6 +155,7 @@ class _HomePageState extends State<HomePage> {
                     final result = snapshot.data ?? [];
                     return ListView.builder(
                       itemCount: result.length,
+                      padding: EdgeInsets.zero,
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
@@ -160,6 +170,64 @@ class _HomePageState extends State<HomePage> {
                             );
 
                             boxControllerNetwork.close?.call();
+                          },
+                          child: Card(
+                            child: ListTile(title: Text(result[index])),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+
+                const Divider(),
+                SizedBox(height: 16),
+
+                FieldSuggestion<String>.network(
+                  future: (input) => future.call(input),
+                  boxController: boxControllerNetworkTw,
+                  textController: textControllerNetworkTw,
+                  focusNode: twFocusNode,
+                  targetWidget: Row(
+                    children: <Widget> [
+                      // prefix widget for the input description.
+                      Text('Username', style: TextStyle(fontSize: 14, color: Colors.white),),
+                      const SizedBox(width: 8,),
+                      Expanded(
+                        child: TextFormField(
+                          controller: textControllerNetworkTw,
+                          focusNode: twFocusNode,
+                          decoration: InputDecoration(
+                            hintText: 'With Target Widget', // optional
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState != ConnectionState.done) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+
+                    final result = snapshot.data ?? [];
+                    return ListView.builder(
+                      itemCount: result.length,
+                      padding: EdgeInsets.zero,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            setState(
+                                  () => textControllerNetworkTw.text = result[index],
+                            );
+
+                            textControllerNetworkTw.selection =
+                                TextSelection.fromPosition(
+                                  TextPosition(
+                                      offset: textControllerNetworkTw.text.length),
+                                );
+
+                            boxControllerNetworkTw.close?.call();
                           },
                           child: Card(
                             child: ListTile(title: Text(result[index])),
