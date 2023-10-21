@@ -574,11 +574,12 @@ class _FieldSuggestionState<T> extends State<FieldSuggestion<T>>
 
     widget.textController.addListener(() {
       textSubject.add(widget.textController.text);
-    widget.focusNode?.addListener(() {
-      bool? hasFocus = widget.focusNode?.hasFocus;
-      if (hasFocus != null && !hasFocus) {
-        closeBox();
-      }
+      widget.focusNode?.addListener(() {
+        bool? hasFocus = widget.focusNode?.hasFocus;
+        if (hasFocus != null && !hasFocus) {
+          closeBox();
+        }
+      });
     });
 
     if (widget.wOpacityAnimation || widget.wSlideAnimation) {
