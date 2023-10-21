@@ -10,6 +10,7 @@ import 'dart:async';
 
 import 'package:field_suggestion/search_state_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'box_controller.dart';
 import 'styles.dart';
@@ -133,7 +134,7 @@ class FieldSuggestion<T> extends StatefulWidget {
     this.readOnly = false,
   })  : future = null,
         builder = null,
-        futureRebuildDuration = null,
+        futureRebuildDuration = Duration.zero,
         initialData = null,
         onData = null,
         onError = null,
@@ -159,7 +160,7 @@ class FieldSuggestion<T> extends StatefulWidget {
     required this.future,
     required this.builder,
     this.initialData,
-    this.futureRebuildDuration,
+    this.futureRebuildDuration = Duration.zero,
     this.onData,
     this.onError,
     this.onLoad,
@@ -314,7 +315,7 @@ class FieldSuggestion<T> extends StatefulWidget {
   /// You can set a rebuild delay to avoid excessive calls to [future] while
   /// the user is typing. For example, if you set a delay of 500 milliseconds,
   /// [future] will only be re-run 500 milliseconds after the user stops typing.
-  final Duration? futureRebuildDuration;
+  final Duration futureRebuildDuration;
 
   /// The data that will be used to create the snapshots provided until a
   /// non-null [future] has completed.
@@ -529,9 +530,13 @@ class _FieldSuggestionState<T> extends State<FieldSuggestion<T>>
   late Animation<Offset>? _slide;
   late AnimationController _animationController;
 
+  final textSubject = BehaviorSubject<String>();
+  late StreamSubscription<String> subscription;
+
   @override
   void dispose() {
     widget.textController.dispose();
+    subscription.cancel();
     super.dispose();
   }
 
@@ -552,7 +557,19 @@ class _FieldSuggestionState<T> extends State<FieldSuggestion<T>>
             ),
     );
 
-    widget.textController.addListener(_textListener);
+    subscription = textSubject
+        .debounceTime(
+            widget.futureRebuildDuration) // Adjust the debounce time as needed
+        .distinct() // Ensure distinct values
+        .listen((text) async {
+      // Perform actions here when the debounced text changes
+      // print("Debounced Text: $text");
+      _textListener();
+    });
+
+    widget.textController.addListener(() {
+      textSubject.add(widget.textController.text);
+    });
 
     if (widget.wOpacityAnimation || widget.wSlideAnimation) {
       _animationController = AnimationController(

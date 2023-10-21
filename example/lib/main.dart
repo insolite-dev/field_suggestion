@@ -133,6 +133,7 @@ class _HomePageState extends State<HomePage> {
                 /// A network usage of [FieldSuggestion].
                 FieldSuggestion<String>.network(
                   future: (input) => future.call(input),
+                  futureRebuildDuration: Duration(milliseconds: 500),
                   boxController: boxControllerNetwork,
                   textController: textControllerNetwork,
                   inputDecoration: InputDecoration(
