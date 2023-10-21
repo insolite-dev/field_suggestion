@@ -9,14 +9,14 @@ library field_suggestion;
 import 'dart:async';
 
 import 'package:field_suggestion/search_state_manager.dart';
-
-import 'utils.dart';
-import 'styles.dart';
-import 'box_controller.dart';
 import 'package:flutter/material.dart';
 
-export 'package:field_suggestion/styles.dart';
+import 'box_controller.dart';
+import 'styles.dart';
+import 'utils.dart';
+
 export 'package:field_suggestion/box_controller.dart';
+export 'package:field_suggestion/styles.dart';
 export 'package:highlightable/highlightable.dart';
 
 /// Create highly customizable, simple, and controllable autocomplete fields.
@@ -129,6 +129,8 @@ class FieldSuggestion<T> extends StatefulWidget {
     this.slideStyle = SlideStyle.RTL,
     this.slideOffset,
     this.slideCurve = Curves.decelerate,
+    this.enabled = true,
+    this.readOnly = false,
   })  : future = null,
         builder = null,
         futureRebuildDuration = null,
@@ -186,6 +188,8 @@ class FieldSuggestion<T> extends StatefulWidget {
     this.slideStyle = SlideStyle.RTL,
     this.slideOffset,
     this.slideCurve = Curves.decelerate,
+    this.enabled = true,
+    this.readOnly = false,
   })  : itemBuilder = null,
         separatorBuilder = null,
         search = null,
@@ -473,6 +477,16 @@ class FieldSuggestion<T> extends StatefulWidget {
   /// If unset, defaults to the ─▶ [Curves.decelerate].
   final Curve slideCurve;
 
+  /// If false the text field is "disabled": it ignores taps and its
+  /// [decoration] is rendered in grey.
+  ///
+  /// If non-null this property overrides the [decoration]'s
+  /// [InputDecoration.enabled] property.
+  final bool? enabled;
+
+  /// {@macro flutter.widgets.editableText.readOnly}
+  final bool readOnly;
+
   @override
   _FieldSuggestionState createState() =>
       _FieldSuggestionState<T>(boxController);
@@ -679,6 +693,8 @@ class _FieldSuggestionState<T> extends State<FieldSuggestion<T>>
         cursorRadius: widget.cursorRadius,
         cursorColor: widget.cursorColor,
         keyboardAppearance: widget.keyboardAppearance,
+        enabled: widget.enabled,
+        readOnly: widget.readOnly,
       ),
     );
   }
