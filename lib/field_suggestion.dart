@@ -135,6 +135,7 @@ class FieldSuggestion<T> extends StatefulWidget {
   })  : future = null,
         builder = null,
         futureRebuildDuration = Duration.zero,
+        targetWidget = null,
         initialData = null,
         onData = null,
         onError = null,
@@ -159,6 +160,7 @@ class FieldSuggestion<T> extends StatefulWidget {
     required this.textController,
     required this.future,
     required this.builder,
+    this.targetWidget,
     this.initialData,
     this.futureRebuildDuration = Duration.zero,
     this.onData,
@@ -306,6 +308,9 @@ class FieldSuggestion<T> extends StatefulWidget {
   ///
   /// For more: check [FutureBuilder]'s [builder] property.
   final Widget Function(BuildContext, AsyncSnapshot<List<T>>)? builder;
+
+  /// CompositedTransformTarget Widget.
+  final Widget? targetWidget;
 
   /// The rebuild delay for the [future] computation.
   ///
@@ -569,6 +574,11 @@ class _FieldSuggestionState<T> extends State<FieldSuggestion<T>>
 
     widget.textController.addListener(() {
       textSubject.add(widget.textController.text);
+    widget.focusNode?.addListener(() {
+      bool? hasFocus = widget.focusNode?.hasFocus;
+      if (hasFocus != null && !hasFocus) {
+        closeBox();
+      }
     });
 
     if (widget.wOpacityAnimation || widget.wSlideAnimation) {
@@ -694,10 +704,11 @@ class _FieldSuggestionState<T> extends State<FieldSuggestion<T>>
     boxStyle = widget.boxStyle ?? BoxStyle.defaultStyle(context);
 
     // Layer linking adds normal widget's behaviour to overlay widget.
-    // It follows [TextField] every time, and behaves as a normal non-hidable widget.
+    // It follows [TextField] every time if targetWidget is null, and behaves as a normal non-hidable widget.
+    // Otherwise, it will follows targetWidget.
     return CompositedTransformTarget(
       link: _layerLink,
-      child: TextFormField(
+      child: widget.targetWidget ?? TextFormField(
         keyboardType: widget.inputType,
         focusNode: widget.focusNode,
         controller: widget.textController,
